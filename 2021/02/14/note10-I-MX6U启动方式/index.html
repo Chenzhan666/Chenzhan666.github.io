@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note10 I.MX6U启动方式 | CHENZHAN</title><meta name="keywords" content="ARM(MX6U)"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="启动方式选择 BOOT 的处理过程是发生在 I.MX6U 芯片上电以后，芯片会根据 BOOT_MODE[1:0]的设置 来选择 BOOT 方式 BOOT_MODE[1:0]的值可以改变，有两种方式，一是改写 eFUSE(熔 丝)，一是修改相应的 GPIO 高低电平。修改 eFUSE 的方式只能修改一次，后面就不能再修改了，不使用。选择通过修改BOOT_MODE[1:0]对应的 GPIO 高低">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note10 I.MX6U启动方式">
+<meta property="og:url" content="https://www.chenzhan.club/2021/02/14/note10-I-MX6U%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="启动方式选择 BOOT 的处理过程是发生在 I.MX6U 芯片上电以后，芯片会根据 BOOT_MODE[1:0]的设置 来选择 BOOT 方式 BOOT_MODE[1:0]的值可以改变，有两种方式，一是改写 eFUSE(熔 丝)，一是修改相应的 GPIO 高低电平。修改 eFUSE 的方式只能修改一次，后面就不能再修改了，不使用。选择通过修改BOOT_MODE[1:0]对应的 GPIO 高低">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp">
+<meta property="article:published_time" content="2021-02-14T14:36:40.000Z">
+<meta property="article:modified_time" content="2021-02-26T09:58:37.444Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="ARM(MX6U)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/02/14/note10-I-MX6U%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-02-26 17:58:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note10 I.MX6U启动方式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-14T14:36:40.000Z" title="发表于 2021-02-14 22:36:40">2021-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-26T09:58:37.444Z" title="更新于 2021-02-26 17:58:37">2021-02-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note10 I.MX6U启动方式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<ul>
+<li><p>启动方式选择</p>
+<p>BOOT 的处理过程是发生在 I.MX6U 芯片上电以后，芯片会根据 BOOT_MODE[1:0]的设置 来选择 BOOT 方式</p>
+<p>BOOT_MODE[1:0]的值可以改变，有两种方式，一是改写 eFUSE(熔 丝)，一是修改相应的 GPIO 高低电平。修改 eFUSE 的方式只能修改一次，后面就不能再修改了，不使用。选择通过修改BOOT_MODE[1:0]对应的 GPIO 高低电平来选择启动方式，I.MX6U 有一个 BOOT_MODE1 引脚和 BOOT_MODE0 引脚，这两个引脚对应着 BOOT_MODE[1:0]</p>
+<p>BOOT_MODE1 和 BOOT_MODE0 在芯片内部是有 100KΩ下拉电阻的，所以默认是 0</p>
+<p>I.MX6U 有四个 BOOT 模式，这四个 BOOT 模式由 BOOT_MODE[1:0]来控制</p>
+<table>
+<thead>
+<tr>
+<th>BOOT_MODE[1:0]</th>
+<th>BOOT 类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00</td>
+<td>从 FUSE 启动</td>
+</tr>
+<tr>
+<td>01</td>
+<td>串行下载</td>
+</tr>
+<tr>
+<td>10</td>
+<td>内部 BOOT 模式</td>
+</tr>
+<tr>
+<td>11</td>
+<td>保留</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>串行下载</p>
+<p>当 BOOT_MODE1 为 0，BOOT_MODE0 为 1 的时候此模式使能，串行下载的意思就是可 以通过 USB 或者 UART 将代码下载到板子上的外置存储设备中</p>
+</li>
+<li><p>内部BOOT模式</p>
+<p>芯片会执 行内部的 boot ROM 代码，这段 boot ROM 代码会进行硬件初始化(一部分外设)，然后从 boot 设 备(就是存放代码的设备、比如 SD/EMMC、NAND)中将代码拷贝出来复制到指定的 RAM 中， 一般是 DDR</p>
+</li>
+<li><p>BOOT ROM初始化模式</p>
+<p>设置 BOOT 模式为“内部 BOOT 模式”以后，I.MX6U 内部的 boot ROM 代码就会执行，这个boot ROM代码首先肯定初始化时钟</p>
+<p>boot ROM 会将 I.MX6U 的内核时钟设置为 396MHz，也就是主频为 396Mhz。System PLL=528Mhz，USB PLL=480MHz，AHB=132MHz， IPG=66MHz</p>
+<p>内部 boot ROM 为了加快执行速度会打开 MMU 和 Cache，下载镜像的时候 L1 ICache 会打 开，验证镜像的时候 L1 DCache、L2 Cache 和 MMU 都会打开。一旦镜像验证完成，boot ROM 就会关闭 L1 DCache、L2 Cache 和 MMU。 中断向量偏移会被设置到 boot ROM 的起始位置，当 boot ROM 启动了用户代码以后就可 以重新设置中断向量偏移了。一般是重新设置到我们用户代码的开始地方</p>
+</li>
+<li><p>启动设备</p>
+<p>当 BOOT_MODE 设置为内部 BOOT 模式以后，可以从以下设备中启动：</p>
+<ol>
+<li>接到 EIM 接口的 CS0 上的 16 位 NOR Flash</li>
+<li>接到 EIM 接口的 CS0 上的 OneNAND Flash</li>
+<li>接到 GPMI 接口上的 MLC/SLC NAND Flash，NAND Flash 页大小支持 2KByte、4KByte 和 8KByte，8 位宽</li>
+<li>Quad SPI Flash</li>
+<li>接到 USDHC 接口上的 SD/MMC/eSD/SDXC/eMMC 等设备 </li>
+<li>SPI 接口的 EEPROM</li>
+</ol>
+<p>通过 GPIO 来选择启动设备</p>
+<p>如启动模式由 BOOT_MODE[1:0]来选择一样，启动设备是通过BOOT_CFG1[7:0]、BOOT_CFG2[7:0]和 BOOT_CFG4[7:0]这 24 个配置 IO，这 24 个配置 IO 刚 好对应着 LCD 的 24 根数据线 LCD_DATA0~LCDDATA23，当启动完成以后这 24 个 IO 就可以 作为 LCD 的数据线使用。这 24 根线和 BOOT_MODE1、BOOT_MODE0 共同组成了 I.MX6U 的启动选择引脚</p>
+<p>实际需要调整的只有那几个 IO，其它的 IO 全部下拉 接地即可，也就是设置为 0</p>
+<table>
+<thead>
+<tr>
+<th>BOOT_CFG 引脚</th>
+<th>对应LCD 引脚</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BOOT_CFG2[3]</td>
+<td>LCD_DATA11</td>
+<td>为0 时从 SDHC1 上的 SD/EMMC 启动，为 1 时从SDHC2 上的  SD/EMMC 启动</td>
+</tr>
+<tr>
+<td>BOOT_CFG1[3]</td>
+<td>LCD_DATA3</td>
+<td>当从  SD/EMMC 启动的时候设置启动速度，当从 NAND 启动的话设置 NAND 数量</td>
+</tr>
+<tr>
+<td>BOOT_CFG1[4]</td>
+<td>LCD_DATA4</td>
+<td>BOOT_CFG1[7:4]：     0000 NOR/OneNAND(EIM)启动。     0001 QSPI 启动。     0011 SPI 启动。     010x SD/eSD/SDXC 启动。     011x MMC/eMMC 启动。     1xxx NAND Flash 启动。</td>
+</tr>
+<tr>
+<td>BOOT_CFG1[5]</td>
+<td>LCD_DATA5</td>
+<td>同上BOOT_CFG1[4]</td>
+</tr>
+<tr>
+<td>BOOT_CFG1[6]</td>
+<td>LCD_DATA6</td>
+<td>同上BOOT_CFG1[4]</td>
+</tr>
+<tr>
+<td>BOOT_CFG1[7]</td>
+<td>LCD_DATA7</td>
+<td>同上BOOT_CFG1[4]</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>镜像烧写</p>
+<p>bin 文件添加的头部信息</p>
+<p>需要在.bin 文件前面添加一些头信息构成 满足 I.MX6U 需求的最终可烧写文件，I.MX6U 的最终可烧写文件组成如下：</p>
+<ol>
+<li>Image vector table，简称 IVT，IVT 里面包含了一系列的地址信息，这些地址信息在 ROM 中按照固定的地址存放着</li>
+<li>Boot data，启动数据，包含了镜像要拷贝到哪个地址，拷贝的大小是多少等等</li>
+<li>Device configuration data，简称 DCD，设备配置信息，重点是 DDR3 的初始化配置</li>
+<li>用户代码可执行文件，比如 led.bin</li>
+</ol>
+<p>最终烧写到 I.MX6U 中的程序其组成为：IVT+Boot data+DCD+.bin</p>
+<p>内部 Boot ROM 会将 load.imx 拷贝到 DDR 中，用户代码是要一定要从 0X87800000 这个地方开始的，因 为链接地址为 0X87800000，load.imx 在用户代码前面又有 3KByte 的 IVT+Boot Data+DCD 数 据，因此 load.imx 在 DDR 中的起始地址就是 0X87800000- 3072=0X877FF400</p>
+</li>
+<li><p>IVT和Boot Data数据</p>
+<p>IVT 包含了镜像程序的入口点、指向 DCD 的指 针和一些用作其它用途的指针。内部 Boot ROM 要求 IVT 应该放到指定的位置，不同的启动设 备位置不同，而 IVT 在整个 load.imx 的最前面，其实就相当于要求 load.imx 在烧写的时候应该 烧写到存储设备的指定位置去。整个位置都是相对于存储设备的起始地址的偏移</p>
+<p>SD/EMMC 为例，IVT 偏移为 1Kbyte（两个512字节），IVT+Boot data+DCD 的总大小为4KByte1KByte=3KByte</p>
+<p>假如 SD/EMMC 每个扇区为 512 字节，那么 load.imx 应该从第三个扇区开始 烧写，前两个扇区要留出来</p>
+<p>扇区，是指磁盘上划分的区域。磁盘上的每个磁道被等分为若干个弧段，这些弧段便是磁盘的扇区，硬盘的读写以扇区为基本单位</p>
+<p>第一个存放的就是 header(头)</p>
+<p>Tag 为一个字节长度，固定为 0XD1，Length 是两个字节，保存着 IVT 长 度，为大端格式，也就是高字节保存在低内存中。最后的 Version 是一个字节，为 0X40 或者0X41</p>
+<p>软件winhex 可以直接 查看一个文件的二进制格式数据</p>
+<table>
+<thead>
+<tr>
+<th>offset</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00000000</td>
+<td>D1</td>
+<td>00</td>
+<td>20</td>
+<td>40</td>
+</tr>
+</tbody></table>
+<p>据按照 4 个字节一组组合在一起就是：0X402000D1</p>
+<p>44 个字节的数据就是 IVT 和 Boot Data 数据</p>
+<p><img src="/Chenzhan666.github.io/.club//Personalwebsite\blog\myBlog\source_posts\note10-I-MX6U启动方式\image-20210215014640520.png" alt="image-20210215014640520"></p>
+<p><img src="/Chenzhan666.github.io/.club//Personalwebsite\blog\myBlog\source_posts\note10-I-MX6U启动方式\image-20210215014703327.png" alt="image-20210215014703327"></p>
+</li>
+<li><p>DCD数据</p>
+<p> I.MX6U 提出了一个 DCD(Device Config Data)的概念</p>
+<p>DCD 也是添加到 load.imx 里面的，紧跟在 IVT 和 Boot Data 后面，IVT 里面也指定了 DCD 的位置。DCD 其实就是 I.MX6U 寄存器地址和对应 的配置信息集合，Boot ROM 会使用这些寄存器地址和配置集合来初始化相应的寄存器，比如 开启某些外设的时钟、初始化 DDR 等等。DCD 区域不能超过 1768Byte</p>
+<p>其中 Tag 是单字节，固定为 0XD2，Length 为两个字节，表示 DCD 区域的大小，包含 header， 同样是大端模式，Version 是单字节，固定为 0X40 或者 0X41</p>
+<p>CMD 就是要初始化的寄存器地址和相应的寄存器值</p>
+<p>Tag 为一个字节，固定为 0XCC。Length 是两个字节，包含写入的命令数据长 度，包含 header，同样是大端模式。Parameter 为一个字节</p>
+<p>其中各个位 bytes 表示是目标位置宽度，单位为 byte，可以选择 1、2、和 4 字节。flags 是命令控制标志位</p>
+<p>Address 和 Vlalue/Mask 就是要初始化的寄存器地址和相应的寄存器值，采用的是大端模式</p>
+<p>DCD 数据是从 0X2C 地址开始的</p>
+</li>
+</ul>
+<p>  大端模式，是指数据的高字节保存在内存的低地址中，而数据的低字节保存在内存的高地址中，这样的存储模式有点儿类似于把数据当作字符串顺序处理：地址由小向大增加，而数据从高位往低位放；这和我们的阅读习惯一致。</p>
+<p>  小端模式，是指数据的高字节保存在内存的高地址中，而数据的低字节保存在内存的低地址中，这种存储模式将地址的高低和数据位权有效地结合起来，高地址部分权值高，低地址部分权值</p>
+<p>  DCD 里面的初始化配置主要包括三方面：</p>
+<ol>
+<li>设置 CCGR0~CCGR6 这 7 个外设时钟使能寄存器，默认打开所有的外设时钟</li>
+<li>配置 DDR3 所用的所有 IO</li>
+<li>配置 MMDC 控制器，初始化 DDR3</li>
+</ol>
+<p>  I.MX6U 的启动模式、启 动设备类型和镜像烧写过程，需要在.bin 文件前面加上 IVT、Boot Data 和 DCD 这三个数据块。这三个数据块是有指定格式的， 我们必须按照格式填写，然后将其放到.bin 文件前面，最终合成的才是可以直接烧写到 SD 卡 中的文件</p>
+<hr>
+<p>  参考资料：正点原子《I.MX6U嵌入式Linux驱动开发指南V1.5》P320~331</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/02/14/note10-I-MX6U%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F/">https://www.chenzhan.club/2021/02/14/note10-I-MX6U%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/ARM-MX6U/">ARM(MX6U)</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/02/15/note11-%E7%82%B9%E4%BA%AE%E4%B8%80%E7%9B%8F%E7%81%AFC%E8%AF%AD%E8%A8%80/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/article/c340923fc1c895bf10f9069041f8b91b22753d4d.jpg@1320w_588h.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note11 点亮一盏灯C语言</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/02/13/note9-%E7%82%B9%E4%BA%AE%E4%B8%80%E7%9B%8FLED%E7%81%AF/"><img class="next-cover" src="https://wxt.sinaimg.cn/thumb300/007ccotFly1gnjv1acsgcj31zo0u07wn.jpg?tags=%5B%5D" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note9 点亮一盏LED灯</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/02/15/note13-蜂鸣器实验/" title="note13 蜂鸣器实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/d9169dc108ec1dc6c330a5472858de36759703a5.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-15</div><div class="title">note13 蜂鸣器实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/20/note15-主频和时钟配置实验/" title="note15 主频和时钟配置实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-20</div><div class="title">note15 主频和时钟配置实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/17/note14-GPIO输入按键实验/" title="note14 GPIO输入按键实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/aee4ce6332eff5bdc8c9ec4ce19c1d606c156d7f.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-17</div><div class="title">note14 GPIO输入按键实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/26/note17-EPIT定时器实验/" title="note17-EPIT定时器，按键消抖，高精度延时"><img class="cover" src="https://i0.hdslb.com/bfs/album/d186bc9ebd6166a0702afc3be8aced74148845b1.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-26</div><div class="title">note17-EPIT定时器，按键消抖，高精度延时</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/27/note18-UART串口通信/" title="note18-UART串口通信"><img class="cover" src="https://i0.hdslb.com/bfs/article/0efc347b8b2fab3bbc38b50abf506085c2aa185d.jpg@1200w_688h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-27</div><div class="title">note18-UART串口通信</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/02/note22-I2C实验/" title="note22-I2C实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-02</div><div class="title">note22-I2C实验</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节"><img src="https://i0.hdslb.com/bfs/article/d8c27357c95b4ec212391f814a276990815f09e1.jpg@1320w_734h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note25-LCD背光调节"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节">note25-LCD背光调节</a><time datetime="2021-03-05T14:40:09.000Z" title="发表于 2021-03-05 22:40:09">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏"><img src="https://i0.hdslb.com/bfs/article/6df5035bad4239b717df0b5bc957b81f1e4e1fad.jpg@1320w_854h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note24-多点电容触摸屏"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏">note24-多点电容触摸屏</a><time datetime="2021-03-05T12:47:55.000Z" title="发表于 2021-03-05 20:47:55">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验"><img src="https://i0.hdslb.com/bfs/article/a1afb00e2f3048d34143eb987c7a0a15d41e8bfe.jpg@1320w_932h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note23-SPI实验"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验">note23-SPI实验</a><time datetime="2021-03-03T13:08:21.000Z" title="发表于 2021-03-03 21:08:21">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验"><img src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note22-I2C实验"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验">note22-I2C实验</a><time datetime="2021-03-01T16:40:54.000Z" title="发表于 2021-03-02 00:40:54">2021-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟"><img src="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note21-RTC实时时钟"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟">note21-RTC实时时钟</a><time datetime="2021-03-01T06:52:25.000Z" title="发表于 2021-03-01 14:52:25">2021-03-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

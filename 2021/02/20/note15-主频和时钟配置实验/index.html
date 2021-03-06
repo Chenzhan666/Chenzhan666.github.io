@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note15 主频和时钟配置实验 | CHENZHAN</title><meta name="keywords" content="ARM(MX6U)"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="时钟系统I.MX6U 的系统主频为 528MHz，默认情况下内部 boot rom 会将 I.MX6U 的主频设置为 396MHz  来源 32.768KHz 和 24MHz 的晶振，其中 32.768KHz 晶振是 I.MX6U 的 RTC 时钟源，24MHz 晶振是 I.MX6U 内核 和其它外设的时钟源  7 路 PLL 时钟源 为了方便生成时钟，6从24MHz晶振生出来7路PLL。这7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note15 主频和时钟配置实验">
+<meta property="og:url" content="https://www.chenzhan.club/2021/02/20/note15-%E4%B8%BB%E9%A2%91%E5%92%8C%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="时钟系统I.MX6U 的系统主频为 528MHz，默认情况下内部 boot rom 会将 I.MX6U 的主频设置为 396MHz  来源 32.768KHz 和 24MHz 的晶振，其中 32.768KHz 晶振是 I.MX6U 的 RTC 时钟源，24MHz 晶振是 I.MX6U 内核 和其它外设的时钟源  7 路 PLL 时钟源 为了方便生成时钟，6从24MHz晶振生出来7路PLL。这7">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp">
+<meta property="article:published_time" content="2021-02-20T11:56:22.000Z">
+<meta property="article:modified_time" content="2021-02-26T09:57:16.984Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="ARM(MX6U)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/02/20/note15-%E4%B8%BB%E9%A2%91%E5%92%8C%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE%E5%AE%9E%E9%AA%8C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-02-26 17:57:16'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note15 主频和时钟配置实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-20T11:56:22.000Z" title="发表于 2021-02-20 19:56:22">2021-02-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-26T09:57:16.984Z" title="更新于 2021-02-26 17:57:16">2021-02-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note15 主频和时钟配置实验"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="时钟系统"><a href="#时钟系统" class="headerlink" title="时钟系统"></a>时钟系统</h1><p>I.MX6U 的系统主频为 528MHz，默认情况下内部 boot rom 会将 I.MX6U 的主频设置为 396MHz</p>
+<ul>
+<li><p>来源</p>
+<p>32.768KHz 和 24MHz 的晶振，其中 32.768KHz 晶振是 I.MX6U 的 RTC 时钟源，24MHz 晶振是 I.MX6U 内核 和其它外设的时钟源</p>
+</li>
+<li><p>7 路 PLL 时钟源</p>
+<p>为了方便生成时钟，6从24MHz晶振生出来7路PLL。这7路PLL中有的又生出来PFD。</p>
+<ol>
+<li>PLL1：ARM PLL供给ARM内核，ARM 内核时钟就是由此 PLL 生成的，此 PLL 通过编程的方式最高可倍频到 1.3GHz</li>
+<li>PLL2：sysytem PLL，528MHz，528_PLL，此路PLL分出了4路PFD，分别为PLL2_PFD0~PFD3，此路 PLL 时钟=24MHz * 22 = 528MHz ，叫做 528_PLL通常 528_PLL 和这 4 路 PFD 是 I.MX6U 内部系统总线的 时钟源，比如内处理逻辑单元、DDR 接口、NAND/NOR 接口等等</li>
+<li>PLL3: USB1 PLL，480MHz 480_PLL，此路PLL分出了4路PFD，分别为PLL3_PFD0~PFD3， USB1_PLL=24MHz *20=480MHz。 USB1_PLL虽然主要用于USB1PHY，但是其和四路PFD同样也可以作为其他外设的根时钟源</li>
+<li>PLL4: Audio PLL，主供音频使用，,此路 PLL 用于音频相关的外设，此路 PLL 的倍频可以调整，PLL 的输出范围同样也是 650MHz~1300MHz，此路 PLL 在最终输出的时候也可以进行分频，可选 1/2/4 分频</li>
+<li>PLL5: Video PLL，主供视频外设，比如RGB LCD接口，和图像处理有关的外设，显示相关的外设，比如 LCD，此路 PLL 的倍频可以 调整，PLL 的输出范围在 650MHz~1300MHz。此路 PLL 在最终输出的时候还可以进行分频， 可选 1/2/4/8/16 分频</li>
+<li>PLL6：ENET PLL，主供网络外设，ENET_PLL=24MHz * (20+5/6) = 500MHz。此路 PLL 用于生成网络所需的时钟，可以在此 PLL 的基础上生成 25/50/100/125MHz 的网络时钟</li>
+<li>PLL7: USB2_PLL ,480MHz，无PFD，给USB2PHY使用的，此路PLL固定为20倍频是480MHz</li>
+</ol>
+</li>
+<li><p>时钟树</p>
+<p>共有三部分：CLOCK_SWITCHER、CLOCK ROOT GENERATOR 和 SYSTEM CLOCKS。左边的 CLOCK_SWITCHER 是 7 路 PLL 和 8 路 PFD，右边的 SYSTEM CLOCKS 是芯片外设，中间的 CLOCK ROOT GENERATOR 是设置相应的寄存器负责从 7 路 PLL 和 8 路 PFD 中选择合适的时钟源给外设使用</p>
+<p>比如ESAI时钟源选择：</p>
+<p> PLL4、PLL3_PFD2、PLL5、pll3_sw_clk</p>
+<p>由寄存器 CCM-&gt;CSCMR2 的 ESAI_CLK_SEL 位来决定</p>
+<p><img src="/Chenzhan666.github.io/.club//Personalwebsite\blog\myBlog\source_posts\note15-主频和时钟配置实验\image-20210220220107511.png" alt="image-20210220220107511"></p>
+<ol>
+<li>是 ESAI 时钟的前级分频，分频值由寄存器 CCM_CS1CDR 的 ESAI_CLK_PRED 来确定的，可设置 1~8 分频，假如现在 PLL4=650MHz，我们选择 PLL4 作为 ESAI 时钟，前级 分频选择 2 分频，那么此时的时钟就是 650/2=325MHz</li>
+<li>是 ESAI 时钟的前级分频，分频值由寄存器 CCM_CS1CDR 的 ESAI_CLK_PRED 来确定的，可设置 1~8 分频，假如现在 PLL4=650MHz，我们选择 PLL4 作为 ESAI 时钟，前级 分频选择 2 分频，那么此时的时钟就是 650/2=325MHz</li>
+<li>是一个分频器，对②中输出的时钟进一步分频，分频值由寄存器 CCM_CS1CDR 的 ESAI_CLK_PODF 来决定，可设置 1~8 分频。假如我们设置为 8 分频的话， 经过此分频器以后的时钟就是 325/8=40.625MHz。因此最终进入到 ESAI 外设的时钟就是 40.625MHz</li>
+</ol>
+</li>
+<li><p>内核时钟设置</p>
+<p><img src="/Chenzhan666.github.io/.club//Personalwebsite\blog\myBlog\source_posts\note15-主频和时钟配置实验\image-20210220221110905.png" alt="image-20210220221110905"></p>
+<ol>
+<li>内核时钟源来自于 PLL1</li>
+<li>通过寄存器 CCM_CACRR 的 ARM_PODF 位对 PLL1 进行分频，可选择 1/2/4/8 分频， 假如我们选择 2 分频，那么经过分频以后的时钟频率是 996/2=498MHz</li>
+<li>此处没有进行 2 分频</li>
+<li>经过第2步 2 分频以后的 498MHz 就是 ARM 的内核时钟，也就是 I.MX6U 的主频</li>
+</ol>
+<p>寄存器 CCM_CACCR 的 ARM_PODF 位很好设置，可以设置为 0<del>7，分别对应 1</del>8 分频。如果要 设置为2分频的话CCM_CACCR就要设置为1</p>
+<p>PLL1 的频率 可以通过寄存器 CCM_ANALOG_PLL_ARMn 来设置</p>
+<p>ENABLE: 时钟输出使能位，此位设置为 1 使能 PLL1 输出，如果设置为 0 的话就关闭 PLL1 输出。 DIV_SELECT: 此位设置 PLL1 的输出频率，可设置范围为：54~108，PLL1 CLK = Fin * div_seclec/2.0，Fin=24MHz。如果 PLL1 要输出 1056MHz 的话，div_select 就要设置为 88</p>
+</li>
+<li><p>PLL1 时钟开关</p>
+</li>
+<li><p>寄存器 CCM_CCSR</p>
+<p>STEP_SEL、PLL1_SW_CLK_SEL 这两个位，一个是用来选择 step_clk 时钟源的，一个是用来选择 pll1_sw_clk 时钟源的</p>
+</li>
+<li><p>PFD 时钟设置</p>
+<p>设置好主频以后我们还需要设置好其他的 PLL 和 PFD 时钟</p>
+</li>
+<li><p>PLL2、PLL3 和 PLL7 固定为 528MHz、480MHz 和 480MHz，PLL4~PLL6 都是针对特殊外设</p>
+</li>
+<li><p> AHB、IPG 和 PERCLK 根时钟设置</p>
+</li>
+</ul>
+<h1 id="I-MX6U系统配置"><a href="#I-MX6U系统配置" class="headerlink" title="I.MX6U系统配置"></a>I.MX6U系统配置</h1><h2 id="系统主频的配置"><a href="#系统主频的配置" class="headerlink" title="系统主频的配置"></a>系统主频的配置</h2><ol>
+<li><p>要设置ARM内核主频为528MHz，设置CACRR寄存器的ARM_PODF位为2分频，然后设置PLL1=1056MHz即可。CACRR的bit3<del>0为ARM_PODF位，可设置0</del>7，分别对应1~8分频。应该设置CACRR寄存器的ARM_PODF=1</p>
+</li>
+<li><p>设置PLL1=1056MHz。PLL1=pll1_sw_clk。pll1_sw_clk有两路可以选择，分别为pll1_main_clk，和step_clk，通过CCSR寄存器的pll1_sw_clk_sel位(bit2)来选择。为0的时候选择pll1_main_clk，为1的时候选额step_clk</p>
+</li>
+<li><p>在修改PLL1的时候，也就是设置系统时钟的时候需要给6ULL一个临时的时钟，也就是step_clk在修改PLL1的时候需要将pll1_sw_clk切换到step_clk上</p>
+</li>
+<li><p>设置step_clk。Step_clk也有两路来源，由CCSR的step_sel位(bit8)来设置，为0的时候设置step_clk为osc=24MHz。为1的时候不重要，不用</p>
+</li>
+<li><p>时钟切换成功以后就可以修改PLL1的值</p>
+</li>
+<li><p>通过CCM_ANALOG_PLL_ARM寄存器的DIV_SELECT位(bit6~0)来设置PLL1的频率，公式位：</p>
+<p><strong><em>Output = frefDIV_SEL/2 1056=24DIV_SEL/2=&gt;DIEV_SEL=88</em></strong></p>
+<p>设置CCM_ANALOG_PLL_ARM寄存器的DIV_SELECT位=88即可。PLL1=1056MHz</p>
+<p>还要设置CCM_ANALOG_PLL_ARM寄存器的ENABLE位(bit13)为1，也就是使能输出</p>
+</li>
+<li><p>在切换回PLL1之前，设置置CACRR寄存器的ARM_PODF=1！！切记</p>
+</li>
+</ol>
+<h2 id="各个PLL时钟的配置"><a href="#各个PLL时钟的配置" class="headerlink" title="各个PLL时钟的配置"></a>各个PLL时钟的配置</h2><p>PLL2和PLL3。PLL2固定为528MHz，PLL3固定为480MHz</p>
+<ol>
+<li>初始化PLL2_PFD0~PFD3。寄存器CCM_ANALOG_PFD_528用于设置4路PFD的时钟。比如PFD0= 528<em>18/PFD0_FRAC。设置PFD0_FRAC位即可。比如PLL2_PFD0=352M=528</em>18/PFD0_FRAC，因此FPD0_FRAC=27</li>
+<li>初始化PLL3_PFD0~PFD3</li>
+</ol>
+<h2 id="其他外设时钟源配置"><a href="#其他外设时钟源配置" class="headerlink" title="其他外设时钟源配置"></a>其他外设时钟源配置</h2><p>AHB_CLK_ROOT、PERCLK_CLK_ROOT以及IPG_CLK_ROOT。</p>
+<p>因为PERCLK_CLK_ROOT和IPG_CLK_ROOT要用到AHB_CLK_ROOT，所以我们要初始化AHB_CLK_ROOT</p>
+<ol>
+<li><p>AHB_CLK_ROOT的初始化</p>
+<p>AHB_CLK_ROOT=132MHz</p>
+<p>设置CBCMR寄存器的PRE_PERIPH_CLK_SEL位，设置CBCDR寄存器的PERIPH_CLK_SEL位0。设置CBCDR寄存器的AHB_PODF位为2，也就是3分频，因此396/3=132MHz</p>
+</li>
+<li><p>IPG_CLK_ROOT初始化</p>
+<p>设置CBCDR寄存器IPG_PODF=1，也就是2分频</p>
+</li>
+<li><p>PERCLK_CLK_ROOT初始化</p>
+<p>设置CSCMR1寄存器的PERCLK_CLK_SEL位为0，表示PERCLK的时钟源为IPG</p>
+</li>
+</ol>
+<hr>
+<p>参考资料：正点原子【第二期】手把手教你学Linux之ARM（MX6U）裸机篇-主频和时钟配置实验</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/02/20/note15-%E4%B8%BB%E9%A2%91%E5%92%8C%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE%E5%AE%9E%E9%AA%8C/">https://www.chenzhan.club/2021/02/20/note15-%E4%B8%BB%E9%A2%91%E5%92%8C%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE%E5%AE%9E%E9%AA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/ARM-MX6U/">ARM(MX6U)</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/02/21/note16-GPIO%E4%B8%AD%E6%96%AD%E5%AE%9E%E9%AA%8C%E5%AE%9E%E9%AA%8C/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/c2e54c69fd83a318261e5b30e13bc8184caf837f.jpg@518w.jpg" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note16 GPIO中断实验</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/02/17/note14-GPIO%E8%BE%93%E5%85%A5%E6%8C%89%E9%94%AE%E5%AE%9E%E9%AA%8C/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/aee4ce6332eff5bdc8c9ec4ce19c1d606c156d7f.jpg@518w.jpg" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note14 GPIO输入按键实验</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/02/14/note10-I-MX6U启动方式/" title="note10 I.MX6U启动方式"><img class="cover" src="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-14</div><div class="title">note10 I.MX6U启动方式</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/15/note13-蜂鸣器实验/" title="note13 蜂鸣器实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/d9169dc108ec1dc6c330a5472858de36759703a5.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-15</div><div class="title">note13 蜂鸣器实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/17/note14-GPIO输入按键实验/" title="note14 GPIO输入按键实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/aee4ce6332eff5bdc8c9ec4ce19c1d606c156d7f.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-17</div><div class="title">note14 GPIO输入按键实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/26/note17-EPIT定时器实验/" title="note17-EPIT定时器，按键消抖，高精度延时"><img class="cover" src="https://i0.hdslb.com/bfs/album/d186bc9ebd6166a0702afc3be8aced74148845b1.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-26</div><div class="title">note17-EPIT定时器，按键消抖，高精度延时</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/27/note18-UART串口通信/" title="note18-UART串口通信"><img class="cover" src="https://i0.hdslb.com/bfs/article/0efc347b8b2fab3bbc38b50abf506085c2aa185d.jpg@1200w_688h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-27</div><div class="title">note18-UART串口通信</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/02/note22-I2C实验/" title="note22-I2C实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-02</div><div class="title">note22-I2C实验</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%B6%E9%92%9F%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">时钟系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#I-MX6U%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">I.MX6U系统配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E4%B8%BB%E9%A2%91%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">系统主频的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E4%B8%AAPLL%E6%97%B6%E9%92%9F%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">各个PLL时钟的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%A4%96%E8%AE%BE%E6%97%B6%E9%92%9F%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">其他外设时钟源配置</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节"><img src="https://i0.hdslb.com/bfs/article/d8c27357c95b4ec212391f814a276990815f09e1.jpg@1320w_734h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note25-LCD背光调节"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节">note25-LCD背光调节</a><time datetime="2021-03-05T14:40:09.000Z" title="发表于 2021-03-05 22:40:09">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏"><img src="https://i0.hdslb.com/bfs/article/6df5035bad4239b717df0b5bc957b81f1e4e1fad.jpg@1320w_854h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note24-多点电容触摸屏"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏">note24-多点电容触摸屏</a><time datetime="2021-03-05T12:47:55.000Z" title="发表于 2021-03-05 20:47:55">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验"><img src="https://i0.hdslb.com/bfs/article/a1afb00e2f3048d34143eb987c7a0a15d41e8bfe.jpg@1320w_932h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note23-SPI实验"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验">note23-SPI实验</a><time datetime="2021-03-03T13:08:21.000Z" title="发表于 2021-03-03 21:08:21">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验"><img src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note22-I2C实验"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验">note22-I2C实验</a><time datetime="2021-03-01T16:40:54.000Z" title="发表于 2021-03-02 00:40:54">2021-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟"><img src="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note21-RTC实时时钟"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟">note21-RTC实时时钟</a><time datetime="2021-03-01T06:52:25.000Z" title="发表于 2021-03-01 14:52:25">2021-03-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
