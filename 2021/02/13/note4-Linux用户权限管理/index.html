@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note4 Linux用户权限管理 | CHENZHAN</title><meta name="keywords" content="Ubuntu入门"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Ubuntu 用户系统 Ubuntu 下用户类型分为以下 3 类： 初次创建的用户 root用户 普通用户 每个用户都有一个 ID 号，称为 UID，操作系统通过 UID 来识别是哪个用户，用户相关信息可以在文件&#x2F;etc&#x2F;passwd 中查看到 “1000:1000”，第一个数字是用户的 ID，另一个是用户的 GID，也就是用户组 ID  权限管理 做嵌入式开发重点关注的是文件的权限问题 使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note4 Linux用户权限管理">
+<meta property="og:url" content="https://chenzhan666.coding.me/2021/02/13/note4-Linux%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="Ubuntu 用户系统 Ubuntu 下用户类型分为以下 3 类： 初次创建的用户 root用户 普通用户 每个用户都有一个 ID 号，称为 UID，操作系统通过 UID 来识别是哪个用户，用户相关信息可以在文件&#x2F;etc&#x2F;passwd 中查看到 “1000:1000”，第一个数字是用户的 ID，另一个是用户的 GID，也就是用户组 ID  权限管理 做嵌入式开发重点关注的是文件的权限问题 使">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://i0.hdslb.com/bfs/album/0ad890001f85261fa8e29084fbdb23b280785f00.jpg@518w.jpg">
+<meta property="article:published_time" content="2021-02-13T11:58:30.000Z">
+<meta property="article:modified_time" content="2021-02-13T17:24:10.269Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="Ubuntu入门">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i0.hdslb.com/bfs/album/0ad890001f85261fa8e29084fbdb23b280785f00.jpg@518w.jpg"><link rel="shortcut icon" href="/Personalwebsite/blog/myBlog/img/favicon.png"><link rel="canonical" href="https://chenzhan666.coding.me/2021/02/13/note4-Linux%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Personalwebsite/blog/myBlog/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Personalwebsite/blog/myBlog/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-02-14 01:24:10'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Personalwebsite/blog/myBlog/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Personalwebsite/blog/myBlog/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Personalwebsite/blog/myBlog/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Personalwebsite/blog/myBlog/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('http://i0.hdslb.com/bfs/album/0ad890001f85261fa8e29084fbdb23b280785f00.jpg@518w.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Personalwebsite/blog/myBlog/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note4 Linux用户权限管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-13T11:58:30.000Z" title="发表于 2021-02-13 19:58:30">2021-02-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-13T17:24:10.269Z" title="更新于 2021-02-14 01:24:10">2021-02-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note4 Linux用户权限管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<ul>
+<li><p>Ubuntu 用户系统</p>
+<p>Ubuntu 下用户类型分为以下 3 类：</p>
+<p>初次创建的用户</p>
+<p>root用户</p>
+<p>普通用户</p>
+<p>每个用户都有一个 ID 号，称为 UID，操作系统通过 UID 来识别是哪个用户，用户相关信息可以在文件/etc/passwd 中查看到</p>
+<p>“1000:1000”，第一个数字是用户的 ID，另一个是用户的 GID，也就是用户组 ID</p>
+</li>
+<li><p>权限管理</p>
+<p>做嵌入式开发重点关注的是文件的权限问题</p>
+<p>使用命令“ls -l”可以查看某个目录下所有文件的权限信息</p>
+<p>“-rw-rw-r–”表示文件权限与用户和用户组之间的关系，第一位表示文件类型，剩下的 9 位以 3 位为一组，分别表示文件拥有者的权限，文件拥有者所在用户组的权限以及其它用户权限。后面的“chenzhan chenzhan”分别代表文件拥有者(用户)和该用户所在的用户组</p>
+</li>
+</ul>
+<ol>
+<li><p> 文件 test.c 的拥有者是用户 zuozhongkai，其对文件 test.c 的权限是“rw-”，也就是对该文件拥有读和写两种权限</p>
+</li>
+<li><p> 用户 zuozhongkai 所在的用户组也叫做 zuozhongkai，其组内用户对于文件 test.c 的权限是“rw-”，也是拥有读和写这两种权限</p>
+</li>
+<li><p> 其它用户对于文件 test.c 的权限是“r–”，也就是只读权限文件的权限有三种：读(r)、写(w)和执行(x)</p>
+</li>
+</ol>
+<p>   使用 a、u、g 和 o 表示文件的归属关系，用=、+和-表示文件权限的变化</p>
+<p>   修改其归属用户(chenzhan)对其拥有可执行权限，可以使用：u+x。如果希望设置归属用户及其所在的用户组都对其拥有可执行权限就可以使用：gu+x。</p>
+<ul>
+<li><p>权限管理命令</p>
+<ul>
+<li><p>chmod</p>
+<p>权限修改命令</p>
+<p>chmod [参数] [文件名/目录名]</p>
+<table>
+<thead>
+<tr>
+<th align="left">-c</th>
+<th>效果类似“-v”参数，但仅回显更改的部分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-f</td>
+<td>不显示错误信息</td>
+</tr>
+<tr>
+<td align="left">-R</td>
+<td>递归处理，指定目录下的所有文件及其子文件目录一起处理</td>
+</tr>
+<tr>
+<td align="left">-v</td>
+<td>显示指令的执行过程</td>
+</tr>
+</tbody></table>
+<p>权限改为“rwxrw-rw”，对应数字 766</p>
+<p>权限改为“rwxrwxrwx”，对应数字 777</p>
+</li>
+<li><p>chown</p>
+<p>chown [参数] [用户名.&lt;组名&gt;] [文件名/目录]</p>
+<p>用来修改某个文件或者目录的归属者用户或者用户组</p>
+<p>其中[用户名.&lt;组名&gt;]表示要将文件或者目录改为哪一个用户或者用户组，用户名和组名用“.”隔开，其中用户名和组名中的任何一个都可以省略，命令主要参数如下：</p>
+<table>
+<thead>
+<tr>
+<th>-c</th>
+<th>效果同-v 类似，但仅回报更改的部分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-f</td>
+<td>不显示错误信息</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>只对符号连接的文件做修改，不改动其它任何相关的文件</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>递归处理，将指定的目录下的所有文件和子目录一起处理</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示处理过程</td>
+</tr>
+</tbody></table>
+<p>命令shown同样也可以递归处理来修改文件夹的归属用户和用户组，用法和命令chown一样</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Linux磁盘管理"><a href="#Linux磁盘管理" class="headerlink" title="Linux磁盘管理"></a>Linux磁盘管理</h1><ul>
+<li><p>Linux磁盘管理基本概念</p>
+<p>文件/etc/fstab 详细的记录了 Ubuntu 中硬盘分区的情况</p>
+<p>“/”是挂载点，“/dev/sda1”就是我们装 Ubuntu 系统的硬盘</p>
+<p>*<strong>ls /dev/sd**</strong></p>
+<p><strong><em>查看当前系统中的磁盘，打印出所有以/dev/sd 开头的设备文件</em></strong></p>
+</li>
+<li><p>磁盘管理命令</p>
+<ul>
+<li><p>fdisk</p>
+<p>fdisk [参数]</p>
+<p>对某个磁盘进行分区</p>
+<table>
+<thead>
+<tr>
+<th>-b&lt;分区大小&gt;</th>
+<th>指定每个分区的大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-l</td>
+<td>列出指定设备的分区表</td>
+</tr>
+<tr>
+<td>-s&lt;分区编号&gt;</td>
+<td>将指定的分区大小输出到标准的输出上，单位为块</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>搭配“-l”参数，会用分区数目取代柱面数目，来表示每个分区的起始地址</td>
+</tr>
+</tbody></table>
+</li>
+<li><p> sudo fdisk /dev/sdb</p>
+<p><del>对 U 盘进行分区</del></p>
+<p><strong>千万不要对自己装的 Ubuntu 系统进行分区！！！</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">p</th>
+<th>显示现有的分区</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">n</td>
+<td>建立新分区</td>
+</tr>
+<tr>
+<td align="left">t</td>
+<td>更改分区类型</td>
+</tr>
+<tr>
+<td align="left">d</td>
+<td>删除现有的分区</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td>更改分区启动标志</td>
+</tr>
+<tr>
+<td align="left">w</td>
+<td>对分区的更改写入到硬盘或者存储器中</td>
+</tr>
+<tr>
+<td align="left">q</td>
+<td>不保存退出</td>
+</tr>
+</tbody></table>
+</li>
+<li><p> mkfs</p>
+<p>mkfs [参数] [-t 文件系统类型] [分区名称]</p>
+<p>格式化命令</p>
+<table>
+<thead>
+<tr>
+<th>fs</th>
+<th>指定建立文件系统时的参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-V</td>
+<td>显示版本信息和简要的使用方法</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示版本信息和详细的使用方法</td>
+</tr>
+</tbody></table>
+<p>比如要格式化 U 盘的分区/dev/sdb1 为 FAT 格式，那么就可以使用如下命令：</p>
+<p>mkfs –t vfat /dev/sdb1</p>
+</li>
+<li><p> mount</p>
+<p>mount [参数] -t [类型] [设备名称] [目的文件夹]</p>
+<p>挂载分区命令</p>
+<table>
+<thead>
+<tr>
+<th>-V</th>
+<th>显示程序版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-h</td>
+<td>显示辅助信息</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示执行过程详细信息</td>
+</tr>
+<tr>
+<td>-o ro</td>
+<td>只读模式挂载</td>
+</tr>
+<tr>
+<td>-o rw</td>
+<td>读写模式挂载</td>
+</tr>
+<tr>
+<td>-s-r</td>
+<td>等于-o ro</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>等于-o rw</td>
+</tr>
+</tbody></table>
+<p>我们需要将/dev/sdb1 这个分区挂载到一个文件夹中，然后通过这个文件访问 U 盘</p>
+<p>挂载点是一个文件夹，因此在挂载之前先要创建一个文件夹，一般我们把挂载点放到“/mnt”目录下，在“/mnt”下创建一个 tmp 文件夹，然后将 U 盘的/dev/sdb1 分区挂载到/mnt/tmp文件夹里面</p>
+<p>将 U 盘以 fat 格式挂载到目录/mnt/tmp 中，然后就可以通过访问/mnt/tmp 来访问 U 盘</p>
+</li>
+<li><p> umount</p>
+<p>umount [参数] -t [文件系统类型] [设备名称]</p>
+<p>卸载命令，不再需要访问已经挂载的 U 盘，可以通过 umount 将其从卸载点卸除</p>
+<table>
+<thead>
+<tr>
+<th>-a</th>
+<th>卸载/etc/mtab 中的所有文件系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-h</td>
+<td>显示帮助</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>卸载时不要将信息存入到/etc/mtab 文件中</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>如果无法成功卸载，则尝试以只读的方式重新挂载</td>
+</tr>
+<tr>
+<td>-t&lt;文件系统类型&gt;</td>
+<td>仅卸载选项中指定的文件系统</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示执行过程</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>参考资料：正点原子《I.MX6U嵌入式Linux驱动开发指南V1.5》P123~132</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://chenzhan666.coding.me/2021/02/13/note4-Linux%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">https://chenzhan666.coding.me/2021/02/13/note4-Linux%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://chenzhan666.coding.me" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Personalwebsite/blog/myBlog/tags/Ubuntu%E5%85%A5%E9%97%A8/">Ubuntu入门</a></div><div class="post_share"><div class="social-share" data-image="http://i0.hdslb.com/bfs/album/0ad890001f85261fa8e29084fbdb23b280785f00.jpg@518w.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Personalwebsite/blog/myBlog/2021/02/13/note5-Linux-C%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E3%80%81Makefile%E5%9F%BA%E7%A1%80/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/104b685632df0f13141be343b76461e8cfa47a43.png@518w.png" onerror="onerror=null;src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note5 Linux C编程入门、Makefile基础</div></div></a></div><div class="next-post pull-right"><a href="/Personalwebsite/blog/myBlog/2021/02/13/note3-Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"><img class="next-cover" src="http://i0.hdslb.com/bfs/article/2a975e3f4174d022f747748f3bbc50b8a7828e7e.jpg@1320w_742h.webp" onerror="onerror=null;src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note3 Linux文件系统</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Personalwebsite/blog/myBlog/2021/02/13/note1-常用shell命令/" title="note1 常用shell命令"><img class="cover" src="https://i0.hdslb.com/bfs/album/1903354572a2082a0712f25e3a47d59b7fd7e908.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-13</div><div class="title">note1 常用shell命令</div></div></a></div><div><a href="/Personalwebsite/blog/myBlog/2021/02/13/note2-常用工具命令/" title="note2 常用工具命令"><img class="cover" src="https://i0.hdslb.com/bfs/album/d79534e97241dc277cc3f6525cd1d27acee50953.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-13</div><div class="title">note2 常用工具命令</div></div></a></div><div><a href="/Personalwebsite/blog/myBlog/2021/02/13/note3-Linux文件系统/" title="note3 Linux文件系统"><img class="cover" src="http://i0.hdslb.com/bfs/article/2a975e3f4174d022f747748f3bbc50b8a7828e7e.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-13</div><div class="title">note3 Linux文件系统</div></div></a></div><div><a href="/Personalwebsite/blog/myBlog/2021/02/13/note5-Linux-C编程入门、Makefile基础/" title="note5 Linux C编程入门、Makefile基础"><img class="cover" src="https://i0.hdslb.com/bfs/album/104b685632df0f13141be343b76461e8cfa47a43.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-13</div><div class="title">note5 Linux C编程入门、Makefile基础</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Personalwebsite/blog/myBlog/null" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Personalwebsite/blog/myBlog/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div><div class="card-info-data-item is-center"><a href="/Personalwebsite/blog/myBlog/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">Linux磁盘管理</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Personalwebsite/blog/myBlog/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节"><img src="https://i0.hdslb.com/bfs/article/d8c27357c95b4ec212391f814a276990815f09e1.jpg@1320w_734h.webp" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="note25-LCD背光调节"/></a><div class="content"><a class="title" href="/Personalwebsite/blog/myBlog/2021/03/05/note25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note25-LCD背光调节">note25-LCD背光调节</a><time datetime="2021-03-05T14:40:09.000Z" title="发表于 2021-03-05 22:40:09">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Personalwebsite/blog/myBlog/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏"><img src="https://i0.hdslb.com/bfs/article/6df5035bad4239b717df0b5bc957b81f1e4e1fad.jpg@1320w_854h.webp" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="note24-多点电容触摸屏"/></a><div class="content"><a class="title" href="/Personalwebsite/blog/myBlog/2021/03/05/note24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note24-多点电容触摸屏">note24-多点电容触摸屏</a><time datetime="2021-03-05T12:47:55.000Z" title="发表于 2021-03-05 20:47:55">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Personalwebsite/blog/myBlog/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验"><img src="https://i0.hdslb.com/bfs/article/a1afb00e2f3048d34143eb987c7a0a15d41e8bfe.jpg@1320w_932h.webp" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="note23-SPI实验"/></a><div class="content"><a class="title" href="/Personalwebsite/blog/myBlog/2021/03/03/note23-SPI%E5%AE%9E%E9%AA%8C/" title="note23-SPI实验">note23-SPI实验</a><time datetime="2021-03-03T13:08:21.000Z" title="发表于 2021-03-03 21:08:21">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Personalwebsite/blog/myBlog/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验"><img src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="note22-I2C实验"/></a><div class="content"><a class="title" href="/Personalwebsite/blog/myBlog/2021/03/02/note22-I2C%E5%AE%9E%E9%AA%8C/" title="note22-I2C实验">note22-I2C实验</a><time datetime="2021-03-01T16:40:54.000Z" title="发表于 2021-03-02 00:40:54">2021-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Personalwebsite/blog/myBlog/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟"><img src="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp" onerror="this.onerror=null;this.src='/Personalwebsite/blog/myBlog/img/404.jpg'" alt="note21-RTC实时时钟"/></a><div class="content"><a class="title" href="/Personalwebsite/blog/myBlog/2021/03/01/note21-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/" title="note21-RTC实时时钟">note21-RTC实时时钟</a><time datetime="2021-03-01T06:52:25.000Z" title="发表于 2021-03-01 14:52:25">2021-03-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Personalwebsite/blog/myBlog/js/utils.js"></script><script src="/Personalwebsite/blog/myBlog/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Personalwebsite/blog/myBlog/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
