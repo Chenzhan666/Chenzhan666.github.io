@@ -1,0 +1,685 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note3.27-数据结构概念二 | CHENZHAN</title><meta name="keywords" content="数据结构"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="结构体结构体基础知识结构体类型的定义123456789struct Person&amp;#123;	char name[64];	int age;&amp;#125;;typedef struct _PERSON&amp;#123;	char name[64];	int age;&amp;#125;Person; 注意：定义结构体类型时不要直接给成员赋值，结构体只是一个类型，编译器还没有为其分配空间，只有根据其类型定义变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note3.27-数据结构概念二">
+<meta property="og:url" content="https://www.chenzhan.club/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="结构体结构体基础知识结构体类型的定义123456789struct Person&amp;#123;	char name[64];	int age;&amp;#125;;typedef struct _PERSON&amp;#123;	char name[64];	int age;&amp;#125;Person; 注意：定义结构体类型时不要直接给成员赋值，结构体只是一个类型，编译器还没有为其分配空间，只有根据其类型定义变量">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3855299888,698829681&fm=26&gp=0.jpg">
+<meta property="article:published_time" content="2021-03-08T13:44:00.000Z">
+<meta property="article:modified_time" content="2021-03-09T18:09:45.469Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3855299888,698829681&fm=26&gp=0.jpg"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-03-10 02:09:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3855299888,698829681&amp;fm=26&amp;gp=0.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note3.27-数据结构概念二</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-08T13:44:00.000Z" title="发表于 2021-03-08 21:44:00">2021-03-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-03-09T18:09:45.469Z" title="更新于 2021-03-10 02:09:45">2021-03-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note3.27-数据结构概念二"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h1><h2 id="结构体基础知识"><a href="#结构体基础知识" class="headerlink" title="结构体基础知识"></a>结构体基础知识</h2><h3 id="结构体类型的定义"><a href="#结构体类型的定义" class="headerlink" title="结构体类型的定义"></a>结构体类型的定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">struct Person&#123;</span><br><span class="line">	char name[64];</span><br><span class="line">	int age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">typedef struct _PERSON&#123;</span><br><span class="line">	char name[64];</span><br><span class="line">	int age;</span><br><span class="line">&#125;Person;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>定义结构体类型时不要直接给成员赋值，结构体只是一个类型，编译器还没有为其分配空间，只有根据其类型定义变量时，才分配空间，有空间后才能赋值</p>
+<h3 id="结构体变量的定义"><a href="#结构体变量的定义" class="headerlink" title="结构体变量的定义"></a>结构体变量的定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct Person&#123;</span><br><span class="line">	char name[64];</span><br><span class="line">	int age;</span><br><span class="line">&#125;p1; &#x2F;&#x2F;定义类型同时定义变量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">struct&#123;</span><br><span class="line">	char name[64];</span><br><span class="line">	int age;</span><br><span class="line">&#125;p2; &#x2F;&#x2F;定义类型同时定义变量</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">struct Person p3; &#x2F;&#x2F;通过类型直接定义</span><br></pre></td></tr></table></figure>
+<h3 id="结构体变量的初始化"><a href="#结构体变量的初始化" class="headerlink" title="结构体变量的初始化"></a>结构体变量的初始化</h3><h3 id="结构体成员的使用"><a href="#结构体成员的使用" class="headerlink" title="结构体成员的使用"></a>结构体成员的使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">struct Person&#123;</span><br><span class="line">	char name[64];</span><br><span class="line">	int age;</span><br><span class="line">&#125;;</span><br><span class="line">void test()&#123;</span><br><span class="line">	&#x2F;&#x2F;在栈上分配空间</span><br><span class="line">	struct Person p1;</span><br><span class="line">	strcpy(p1.name, &quot;John&quot;);</span><br><span class="line">	p1.age &#x3D; 30;</span><br><span class="line">	&#x2F;&#x2F;如果是普通变量，通过点运算符操作结构体成员</span><br><span class="line">	printf(&quot;Name:%s Age:%d\n&quot;, p1.name, p1.age);</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F;在堆上分配空间</span><br><span class="line">	struct Person* p2 &#x3D; (struct Person*)malloc(sizeof(struct Person));</span><br><span class="line">	strcpy(p2-&gt;name, &quot;Obama&quot;);</span><br><span class="line">	p2-&gt;age &#x3D; 33;</span><br><span class="line">	&#x2F;&#x2F;如果是指针变量，通过-&gt;操作结构体成员</span><br><span class="line">	printf(&quot;Name:%s Age:%d\n&quot;, p2-&gt;name, p2-&gt;age);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果有typedef， 定义结构体，那么后面跟着的单词是类型的别名</li>
+<li>没有typedef，定义结构体，后面跟着的单词是一个结构体变量</li>
+<li>结构体数组<ul>
+<li>在栈上开辟</li>
+<li>在堆区开辟</li>
+</ul>
+</li>
+</ul>
+<h3 id="结构体赋值问题以及解决"><a href="#结构体赋值问题以及解决" class="headerlink" title="结构体赋值问题以及解决"></a>结构体赋值问题以及解决</h3><p>相同的两个结构体变量可以相互赋值，把一个结构体变量的值拷贝给另一个结构体，这两个变量还是两个独立的变量</p>
+<p>系统提供的赋值操作是简单的值拷贝，逐字节拷贝—- 浅拷贝</p>
+<p>如果属性中有指向堆区的内容，在释放期间会导致堆区重复释放，并且还有内存泄露</p>
+<p>解决方案：利用深拷贝，手动赋值</p>
+<h4 id="深拷贝和浅拷贝"><a href="#深拷贝和浅拷贝" class="headerlink" title="深拷贝和浅拷贝"></a>深拷贝和浅拷贝</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;一个老师有N个学生</span><br><span class="line">typedef struct _TEACHER&#123;</span><br><span class="line">	char* name;</span><br><span class="line">&#125;Teacher;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void test()&#123;</span><br><span class="line">	</span><br><span class="line">	Teacher t1;</span><br><span class="line">	t1.name &#x3D; malloc(64);</span><br><span class="line">	strcpy(t1.name , &quot;John&quot;);</span><br><span class="line"></span><br><span class="line">	Teacher t2;</span><br><span class="line">	t2 &#x3D; t1;</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F;对手动开辟的内存，需要手动拷贝</span><br><span class="line">	t2.name &#x3D; malloc(64);</span><br><span class="line">	strcpy(t2.name, t1.name);</span><br><span class="line"></span><br><span class="line">	if (t1.name !&#x3D; NULL)&#123;</span><br><span class="line">		free(t1.name);</span><br><span class="line">		t1.name &#x3D; NULL;</span><br><span class="line">	&#125;</span><br><span class="line">	if (t2.name !&#x3D; NULL)&#123;</span><br><span class="line">		free(t2.name);</span><br><span class="line">		t1.name &#x3D; NULL;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="结构体数组"><a href="#结构体数组" class="headerlink" title="结构体数组"></a>结构体数组</h3><h2 id="结构体嵌套指针"><a href="#结构体嵌套指针" class="headerlink" title="结构体嵌套指针"></a>结构体嵌套指针</h2><h3 id="结构体嵌套一级指针"><a href="#结构体嵌套一级指针" class="headerlink" title="结构体嵌套一级指针"></a>结构体嵌套一级指针</h3><ol>
+<li>设计结构体 struct Person { char * name,int age }</li>
+<li>在堆区创建 结构体指针数组  malloc(sizeof(struct Person *) * 3);</li>
+<li>给每个结构体也分配到堆区</li>
+<li>给每个结构体的姓名分配到堆区</li>
+<li>打印数组中所有人的信息</li>
+<li>释放堆区数据</li>
+</ol>
+<h3 id="结构体嵌套二级指针"><a href="#结构体嵌套二级指针" class="headerlink" title="结构体嵌套二级指针"></a>结构体嵌套二级指针</h3><h3 id="结构体成员偏移量"><a href="#结构体成员偏移量" class="headerlink" title="结构体成员偏移量"></a>结构体成员偏移量</h3><p>一旦结构体定义下来，则结构体中的成员内存布局就定下了</p>
+<p>可以利用offsetof来计算结构体中属性的偏移</p>
+<p>也可以通过地址的相加运算 计算偏移量</p>
+<p>结构体嵌套结构体</p>
+<h3 id="结构体字节对齐"><a href="#结构体字节对齐" class="headerlink" title="结构体字节对齐"></a>结构体字节对齐</h3><p>在用sizeof运算符求算某结构体所占空间时，并不是简单地将结构体中所有元素各自占的空间相加，这里涉及到内存字节对齐的问题</p>
+<p>从理论上讲，对于任何变量的访问都可以从任何地址开始访问，但是事实上不是如此，实际上访问特定类型的变量只能在特定的地址访问，这就需要各个变量在空间上按一定的规则排列， 而不是简单地顺序排列，这就是内存对齐</p>
+<h4 id="内存对齐"><a href="#内存对齐" class="headerlink" title="内存对齐"></a>内存对齐</h4><h5 id="内存对齐原因"><a href="#内存对齐原因" class="headerlink" title="内存对齐原因"></a>内存对齐原因</h5><p>内存对齐原因：以空间换时间</p>
+<p>内存的最小单元是一个字节，当cpu从内存中读取数据的时候，是一个一个字节读取</p>
+<p>但是实际上cpu将内存当成多个块，每次从内存中读取一个块，这个块的大小可能是2、4、8、16等</p>
+<p><em>非内存对齐和内存对齐的优缺点在哪？</em></p>
+<p>内存对齐是操作系统为了提高访问内存的策略。操作系统在访问内存的时候，每次读取一定长度(这个长度是操作系统默认的对齐数，或者默认对齐数的整数倍)。如果没有对齐，为了访问一个变量可能产生二次访问</p>
+<p><em>为什么要简单内存对齐？</em></p>
+<p>提高存取数据的速度。比如有的平台每次都是从偶地址处读取数据，对于一个int型的变量，若从偶地址单元处存放，则只需一个读取周期即可读取该变量；但是若从奇地址单元处存放，则需要2个读取周期读取该变量</p>
+<p>某些平台只能在特定的地址处访问特定类型的数据，否则抛出硬件异常给操作系统</p>
+<h5 id="对于自定义数据类型对齐规则"><a href="#对于自定义数据类型对齐规则" class="headerlink" title="对于自定义数据类型对齐规则"></a>对于自定义数据类型对齐规则</h5><ol>
+<li>从第一个属性开始 偏移为0 </li>
+<li>第二个属性开始，地址要放在该类型整数倍与对齐模数比取小的值的整数倍上</li>
+<li>所有的属性都计算结束后，整体再做二次对齐，整体需要放在属性中最大类型与对齐模数比取小的值的整数倍上</li>
+</ol>
+<h5 id="如何内存对齐"><a href="#如何内存对齐" class="headerlink" title="如何内存对齐"></a>如何内存对齐</h5><p>默认对齐模数  是8，可以将对齐模数改为 2的n次方</p>
+<p>当结构体嵌套结构体时候，只需要看子结构体中最大数据类型就可以了</p>
+<p>对于标准数据类型，它的地址只要是它的长度的整数倍。</p>
+<p>对于非标准数据类型，比如结构体，要遵循一下对齐原则：</p>
+<ul>
+<li>数组成员对齐规则。第一个数组成员应该放在offset为0的地方，以后每个数组成员应该放在offset为min（当前成员的大小，#pargama pack(n)）整数倍的地方开始（比如int在32位机器为４字节，#pargama pack(2)，那么从2的倍数地方开始存储）</li>
+<li> 结构体总的大小，也就是sizeof的结果，必须是min（结构体内部最大成员，#pargama pack(n)）的整数倍，不足要补齐</li>
+<li>结构体做为成员的对齐规则。如果一个结构体B里嵌套另一个结构体A,还是以最大成员类型的大小对齐，但是结构体A的起点为A内部最大成员的整数倍的地方。（struct B里存有struct A，A里有char，int，double等成员，那A应该从8的整数倍开始存储。），结构体A中的成员的对齐规则仍满足原则1、原则2</li>
+</ul>
+<p>手动设置对齐模数:</p>
+<ul>
+<li><p>#pragma  pack(show)</p>
+<p>显示当前packing alignment的字节数，以warning message的形式被显示</p>
+</li>
+<li><p>#pragma pack(push)   </p>
+<p>将当前指定的packing alignment数组进行压栈操作，这里的栈是the internal compiler stack,同事设置当前的packing  alignment为n；如果n没有指定，则将当前的packing alignment数组压栈</p>
+</li>
+<li><p>#pragma pack(pop)  </p>
+<p>从internal compiler stack中删除最顶端的reaord; 如果没有指定n,则当前栈顶record即为新的packing alignement数值；如果指定了n，则n成为新的packing  alignment值 </p>
+</li>
+<li><p>#pragma pack(n) </p>
+<p>指定packing的数值，以字节为单位，缺省数值是8，合法的数值分别是1,2,4,8,16</p>
+</li>
+</ul>
+<h4 id="内存对齐案例"><a href="#内存对齐案例" class="headerlink" title="内存对齐案例"></a>内存对齐案例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#pragma pack(4)</span><br><span class="line"></span><br><span class="line">typedef struct _STUDENT&#123;</span><br><span class="line">	int a;</span><br><span class="line">	char b;</span><br><span class="line">	double c;</span><br><span class="line">	float d;</span><br><span class="line">&#125;Student;</span><br><span class="line"></span><br><span class="line">typedef struct _STUDENT2&#123;</span><br><span class="line">	char a;</span><br><span class="line">	Student b; </span><br><span class="line">	double c;</span><br><span class="line">&#125;Student2;</span><br><span class="line"></span><br><span class="line">void test01()&#123;</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F;Student</span><br><span class="line">	&#x2F;&#x2F;a从偏移量0位置开始存储</span><br><span class="line">	&#x2F;&#x2F;b从4位置开始存储</span><br><span class="line">	&#x2F;&#x2F;c从8位置开始存储</span><br><span class="line">	&#x2F;&#x2F;d从12位置开存储</span><br><span class="line">	&#x2F;&#x2F;所以Student内部对齐之后的大小为20 ，整体对齐，整体为最大类型的整数倍 也就是8的整数倍 为24</span><br><span class="line"></span><br><span class="line">	printf(&quot;sizeof Student:%d\n&quot;,sizeof(Student));</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F;Student2 </span><br><span class="line">	&#x2F;&#x2F;a从偏移量为0位置开始 </span><br><span class="line">	&#x2F;&#x2F;b从偏移量为Student内部最大成员整数倍开始，也就是8开始</span><br><span class="line">	&#x2F;&#x2F;c从8的整数倍地方开始,也就是32开始</span><br><span class="line">	&#x2F;&#x2F;所以结构体Sutdnet2内部对齐之后的大小为：40 ， 由于结构体中最大成员为8，必须为8的整数倍 所以大小为40</span><br><span class="line">	printf(&quot;sizeof Student2:%d\n&quot;, sizeof(Student2));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="有关结构体的自身引用"><a href="#有关结构体的自身引用" class="headerlink" title="有关结构体的自身引用"></a>有关结构体的自身引用</h2><ul>
+<li>结构体可以嵌套另外一个结构体的任何类型变量</li>
+<li>结构体嵌套本结构体普通变量（不可以）。本结构体的类型大小无法确定，类型本质：固定大小内存块别名</li>
+<li>结构体嵌套本结构体指针变量（可以）, 指针变量的空间能确定，32位， 4字节， 64位， 8字节</li>
+</ul>
+<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><p>文件在今天的计算机系统中作用是很重要的。文件用来存放程序、文档、数据、表格、图片和其他很多种类的信息。作为一名程序员，须学会使用编程来创建、写入和读取文件。编写程序从文件读取信息或者将结果写入文件是一种经常性的需求。C提供了强大的和文件进行通信的方法。使用这种方法我们可以在程序中打开文件，然后使用专门的I/O函数读取文件或者写入文件</p>
+<h2 id="文件相关概念"><a href="#文件相关概念" class="headerlink" title="文件相关概念"></a>文件相关概念</h2><p>一个文件通常就是磁盘上一段命名的存储区。但是对于操作系统来说，文件就会更复杂一些。例如，一个大文件可以存储在一些分散的区段中，或者还会包含一些操作系统可以确定其文件类型的附加数据，是操作系统关心的事情。我们应该考虑如何在C程序中处理文件</p>
+<h2 id="流的概念"><a href="#流的概念" class="headerlink" title="流的概念"></a>流的概念</h2><p>流是一个动态的概念，可以将一个字节形象地比喻成一滴水，字节在设备、文件和程序之间的传输就是流，类似于水在管道中的传输，可以看出，流是对输入输出源的一种抽象，也是对传输信息的一种抽象</p>
+<p>C语言中，I/O操作可以简单地看作是从程序移进或移出字节，这种搬运的过程便称为流(stream)。程序只需要关心是否正确地输出了字节数据，以及是否正确地输入了要读取字节数据，特定I/O设备的细节对程序员是隐藏的</p>
+<h3 id="文本流"><a href="#文本流" class="headerlink" title="文本流"></a>文本流</h3><p>文本流，也就是我们常说的以文本模式读取文件。文本流的有些特性在不同的系统中可能不同。其中之一就是文本行的最大长度。标准规定至少允许254个字符。另一个可能不同的特性是文本行的结束方式。例如在Windows系统中，文本文件约定以一个回车符和一个换行符结尾。但是在Linux下只使用一个换行符结尾</p>
+<p>标准C把文本定义为零个或者多个字符，后面跟一个表示结束的换行符(\n).对于那些文本行的外在表现形式与这个定义不同的系统上，库函数负责外部形式和内部形式之间的翻译。例如，在Windows系统中，在输出时，文本的换行符被写成一对回车/换行符。在输入时，文本中的回车符被丢弃。这种不必考虑文本的外部形势而操纵文本的能力简化了可移植程序的创建</p>
+<h3 id="二进制流"><a href="#二进制流" class="headerlink" title="二进制流"></a>二进制流</h3><p>二进制流中的字节将完全根据程序编写它们的形式写入到文件中，而且完全根据它们从文件或设备读取的形式读入到程序中。它们并未做任何改变。这种类型的流适用于非文本数据，但是如果你不希望I/O函数修改文本文件的行末字符，也可以把它们用于文本文件</p>
+<p>c语言在处理这两种文件的时候并不区分，都看成是字符流，按字节进行处理。</p>
+<p><strong>我们程序中，经常看到的文本方式打开文件和二进制方式打开文件仅仅体现在换行符的处理上</strong></p>
+<p>比如说，在widows下，文件的换行符是\r\n，而在Linux下换行符则是\n</p>
+<p>当对文件使用文本方式打开的时候，读写的windows文件中的换行符\r\n会被替换成\n读到内存中，当在windows下写入文件的时候，\n被替换成\r\n再写入文件。如果使用二进制方式打开文件，则不进行\r\n和\n之间的转换。 那么由于Linux下的换行符就是\n,所以文本文件方式和二进制方式无区别</p>
+<h2 id="文件的操作"><a href="#文件的操作" class="headerlink" title="文件的操作"></a>文件的操作</h2><h3 id="文件流总览"><a href="#文件流总览" class="headerlink" title="文件流总览"></a>文件流总览</h3><p>标准库函数是的我们在C程序中执行与文件相关的I/O任务非常方便。下面是关于文件I/O的一般概况</p>
+<ol>
+<li>程序为同时处于活动状态的每个文件声明一个指针变量，其类型为FILE*。这个指针指向这个FILE结构，当它处于活动状态时由流使用</li>
+<li>流通过fopen函数打开。为了打开一个流，我们必须指定需要访问的文件或设备以及他们的访问方式(读、写、或者读写)。Fopen和操作系统验证文件或者设备是否存在并初始化FILE</li>
+<li>根据需要对文件进行读写操作</li>
+<li>最后调用fclose函数关闭流。关闭一个流可以防止与它相关的文件被再次访问，保证任何存储于缓冲区中的数据被正确写入到文件中，并且释放FILE结构</li>
+</ol>
+<p>标准I/O更为简单，因为它们并不需要打开或者关闭</p>
+<p>I/O函数以三种基本的形式处理数据：<strong>单个字符</strong>、<strong>文本行</strong>和<strong>二进制数据</strong>。对于每种形式都有一组特定的函数对它们进行处理</p>
+<p><strong>输入/输出函数家族</strong></p>
+<table>
+<thead>
+<tr>
+<th>家族名</th>
+<th>目的</th>
+<th>可用于所有流</th>
+<th>只用于stdin和stdout</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getchar</td>
+<td>字符输入</td>
+<td>fgetc、getc</td>
+<td>getchar</td>
+</tr>
+<tr>
+<td>putchar</td>
+<td>字符输出</td>
+<td>fputc、putc</td>
+<td>putchar</td>
+</tr>
+<tr>
+<td>gets</td>
+<td>文本行输入</td>
+<td>fgets</td>
+<td>gets</td>
+</tr>
+<tr>
+<td>puts</td>
+<td>文本行输出</td>
+<td>fputs</td>
+<td>puts</td>
+</tr>
+<tr>
+<td>scanf</td>
+<td>格式化输入</td>
+<td>fscanf</td>
+<td>scanf</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>格式化输出</td>
+<td>fprintf</td>
+<td>printf</td>
+</tr>
+</tbody></table>
+<p>fgetc：函数从流中返回一个字符值</p>
+<p>getc：从流中取字符</p>
+<p>fputc：函数功能： 将<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6/4768913">字符</a>c写到文件指针fp所指向的文件的当前写指针的位置</p>
+<p>putc：putc，原型是int fputc，功能是输出一字符到指定流中</p>
+<p>fscanf：功能为根据数据格式(format)，从输入流(stream)中读入数据，存储到argument中，遇到空格和换行时结束。fscanf位于C标准库头文件&lt;stdio.h&gt;中</p>
+<p>fprintf：是C/C++中的一个格式化库函数，位于头文件<cstdio>中，其作用是格式化输出到一个流文件中；fprintf()函数根据指定的格式(format)，向输出流(stream)写入数据(argument)</cstdio></p>
+<p>stdin：标准输入流，一般指键盘输入到缓冲区里的东西</p>
+<p>stdout：一个定义在&lt;stdio.h&gt;的宏（macro），它展开到一个 FILE* （“指向 FILE 的指针”）类型的表达式（不一定是常量），这个表达式指向一个与标准输出流（standard output stream）相关连的 FILE 对象</p>
+<h3 id="文件指针"><a href="#文件指针" class="headerlink" title="文件指针"></a>文件指针</h3><p>文件是由操作系统管理的单元。操作一个文件的时候，让操作系统帮我们打开文件，操作系统把我们指定要打开文件的信息保存起来，并且返回给我们一个指针指向文件的信息。文件指针也可以理解为代指打开的文件。这个指针的类型为FILE类型。该类型定义在stdio.h头文件中。通过文件指针，我们就可以对文件进行各种操作</p>
+<p>对于每一个ANSI C程序，运行时系统必须提供至少三个流-标准输入(stdin)、标准输出(stdout)、标准错误(stderr)，它们都是一个指向FILE结构的指针。标准输入是缺省情况下的输入来源，标准输出时缺省情况下的输出设置。具体缺省值因编译器而异，通常标准输入为键盘设备、标准输出为终端或者屏幕</p>
+<p>ANSI C并未规定FILE的成员，不同编译器可能有不同的定义。VS下FILE信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct _iobuf &#123; </span><br><span class="line">        char  *_ptr;         &#x2F;&#x2F;文件输入的下一个位置 </span><br><span class="line">        int   _cnt;          &#x2F;&#x2F;剩余多少字符未被读取</span><br><span class="line">        char  *_base;        &#x2F;&#x2F;指基础位置(应该是文件的其始位置) </span><br><span class="line">        int   _flag;         &#x2F;&#x2F;文件标志 </span><br><span class="line">        int   _file;         &#x2F;&#x2F;文件的有效性验证 </span><br><span class="line">        int   _charbuf;      &#x2F;&#x2F;检查缓冲区状况,如果无缓冲区则不读取 </span><br><span class="line">        int   _bufsiz;       &#x2F;&#x2F;文件的大小 </span><br><span class="line">        char  *_tmpfname;    &#x2F;&#x2F;临时文件名 </span><br><span class="line">&#125;; </span><br><span class="line">typedef struct _iobuf FILE;</span><br></pre></td></tr></table></figure>
+<h3 id="文件缓冲区"><a href="#文件缓冲区" class="headerlink" title="文件缓冲区"></a>文件缓冲区</h3><p>ANSI C标准采用“缓冲文件系统”处理数据文件 所谓缓冲文件系统是指系统自动地在内存区为程序中每一个正在使用的文件开辟一个文件缓冲区从内存向磁盘输出数据必须先送到内存中的缓冲区，装满缓冲区后才一起送到磁盘去 如果从磁盘向计算机读入数据，则一次从磁盘文件将一批数据输入到内存缓冲区(充满缓冲区)，然后再从缓冲区逐个地将数据送到程序数据区(给程序变量)</p>
+<p><em>文件缓冲区有什么作用呢？</em></p>
+<p>如我们从磁盘里取信息，我们先把读出的数据放在缓冲区，计算机再直接从缓冲区中取数据，等缓冲区的数据取完后再去磁盘中读取，这样就可以减少磁盘的读写次数，再加上计算机对缓冲区的操作大大快于对磁盘的操作，故应用缓冲区可大大提高计算机的运行速度</p>
+<h2 id="文件读写回顾"><a href="#文件读写回顾" class="headerlink" title="文件读写回顾"></a>文件读写回顾</h2><ul>
+<li><p>按照字符进行读写</p>
+<ul>
+<li>写文件 fputc</li>
+<li>读文件 fgetc</li>
+<li>文件结尾 EOF  END OF FILE</li>
+</ul>
+</li>
+<li><p>按行读写</p>
+<ul>
+<li>写文件 fputs</li>
+<li>读文件 fgets</li>
+</ul>
+</li>
+<li><p>按块读写</p>
+<ul>
+<li>写文件 fwrite <ul>
+<li>参数1 数据地址  参数2 块大小  参数3 块个数  参数4 文件指针</li>
+</ul>
+</li>
+<li>读文件 fread</li>
+</ul>
+</li>
+<li><p>按格式化读写</p>
+<ul>
+<li>写文件fprintf</li>
+<li>读文件fscanf</li>
+</ul>
+</li>
+<li><p>随机位置读写</p>
+<ul>
+<li>fseek （文件指针，偏移， 起始位置 SEEK_SET SEEK_END SEEK_CUR）</li>
+<li>rewind （文件指针） 将文件光标置首</li>
+<li>error宏 全局变量  perror打印宏的提示错误信息</li>
+</ul>
+</li>
+<li><p>文件读写注意事项</p>
+<ul>
+<li>当按照字符的方式读文件时候，通常利用判断EOF获取是否读到文件尾</li>
+<li>当对自定义数据类型写入文件时，不要将指针写入到文件里，要将指针指向的内容写入</li>
+</ul>
+</li>
+<li><p>配置文件读写</p>
+<ul>
+<li>需求：将文件中的有效内容截取出来，并且放入到一个键值对的数组中<ul>
+<li>struct ConfigInfo { char key[64] ; char value[64] };</li>
+</ul>
+</li>
+<li>获取有效行数</li>
+<li>判断当前行是否有效</li>
+<li>解析数据 parseFile<ul>
+<li>将有效数据放入到数组中，数组在堆区开辟</li>
+</ul>
+</li>
+<li>根据key获取value  getInfoByKey</li>
+<li>释放内存 freeSpace</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件打开关闭"><a href="#文件打开关闭" class="headerlink" title="文件打开关闭"></a>文件打开关闭</h2><h3 id="文件打开-fopen"><a href="#文件打开-fopen" class="headerlink" title="文件打开(fopen)"></a>文件打开(fopen)</h3><p>文件的打开操作表示将给用户指定的文件在内存分配一个FILE结构区，并将该结构的指针返回给用户程序，以后用户程序就可用此FILE指针来实现对指定文件的存取操作了。当使用打开函数时，必须给出文件名、文件操作方式(读、写或读写)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FILE * fopen(const char * filename, const char * mode);</span><br><span class="line">功能：打开文件</span><br><span class="line">参数：</span><br><span class="line">  filename：需要打开的文件名，根据需要加上路径</span><br><span class="line">  mode：打开文件的权限设置</span><br><span class="line">返回值：</span><br><span class="line">  成功：文件指针</span><br><span class="line">  失败：NULL</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“r”</td>
+<td>打开，只读，文件必须已经存在</td>
+</tr>
+<tr>
+<td>“w”</td>
+<td>只写,如果文件不存在则创建,如果文件已存在则把文件长度截断(Truncate)为0字节。再重新写,也就是替换掉原来的文件内容文件指针指到头</td>
+</tr>
+<tr>
+<td>“a”</td>
+<td>只能在文件末尾追加数据,如果文件不存在则创建</td>
+</tr>
+<tr>
+<td>“rb”</td>
+<td>打开一个二进制文件，只读</td>
+</tr>
+<tr>
+<td>“wb”</td>
+<td>打开一个二进制文件，只写</td>
+</tr>
+<tr>
+<td>“ab”</td>
+<td>打开一个二进制文件，追加</td>
+</tr>
+<tr>
+<td>“r+”</td>
+<td>允许读和写,文件必须已存在</td>
+</tr>
+<tr>
+<td>“w+”</td>
+<td>允许读和写,如果文件不存在则创建,如果文件已存在则把文件长度截断为0字节再重新写</td>
+</tr>
+<tr>
+<td>“a+”</td>
+<td>允许读和追加数据,如果文件不存在则创建</td>
+</tr>
+<tr>
+<td>“rb+”</td>
+<td>以读/写方式打开一个二进制文件</td>
+</tr>
+<tr>
+<td>“wb+”</td>
+<td>以读/写方式建立一个新的二进制文件</td>
+</tr>
+<tr>
+<td>“ab+”</td>
+<td>以读/写方式打开一个二进制文件进行追加</td>
+</tr>
+</tbody></table>
+<p>应该检查fopen的返回值!如何函数失败，它会返回一个NULL值。如果程序不检查错误，这个NULL指针就会传给后续的I/O函数。它们将对这个指针执行间接访问，并将失败</p>
+<h3 id="文件关闭-fclose"><a href="#文件关闭-fclose" class="headerlink" title="文件关闭(fclose)"></a>文件关闭(fclose)</h3><p>文件操作完成后，如果程序没有结束，必须要用fclose()函数进行关闭，这是因为对打开的文件进行写入时，若文件缓冲区的空间未被写入的内容填满，这些内容不会写到打开的文件中。只有对打开的文件进行关闭操作时，停留在文件缓冲区的内容才能写到该文件中去，从而使文件完整。再者一旦关闭了文件，该文件对应的FILE结构将被释放，从而使关闭的文件得到保护，因为这时对该文件的存取操作将不会进行。文件的关闭也意味着释放了该文件的缓冲区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int fclose(FILE * stream);</span><br><span class="line">功能：关闭先前fopen()打开的文件。此动作让缓冲区的数据写入文件中，并释放系统所提供的文件资源。</span><br><span class="line">参数：</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：0</span><br><span class="line">	失败：-1</span><br></pre></td></tr></table></figure>
+<p>它表示该函数将关闭FILE指针对应的文件，并返回一个整数值。若成功地关闭了文件，则返回一个0值，否则返回一个非0值</p>
+<h3 id="文件读写函数回顾"><a href="#文件读写函数回顾" class="headerlink" title="文件读写函数回顾"></a>文件读写函数回顾</h3><ol>
+<li>按照字符读写文件：fgetc(), fputc()</li>
+<li>按照行读写文件：fputs(), fgets()</li>
+<li>按照块读写文件：fread(), fwirte()</li>
+<li>按照格式化读写文件：fprintf(), fscanf()</li>
+<li>按照随机位置读写文件：fseek(), ftell(), rewind()   </li>
+</ol>
+<h4 id="字符读写函数回顾"><a href="#字符读写函数回顾" class="headerlink" title="字符读写函数回顾"></a>字符读写函数回顾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">int fputc(int ch, FILE * stream);</span><br><span class="line">功能：将ch转换为unsigned char后写入stream指定的文件中</span><br><span class="line">参数：</span><br><span class="line">	ch：需要写入文件的字符</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：成功写入文件的字符</span><br><span class="line">	失败：返回-1</span><br><span class="line"></span><br><span class="line">int fgetc(FILE * stream);</span><br><span class="line">功能：从stream指定的文件中读取一个字符</span><br><span class="line">参数：</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：返回读取到的字符</span><br><span class="line">	失败：-1</span><br><span class="line"></span><br><span class="line">int feof(FILE * stream);</span><br><span class="line">功能：检测是否读取到了文件结尾</span><br><span class="line">参数：</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	非0值：已经到文件结尾</span><br><span class="line">	0：没有到文件结尾</span><br></pre></td></tr></table></figure>
+<p>将把流指针fp指向的文件中的一个字符读出，并赋给ch，当执行fgetc()函数时，若当时文件指针指到文件尾，即遇到文件结束标志EOF(其对应值为-1)，该函数返回一个 -1 给ch，在程序中常用检查该函数返回值是否为 -1 来判断是否已读到文件尾，从而决定是否继续</p>
+<h4 id="行读写函数回顾"><a href="#行读写函数回顾" class="headerlink" title="行读写函数回顾"></a>行读写函数回顾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">int fputs(const char * str, FILE * stream);</span><br><span class="line">功能：将str所指定的字符串写入到stream指定的文件中， 字符串结束符 &#39;\0&#39;  不写入文件。 </span><br><span class="line">参数：</span><br><span class="line">	str：字符串</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：0</span><br><span class="line">	失败：-1</span><br><span class="line"></span><br><span class="line">char * fgets(char * str, int size, FILE * stream);</span><br><span class="line">功能：从stream指定的文件内读入字符，保存到str所指定的内存空间，直到出现换行字符、读到文件结尾或是已读了size - 1个字符为止，最后会自动加上字符 &#39;\0&#39; 作为字符串结束。</span><br><span class="line">参数：</span><br><span class="line">	str：字符串</span><br><span class="line">	size：指定最大读取字符串的长度（size - 1）</span><br><span class="line">	stream：文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：成功读取的字符串</span><br><span class="line">	读到文件尾或出错： NULL</span><br></pre></td></tr></table></figure>
+<h4 id="块读写函数回顾"><a href="#块读写函数回顾" class="headerlink" title="块读写函数回顾"></a>块读写函数回顾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);</span><br><span class="line">功能：以数据块的方式给文件写入内容</span><br><span class="line">参数：</span><br><span class="line">	ptr：准备写入文件数据的地址</span><br><span class="line">	size： size_t 为 unsigned int类型，此参数指定写入文件内容的块数据大小</span><br><span class="line">	nmemb：写入文件的块数，写入文件数据总大小为：size * nmemb</span><br><span class="line">	stream：已经打开的文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：实际成功写入文件数据的块数，此值和nmemb相等</span><br><span class="line">	失败：0</span><br><span class="line"></span><br><span class="line">size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);</span><br><span class="line">功能：以数据块的方式从文件中读取内容</span><br><span class="line">参数：</span><br><span class="line">	ptr：存放读取出来数据的内存空间</span><br><span class="line">	size： size_t 为 unsigned int类型，此参数指定读取文件内容的块数据大小</span><br><span class="line">	nmemb：读取文件的块数，读取文件数据总大小为：size * nmemb</span><br><span class="line">	stream：已经打开的文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：实际成功读取到内容的块数，如果此值比nmemb小，但大于0，说明读到文件的结尾。</span><br><span class="line">	失败：0</span><br></pre></td></tr></table></figure>
+<h4 id="格式化读写函数回顾"><a href="#格式化读写函数回顾" class="headerlink" title="格式化读写函数回顾"></a>格式化读写函数回顾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">int fprintf(FILE * stream, const char * format, ...);</span><br><span class="line">功能：根据参数format字符串来转换并格式化数据，然后将结果输出到stream指定的文件中，指定出现字符串结束符 &#39;\0&#39;  为止。</span><br><span class="line">参数：</span><br><span class="line">	stream：已经打开的文件</span><br><span class="line">	format：字符串格式，用法和printf()一样</span><br><span class="line">返回值：</span><br><span class="line">	成功：实际写入文件的字符个数</span><br><span class="line">	失败：-1</span><br><span class="line"></span><br><span class="line">int fscanf(FILE * stream, const char * format, ...);</span><br><span class="line">功能：从stream指定的文件读取字符串，并根据参数format字符串来转换并格式化数据。</span><br><span class="line">参数：</span><br><span class="line">	stream：已经打开的文件</span><br><span class="line">	format：字符串格式，用法和scanf()一样</span><br><span class="line">返回值：</span><br><span class="line">	成功：实际从文件中读取的字符个数</span><br><span class="line">	失败： - 1</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：<strong>fscanf遇到空格和换行时结束</strong></p>
+<h4 id="随机读写函数回顾"><a href="#随机读写函数回顾" class="headerlink" title="随机读写函数回顾"></a>随机读写函数回顾</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">int fseek(FILE *stream, long offset, int whence);</span><br><span class="line">功能：移动文件流（文件光标）的读写位置。</span><br><span class="line">参数：</span><br><span class="line">	stream：已经打开的文件指针</span><br><span class="line">	offset：根据whence来移动的位移数（偏移量），可以是正数，也可以负数，如果正数，则相对于whence往右移动，如果是负数，则相对于whence往左移动。如果向前移动的字节数超过了文件开头则出错返回，如果向后移动的字节数超过了 文件末尾，再次写入时将增大文件尺寸。</span><br><span class="line">	whence：其取值如下：</span><br><span class="line">		SEEK_SET：从文件开头移动offset个字节</span><br><span class="line">		SEEK_CUR：从当前位置移动offset个字节</span><br><span class="line">		SEEK_END：从文件末尾移动offset个字节</span><br><span class="line">返回值：</span><br><span class="line">	成功：0</span><br><span class="line">	失败：-1</span><br><span class="line"></span><br><span class="line">long ftell(FILE *stream);</span><br><span class="line">功能：获取文件流（文件光标）的读写位置。</span><br><span class="line">参数：</span><br><span class="line">	stream：已经打开的文件指针</span><br><span class="line">返回值：</span><br><span class="line">	成功：当前文件流（文件光标）的读写位置</span><br><span class="line">	失败：-1</span><br><span class="line"></span><br><span class="line">void rewind(FILE *stream);</span><br><span class="line">功能：把文件流（文件光标）的读写位置移动到文件开头。</span><br><span class="line">参数：</span><br><span class="line">	stream：已经打开的文件指针</span><br><span class="line">返回值：</span><br><span class="line">	无返回值</span><br></pre></td></tr></table></figure>
+<h3 id="文件读写案例"><a href="#文件读写案例" class="headerlink" title="文件读写案例"></a>文件读写案例</h3><h4 id="读写配置文件"><a href="#读写配置文件" class="headerlink" title="读写配置文件"></a>读写配置文件</h4><p>配置文件格式如下：</p>
+<p>正式的数据以 ‘:’冒号进行分割，冒号前为key起到索引作用，冒号后为value是实值。#开头的为注释，而不是正式数据</p>
+<h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="链表基本概念"><a href="#链表基本概念" class="headerlink" title="链表基本概念"></a>链表基本概念</h2><h3 id="链表引出"><a href="#链表引出" class="headerlink" title="链表引出"></a>链表引出</h3><p>数组有缺陷，是静态空间，一旦分配内存就不可以动态扩展，要不分配不够，要不分配过多，对于数组头部进行插入和删除效率低</p>
+<h3 id="链表的组成"><a href="#链表的组成" class="headerlink" title="链表的组成"></a>链表的组成</h3><p>链表是由节点组成的</p>
+<p>节点由 数据域 和 指针域组成</p>
+<p>struct LinkNode { int num ; struct LinkNode * next; }</p>
+<ul>
+<li>链表是一种常用的数据结构，它通过指针将一些列数据结点，连接成一个数据链。相对于数组，链表具有更好的动态性（非顺序存储）</li>
+<li>数据域用来存储数据，指针域用于建立与下一个结点的联系</li>
+<li>建立链表时无需预先知道数据总量的，可以随机的分配空间，可以高效的在链表中的任意位置实时插入或删除数据</li>
+<li>链表的开销，主要是访问顺序性和组织链的空间损失</li>
+</ul>
+<p><strong>数组和链表的区别：</strong></p>
+<ul>
+<li>数组：一次性分配一块连续的存储区域</li>
+</ul>
+<p>优点：随机访问元素效率高  </p>
+<p>缺点：需要分配一块连续的存储区域（很大区域，有可能分配失败），删除和插入某个元素效率低 </p>
+<ul>
+<li>链表：无需一次性分配一块连续的存储区域，只需分配n块节点存储区域，通过指针建立关系</li>
+</ul>
+<p>优点：不需要一块连续的存储区域 ，删除和插入某个元素效率高  </p>
+<p>缺点：随机访问元素效率低  </p>
+<h3 id="链表的分类"><a href="#链表的分类" class="headerlink" title="链表的分类"></a>链表的分类</h3><p>方式1 静态链表 动态链表</p>
+<p>方式2 单向链表 双向链表 单向循环链表 双向循环链表</p>
+<h3 id="链表节点"><a href="#链表节点" class="headerlink" title="链表节点"></a>链表节点</h3><p>如何表示一个包含了数据域和指针域的节点呢？</p>
+<p>链表的节点类型实际上是结构体变量，此结构体包含数据域和指针域：</p>
+<ul>
+<li>数据域用来存储数据</li>
+<li>指针域用于建立与下一个结点的联系，当此节点为尾节点时，指针域的值为NULL</li>
+</ul>
+<h3 id="链表的分类-1"><a href="#链表的分类-1" class="headerlink" title="链表的分类"></a>链表的分类</h3><p>链表分为：静态链表和动态链表</p>
+<p>静态链表和动态链表是线性表链式存储结构的两种不同的表示方式：</p>
+<ul>
+<li>所有结点都是在程序中定义的，不是临时开辟的，也不能用完后释放，这种链表称为“静态链表”</li>
+<li>所谓动态链表，是指在程序执行过程中从无到有地建立起一个链表，即一个一个地开辟结点和输入各结点数据，并建立起前后相链的关系</li>
+</ul>
+<h4 id="带头和不带头链表"><a href="#带头和不带头链表" class="headerlink" title="带头和不带头链表"></a>带头和不带头链表</h4><p>带头链表：固定一个节点作为头结点(数据域不保存有效数据)，起一个标志位的作用，以后不管链表节点如果改变，此头结点固定不变</p>
+<p>不带头链表：头结点不固定，根据实际需要变换头结点(如在原来头结点前插入新节点，然后，新节点重新作为链表的头结点)</p>
+<h4 id="单向链表、双向链表、循环链表"><a href="#单向链表、双向链表、循环链表" class="headerlink" title="单向链表、双向链表、循环链表"></a>单向链表、双向链表、循环链表</h4><h4 id="链表的基本使用"><a href="#链表的基本使用" class="headerlink" title="链表的基本使用"></a>链表的基本使用</h4><h5 id="创建链表"><a href="#创建链表" class="headerlink" title="创建链表"></a>创建链表</h5><p>使用结构体定义节点类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _LINKNODE</span><br><span class="line">&#123;</span><br><span class="line">	int id; &#x2F;&#x2F;数据域</span><br><span class="line">	struct _LINKNODE* next; &#x2F;&#x2F;指针域</span><br><span class="line">&#125;link_node;</span><br></pre></td></tr></table></figure>
+<p>编写函数：link_node* init_linklist()</p>
+<p>建立带有头结点的单向链表，循环创建结点，结点数据域中的数值从键盘输入，以 -1 作为输入结束标志，链表的头结点地址由函数值返回</p>
+<h5 id="遍历链表"><a href="#遍历链表" class="headerlink" title="遍历链表"></a>遍历链表</h5><p>编写函数：void foreach_linklist(link_node* head)</p>
+<p>顺序输出单向链表各项结点数据域中的内容</p>
+<h5 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h5><p>编写函数: void insert_linklist(link_node* head,int val,int data).</p>
+<p>在指定值后面插入数据data,如果值val不存在，则在尾部插入</p>
+<h5 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h5><p>编写函数: void remove_linklist(link_node* head,int val)</p>
+<p>删除第一个值为val的结点</p>
+<h5 id="销毁链表"><a href="#销毁链表" class="headerlink" title="销毁链表"></a>销毁链表</h5><p>编写函数: void destroy_linklist(link_node* head)</p>
+<p>销毁链表，释放所有节点的空间</p>
+<h4 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h4><ul>
+<li>带头节点链表 好处在于 头节点永远都是固定的</li>
+<li>初始化链表  struct LinkNode * pHeader = init_LinkList ()</li>
+<li>遍历链表  void  foreach_LinkList( struct LinkNode * pHeader ) </li>
+<li>插入链表  void insertLinkList( struct LinkNode*pHeader , int oldval ,int newval )<ul>
+<li>在oldval前插入 newVal，如果没有oldval就进行尾插</li>
+</ul>
+</li>
+<li>删除链表 void delete_LinkList( struct LinkNode*pHeader, int val )<ul>
+<li>用户提供的有效数据 删除掉</li>
+<li>无效数据 直接return </li>
+</ul>
+</li>
+<li>清空链表 <ul>
+<li>void clear_LinkList(struct LinkNode*pHeader ) </li>
+<li>将所有有数据的节点释放掉</li>
+</ul>
+</li>
+<li>销毁链表<ul>
+<li>void destroy_LinkList(struct LinkNode*pHeader)</li>
+<li>将整个链表都释放掉</li>
+</ul>
+</li>
+</ul>
+<h1 id="函数指针和回调函数"><a href="#函数指针和回调函数" class="headerlink" title="函数指针和回调函数"></a>函数指针和回调函数</h1><h2 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h2><h3 id="函数类型"><a href="#函数类型" class="headerlink" title="函数类型"></a>函数类型</h3><p><em>通过什么来区分两个不同的函数？</em></p>
+<p>一个函数在编译时被分配一个入口地址，这个地址就称为函数的指针，函数名代表函数的入口地址</p>
+<p>函数三要素： 名称、参数、返回值。C语言中的函数有自己特定的类型</p>
+<p>c语言中通过typedef为函数类型重命名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typedef int f(int, int);   	&#x2F;&#x2F; f 为函数类型  </span><br><span class="line">typedef void  p(int);		&#x2F;&#x2F; p 为函数类型 </span><br></pre></td></tr></table></figure>
+<p> 和数组一样，因此我们可以用一个指针变量来存放这个入口地址，然后通过该指针变量调用函数。</p>
+<p><strong>注意：</strong>通过函数类型定义的变量是不能够直接执行，因为没有函数体。只能通过类型定义一个函数指针指向某一个具体函数，才能调用</p>
+<h3 id="函数指针的定义-指向函数的指针"><a href="#函数指针的定义-指向函数的指针" class="headerlink" title="函数指针的定义(指向函数的指针)"></a>函数指针的定义(指向函数的指针)</h3><ul>
+<li>先定义出函数类型，再通过类型定义出函数指针<ul>
+<li>typedef void(FUNC_TYPE)()</li>
+<li>FUNC_TYPE * pFunc = func</li>
+</ul>
+</li>
+<li>先定义出函数指针类型，再根据类型定义函数指针<ul>
+<li>typedef void(*FUNC_TYPE)()</li>
+<li>FUNC_TYPE pFunc = func</li>
+</ul>
+</li>
+<li>直接定义函数指针变量<ul>
+<li>void(* pFunc )() = func</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数指针数组"><a href="#函数指针数组" class="headerlink" title="函数指针数组"></a>函数指针数组</h3><p>函数指针数组，每个元素都是函数指针</p>
+<ul>
+<li>函数指针和指针函数的区别<ul>
+<li>函数指针 是指向函数的 指针 </li>
+<li>指针函数 函数的返回值是一个指针的 函数</li>
+</ul>
+</li>
+<li>函数指针的数组定义<ul>
+<li>void(*pFunc[3])()</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数指针做函数参数（-回调函数-）"><a href="#函数指针做函数参数（-回调函数-）" class="headerlink" title="函数指针做函数参数（ 回调函数 ）"></a>函数指针做函数参数（ 回调函数 ）</h3><p>函数参数除了是普通变量，还可以是函数指针变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;形参为普通变量</span><br><span class="line">void fun( int x )&#123;&#125;</span><br><span class="line">&#x2F;&#x2F;形参为函数指针变量</span><br><span class="line">void fun( int(*p)(int a) )&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>函数指针变量常见的用途之一是把指针作为参数传递到其他函数，指向函数的指针也可以作为参数，以实现函数地址的传递</p>
+<p>提供一个通用的函数，可以打印任意的数据类型</p>
+<h1 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h1><h2 id="预处理的基本概念"><a href="#预处理的基本概念" class="headerlink" title="预处理的基本概念"></a>预处理的基本概念</h2><p>C语言对源程序处理的四个步骤：预处理、编译、汇编、链接。</p>
+<p>预处理是在程序源代码被编译之前，由预处理器（Preprocessor）对程序源代码进行的处理。这个过程并不对程序的源代码语法进行解析，但它会把源代码分割或处理成为特定的符号为下一步的编译做准备工作</p>
+<h2 id="文件包含指令-include"><a href="#文件包含指令-include" class="headerlink" title="文件包含指令(#include)"></a>文件包含指令(#include)</h2><h3 id="文件包含处理"><a href="#文件包含处理" class="headerlink" title="文件包含处理"></a>文件包含处理</h3><p>“文件包含处理”是指一个源文件可以将另外一个文件的全部内容包含进来。Ｃ语言提供了#include命令用来实现“文件包含”的操作</p>
+<h3 id="incude-lt-gt-和-include””区别"><a href="#incude-lt-gt-和-include””区别" class="headerlink" title="#incude&lt;&gt;和#include””区别"></a>#incude&lt;&gt;和#include””区别</h3><ul>
+<li>“” 表示系统先在file1.c所在的当前目录找file1.h，如果找不到，再按系统指定的目录检索</li>
+<li>&lt; &gt; 表示系统直接按系统指定的目录检索</li>
+</ul>
+<p>注意：</p>
+<ol>
+<li>#include &lt;&gt;常用于包含库函数的头文件</li>
+<li>#include “”常用于包含自定义的头文件</li>
+<li>理论上#include可以包含任意格式的文件(.c .h等) ，但一般用于头文件的包含</li>
+</ol>
+<h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><h3 id="无参数的宏定义-宏常量"><a href="#无参数的宏定义-宏常量" class="headerlink" title="无参数的宏定义(宏常量)"></a>无参数的宏定义(宏常量)</h3><p>如果在程序中大量使用到了100这个值，那么为了方便管理，我们可以将其定义为：</p>
+<p>const int num = 100</p>
+<p>但是如果我们使用num定义一个数组，在不支持c99标准的编译器上是不支持的，因为num不是一个编译器常量，如果想得到了一个编译器常量，那么可以使用：</p>
+<p>#define num 100</p>
+<p>在编译预处理时，将程序中在该语句以后出现的所有的num都用100代替。这种方法使用户能以一个简单的名字代替一个长的字符串，在预编译时将宏名替换成字符串的过程称为“宏展开”。宏定义，只在宏定义的文件中起作用</p>
+<p>说明：</p>
+<ol>
+<li>宏名一般用大写，以便于与变量区别</li>
+<li>宏定义可以是常数、表达式等</li>
+<li>宏定义不作语法检查，只有在编译被宏展开后的源程序才会报错</li>
+<li>宏定义不是C语言，不在行末加分号</li>
+<li>宏名有效范围为从定义到本源文件结束</li>
+<li>可以用#undef命令终止宏定义的作用域</li>
+<li>在宏定义中，可以引用已定义的宏名</li>
+</ol>
+<p>不重视作用域、可以利用 #undef 卸载宏、宏常量 没有数据类型、宏函数 要注意表达式完整性</p>
+<h3 id="带参数的宏定义-宏函数"><a href="#带参数的宏定义-宏函数" class="headerlink" title="带参数的宏定义(宏函数)"></a>带参数的宏定义(宏函数)</h3><p>在项目中，经常把一些短小而又频繁使用的函数写成宏函数，这是由于宏函数没有普通函数参数压栈、跳转、返回等的开销，可以调高程序的效率。</p>
+<p>宏通过使用参数，可以创建外形和作用都与函数类似地类函数宏(function-like macro). 宏的参数也用圆括号括起来</p>
+<p><strong>注意:</strong></p>
+<ol>
+<li>宏的名字中不能有空格，但是在替换的字符串中可以有空格。ANSI C允许在参数列表中使用空格</li>
+<li>用括号括住每一个参数，并括住宏的整体定义</li>
+<li>用大写字母表示宏的函数名</li>
+<li>如果打算宏代替函数来加快程序运行速度。假如在程序中只使用一次宏对程序的运行时间没有太大提高</li>
+</ol>
+<h2 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>一般情况下，源程序中所有的行都参加编译。但有时希望对部分源程序行只在满足一定条件时才编译，即对这部分源程序行指定编译条件</p>
+<ul>
+<li>测试存在：</li>
+</ul>
+<p>#ifdef    标识符</p>
+<p>​        程序段 1</p>
+<p>#else</p>
+<p>​        程序段 2 </p>
+<p>#endif</p>
+<ul>
+<li>测试不存在：</li>
+</ul>
+<p>#ifndef    标识符</p>
+<p>​        程序段 1</p>
+<p>#else</p>
+<p>​        程序段 2</p>
+<p>#endif</p>
+<ul>
+<li>自定义条件测试：</li>
+</ul>
+<p>#if</p>
+<p>…同上</p>
+<p><em>防止头文件被重复包含引用</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#ifndef _SOMEFILE_H</span><br><span class="line">#define _SOMEFILE_H</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;需要声明的变量、函数</span><br><span class="line">&#x2F;&#x2F;宏定义</span><br><span class="line">&#x2F;&#x2F;结构体</span><br><span class="line"></span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<h2 id="一些特殊的预定宏"><a href="#一些特殊的预定宏" class="headerlink" title="一些特殊的预定宏"></a>一些特殊的预定宏</h2><p>C编译器，提供了几个特殊形式的预定义宏，在实际编程中可以直接使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;	__FILE__			宏所在文件的源文件名 </span><br><span class="line">&#x2F;&#x2F;	__LINE__			宏所在行的行号</span><br><span class="line">&#x2F;&#x2F;	__DATE__			代码编译的日期</span><br><span class="line">&#x2F;&#x2F;	__TIME__			代码编译的时间</span><br><span class="line"></span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;%s\n&quot;, __FILE__);</span><br><span class="line">	printf(&quot;%d\n&quot;, __LINE__);</span><br><span class="line">	printf(&quot;%s\n&quot;, __DATE__);</span><br><span class="line">	printf(&quot;%s\n&quot;, __TIME__);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="动态库的封装和使用"><a href="#动态库的封装和使用" class="headerlink" title="动态库的封装和使用"></a>动态库的封装和使用</h1><h2 id="库的基本概念"><a href="#库的基本概念" class="headerlink" title="库的基本概念"></a>库的基本概念</h2><p>库是已经写好的、成熟的、可复用的代码。每个程序都需要依赖很多底层库，不可能每个人的代码从零开始编写代码，因此库的存在具有非常重要的意义</p>
+<p>在我们的开发的应用中经常有一些公共代码是需要反复使用的，就把这些代码编译为库文件</p>
+<p>库可以简单看成一组目标文件的集合，将这些目标文件经过压缩打包之后形成的一个文件。像在Windows这样的平台上，最常用的c语言库是由集成按开发环境所附带的运行库，这些库一般由编译厂商提供</p>
+<h2 id="windows下静态库创建和使用"><a href="#windows下静态库创建和使用" class="headerlink" title="windows下静态库创建和使用"></a>windows下静态库创建和使用</h2><h3 id="静态库的创建"><a href="#静态库的创建" class="headerlink" title="静态库的创建"></a>静态库的创建</h3><p>创建一个新项目，在已安装的模板中选择“常规”，在右边的类型下选择“空项目”，在名称和解决方案名称中输入staticlib。点击确定</p>
+<p>在解决方案资源管理器的头文件中添加,mylib.h文件，在源文件添加mylib.c文件（即实现文件）</p>
+<p>在mylib.h文件中添加如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#ifndef TEST_H</span><br><span class="line">#define TEST_H</span><br><span class="line"></span><br><span class="line">int myadd(int a,int b);</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>在mylib.c文件中添加如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include&quot;test.h&quot;</span><br><span class="line">int myadd(int a, int b)&#123;</span><br><span class="line">	return a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置项目属性。因为这是一个静态链接库，所以应在项目属性的“配置属性”下选择“常规”，在其下的配置类型中选择“静态库（.lib）。</p>
+<p>编译生成新的解决方案，在Debug文件夹下会得到mylib.lib (对象文件库），将该.lib文件和相应头文件给用户，用户就可以使用该库里的函数了</p>
+<p>即：</p>
+<p>创建项目 — 配置属性 — 常规 —– 配置类型 — 静态库</p>
+<p>重新生成项目 ，创建出后缀名为 .lib的静态库文件</p>
+<p>测试静态库</p>
+<h3 id="静态库的使用"><a href="#静态库的使用" class="headerlink" title="静态库的使用"></a>静态库的使用</h3><p>方法一：配置项目属性</p>
+<ol>
+<li>添加工程的头文件目录：工程—属性—配置属性—c/c++—常规—附加包含目录：加上头文件存放目录</li>
+<li>添加文件引用的lib静态库路径：工程—属性—配置属性—链接器—常规—附加库目录：加上lib文件存放目录</li>
+<li>然后添加工程引用的lib文件名：工程—属性—配置属性—链接器—输入—附加依赖项：加上lib文件名  </li>
+</ol>
+<p>方法二：使用编译语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pragma comment(lib,&quot;.&#x2F;mylib.lib&quot;)</span><br></pre></td></tr></table></figure>
+<p>方法三：添加工程中</p>
+<p>像添加.h和.c文件一样,把lib文件添加到工程文件列表中去.  切换到”解决方案视图”,—&gt;选中要添加lib的工程–&gt;点击右键–&gt;”添加”–&gt;”现有项”–&gt;选择lib文件–&gt;确定.  </p>
+<h4 id="静态库优缺点"><a href="#静态库优缺点" class="headerlink" title="静态库优缺点"></a>静态库优缺点</h4><ul>
+<li>静态库对函数库的链接是放在编译时期完成的，静态库在程序的链接阶段被复制到了程序中，和程序运行的时候没有关系</li>
+<li>程序在运行时与函数库再无瓜葛，移植方便</li>
+<li>浪费空间和资源，所有相关的目标文件与牵涉到的函数库被链接合成一个可执行文件</li>
+</ul>
+<h4 id="内存和磁盘空间"><a href="#内存和磁盘空间" class="headerlink" title="内存和磁盘空间"></a>内存和磁盘空间</h4><p>静态链接这种方法很简单，原理上也很容易理解，在操作系统和硬件不发达的早期，绝大部门系统采用这种方案。随着计算机软件的发展，这种方法的缺点很快暴露出来，那就是静态链接的方式对于计算机内存和磁盘空间浪费非常严重。特别是多进程操作系统下，静态链接极大的浪费了内存空间。在现在的linux系统中，一个普通程序会用到c语言静态库至少在1MB以上，那么如果磁盘中有2000个这样的程序，就要浪费将近2GB的磁盘空间</p>
+<h4 id="程序开发和发布"><a href="#程序开发和发布" class="headerlink" title="程序开发和发布"></a>程序开发和发布</h4><p>空间浪费是静态链接的一个问题，另一个问题是静态链接对程序的更新、部署和发布也会带来很多麻烦。比如程序中所使用的mylib.lib是由一个第三方厂商提供的，当该厂商更新容量mylib.lib的时候，那么我们的程序就要拿到最新版的mylib.lib，然后将其重新编译链接后，将新的程序整个发布给用户。这样的做缺点很明显，即一旦程序中有任何模块更新，整个程序就要重新编译链接、发布给用户，用户要重新安装整个程序</p>
+<h2 id="windows下动态库创建和使用"><a href="#windows下动态库创建和使用" class="headerlink" title="windows下动态库创建和使用"></a>windows下动态库创建和使用</h2><p>要解决空间浪费和更新困难这两个问题，最简单的办法就是把程序的模块相互分割开来，形成独立的文件，而不是将他们静态的链接在一起。简单地讲，就是不对哪些组成程序的目标程序进行链接，等程序运行的时候才进行链接。也就是说，把整个链接过程推迟到了运行时再进行，这就是动态链接的基本思想</p>
+<h3 id="动态库的创建"><a href="#动态库的创建" class="headerlink" title="动态库的创建"></a>动态库的创建</h3><p>创建一个新项目，在已安装的模板中选择“常规”，在右边的类型下选择“空项目”，在名称和解决方案名称中输入mydll。点击确定。</p>
+<p>在解决方案资源管理器的头文件中添加,mydll.h文件，在源文件添加mydll.c文件（即实现文件）。</p>
+<p>在test.h文件中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#ifndef TEST_H</span><br><span class="line">#define TEST_H</span><br><span class="line"></span><br><span class="line">__declspec(dllexport) int myminus(int a, int b);</span><br><span class="line"></span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>在test.c文件中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include&quot;test.h&quot;</span><br><span class="line">__declspec(dllexport) int myminus(int a, int b)&#123;</span><br><span class="line">	return a - b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置项目属性。因为这是一个动态链接库，所以应在项目属性的“配置属性”下选择“常规”，在其下的配置类型中选择“动态库（.dll）。</p>
+<p>编译生成新的解决方案，在Debug文件夹下会得到mydll.dll (对象文件库），将该.dll文件、.lib文件和相应头文件给用户，用户就可以使用该库里的函数了</p>
+<p>即：</p>
+<p>运行阶段才去链接函数</p>
+<p>配置流程： 创建项目 — 配置属性 – 常规 — 配置类型 — 动态库</p>
+<p>重新生成解决方案，生成 .dll  .lib 库文件</p>
+<p>导入函数  只能在当前项目下使用</p>
+<p>导出函数  可以在外部使用 </p>
+<p>__declspec (dllexport) int mySub(int a, int b);</p>
+<p>测试 引入#pragma comment(lib,”./mydll.lib”)</p>
+<p><em>疑问一：__declspec(dllexport)是什么意思？</em></p>
+<p>动态链接库中定义有两种函数：导出函数(export function)和内部函数(internal function)。 导出函数可以被其它模块调用，内部函数在定义它们的DLL程序内部使用</p>
+<p><em>疑问二：动态库的lib文件和静态库的lib文件的区别？</em></p>
+<p>在使用动态库的时候，往往提供两个文件：一个引入库（.lib）文件（也称“导入库文件”）和一个DLL（.dll）文件。虽然引入库的后缀名也是“lib”，但是，动态库的引入库文件和静态库文件有着本质的区别，对一个DLL文件来说，其引入库文件（.lib）包含该DLL导出的函数和变量的符号名，而.dll文件包含该DLL实际的函数和数据。在使用动态库的情况下，在编译链接可执行文件时，只需要链接该DLL的引入库文件，该DLL中的函数代码和数据并不复制到可执行文件，直到可执行程序运行时，才去加载所需的DLL，将该DLL映射到进程的地址空间中，然后访问DLL中导出的函数。  </p>
+<h3 id="动态库的使用"><a href="#动态库的使用" class="headerlink" title="动态库的使用"></a>动态库的使用</h3><p>方法一：隐式调用</p>
+<p>创建主程序TestDll，将mydll.h、mydll.dll和mydll.lib复制到源代码目录下。  (P.S：头文件Func.h并不是必需的，只是C++中使用外部函数时，需要先进行声明)  在程序中指定链接引用链接库 : #pragma comment(lib,”./mydll.lib”)  </p>
+<p> 方法二：显式调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HANDLE hDll; &#x2F;&#x2F;声明一个dll实例文件句柄</span><br><span class="line">hDll &#x3D; LoadLibrary(&quot;mydll.dll&quot;); &#x2F;&#x2F;导入动态链接库</span><br><span class="line">MYFUNC minus_test; &#x2F;&#x2F;创建函数指针</span><br><span class="line">&#x2F;&#x2F;获取导入函数的函数指针</span><br><span class="line">minus_test &#x3D; (MYFUNC)GetProcAddress(hDll, &quot;myminus&quot;);</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="递归函数"><a href="#递归函数" class="headerlink" title="递归函数"></a>递归函数</h1><h3 id="递归函数基本概念"><a href="#递归函数基本概念" class="headerlink" title="递归函数基本概念"></a>递归函数基本概念</h3><p>C通过运行时堆栈来支持递归函数的实现。递归函数就是直接或间接调用自身的函数</p>
+<p>函数自身调用自身，必须有结束条件退出循环</p>
+<h2 id="案例应用"><a href="#案例应用" class="headerlink" title="案例应用"></a>案例应用</h2><p>递归函数的调用</p>
+<p>递归实现字符串反转</p>
+<p>实现字符串逆序遍历</p>
+<p>实现斐波那契数列</p>
+<h1 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h1><p>……</p>
+<hr>
+<p>参考资料：黑马程序员</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/">https://www.chenzhan.club/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></div><div class="post_share"><div class="social-share" data-image="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3855299888,698829681&amp;fm=26&amp;gp=0.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Chenzhan666.github.io/2021/03/07/Untitled/"><img class="next-cover" src="/Chenzhan666.github.io/img/back.jpg" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">28</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">1.</span> <span class="toc-text">结构体</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">结构体基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">结构体类型的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">结构体变量的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.1.3.</span> <span class="toc-text">结构体变量的初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%88%90%E5%91%98%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.1.4.</span> <span class="toc-text">结构体成员的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E8%B5%8B%E5%80%BC%E9%97%AE%E9%A2%98%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3"><span class="toc-number">1.1.5.</span> <span class="toc-text">结构体赋值问题以及解决</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">深拷贝和浅拷贝</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%95%B0%E7%BB%84"><span class="toc-number">1.1.6.</span> <span class="toc-text">结构体数组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%B5%8C%E5%A5%97%E6%8C%87%E9%92%88"><span class="toc-number">1.2.</span> <span class="toc-text">结构体嵌套指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%B5%8C%E5%A5%97%E4%B8%80%E7%BA%A7%E6%8C%87%E9%92%88"><span class="toc-number">1.2.1.</span> <span class="toc-text">结构体嵌套一级指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%B5%8C%E5%A5%97%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88"><span class="toc-number">1.2.2.</span> <span class="toc-text">结构体嵌套二级指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%88%90%E5%91%98%E5%81%8F%E7%A7%BB%E9%87%8F"><span class="toc-number">1.2.3.</span> <span class="toc-text">结构体成员偏移量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90"><span class="toc-number">1.2.4.</span> <span class="toc-text">结构体字节对齐</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">内存对齐</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E5%8E%9F%E5%9B%A0"><span class="toc-number">1.2.4.1.1.</span> <span class="toc-text">内存对齐原因</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AF%B9%E9%BD%90%E8%A7%84%E5%88%99"><span class="toc-number">1.2.4.1.2.</span> <span class="toc-text">对于自定义数据类型对齐规则</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90"><span class="toc-number">1.2.4.1.3.</span> <span class="toc-text">如何内存对齐</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">内存对齐案例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E8%87%AA%E8%BA%AB%E5%BC%95%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">有关结构体的自身引用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">文件操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">文件相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.</span> <span class="toc-text">流的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E6%B5%81"><span class="toc-number">2.2.1.</span> <span class="toc-text">文本流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81"><span class="toc-number">2.2.2.</span> <span class="toc-text">二进制流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">文件的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%B5%81%E6%80%BB%E8%A7%88"><span class="toc-number">2.3.1.</span> <span class="toc-text">文件流总览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8C%87%E9%92%88"><span class="toc-number">2.3.2.</span> <span class="toc-text">文件指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">2.3.3.</span> <span class="toc-text">文件缓冲区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.4.</span> <span class="toc-text">文件读写回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80%E5%85%B3%E9%97%AD"><span class="toc-number">2.5.</span> <span class="toc-text">文件打开关闭</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%89%93%E5%BC%80-fopen"><span class="toc-number">2.5.1.</span> <span class="toc-text">文件打开(fopen)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%85%B3%E9%97%AD-fclose"><span class="toc-number">2.5.2.</span> <span class="toc-text">文件关闭(fclose)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.</span> <span class="toc-text">文件读写函数回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.1.</span> <span class="toc-text">字符读写函数回顾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%8C%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.2.</span> <span class="toc-text">行读写函数回顾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9D%97%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.3.</span> <span class="toc-text">块读写函数回顾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.4.</span> <span class="toc-text">格式化读写函数回顾</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.5.3.5.</span> <span class="toc-text">随机读写函数回顾</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E6%A1%88%E4%BE%8B"><span class="toc-number">2.5.4.</span> <span class="toc-text">文件读写案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.4.1.</span> <span class="toc-text">读写配置文件</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">链表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">链表基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%BC%95%E5%87%BA"><span class="toc-number">3.1.1.</span> <span class="toc-text">链表引出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">3.1.2.</span> <span class="toc-text">链表的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">3.1.3.</span> <span class="toc-text">链表的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E8%8A%82%E7%82%B9"><span class="toc-number">3.1.4.</span> <span class="toc-text">链表节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E7%9A%84%E5%88%86%E7%B1%BB-1"><span class="toc-number">3.1.5.</span> <span class="toc-text">链表的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A6%E5%A4%B4%E5%92%8C%E4%B8%8D%E5%B8%A6%E5%A4%B4%E9%93%BE%E8%A1%A8"><span class="toc-number">3.1.5.1.</span> <span class="toc-text">带头和不带头链表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8%E3%80%81%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8%E3%80%81%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8"><span class="toc-number">3.1.5.2.</span> <span class="toc-text">单向链表、双向链表、循环链表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">3.1.5.3.</span> <span class="toc-text">链表的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%93%BE%E8%A1%A8"><span class="toc-number">3.1.5.3.1.</span> <span class="toc-text">创建链表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E9%93%BE%E8%A1%A8"><span class="toc-number">3.1.5.3.2.</span> <span class="toc-text">遍历链表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E8%8A%82%E7%82%B9"><span class="toc-number">3.1.5.3.3.</span> <span class="toc-text">插入节点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="toc-number">3.1.5.3.4.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%94%80%E6%AF%81%E9%93%BE%E8%A1%A8"><span class="toc-number">3.1.5.3.5.</span> <span class="toc-text">销毁链表</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">3.1.5.4.</span> <span class="toc-text">步骤：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">函数指针和回调函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="toc-number">4.1.</span> <span class="toc-text">函数指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.1.</span> <span class="toc-text">函数类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%9A%84%E5%AE%9A%E4%B9%89-%E6%8C%87%E5%90%91%E5%87%BD%E6%95%B0%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-number">4.1.2.</span> <span class="toc-text">函数指针的定义(指向函数的指针)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-number">4.1.3.</span> <span class="toc-text">函数指针数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%81%9A%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%EF%BC%88-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0-%EF%BC%89"><span class="toc-number">4.1.4.</span> <span class="toc-text">函数指针做函数参数（ 回调函数 ）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">5.1.</span> <span class="toc-text">预处理的基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%8C%87%E4%BB%A4-include"><span class="toc-number">5.2.</span> <span class="toc-text">文件包含指令(#include)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%A4%84%E7%90%86"><span class="toc-number">5.2.1.</span> <span class="toc-text">文件包含处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#incude-lt-gt-%E5%92%8C-include%E2%80%9D%E2%80%9D%E5%8C%BA%E5%88%AB"><span class="toc-number">5.2.2.</span> <span class="toc-text">#incude&lt;&gt;和#include””区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">5.3.</span> <span class="toc-text">宏定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%8F%82%E6%95%B0%E7%9A%84%E5%AE%8F%E5%AE%9A%E4%B9%89-%E5%AE%8F%E5%B8%B8%E9%87%8F"><span class="toc-number">5.3.1.</span> <span class="toc-text">无参数的宏定义(宏常量)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84%E5%AE%8F%E5%AE%9A%E4%B9%89-%E5%AE%8F%E5%87%BD%E6%95%B0"><span class="toc-number">5.3.2.</span> <span class="toc-text">带参数的宏定义(宏函数)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="toc-number">5.4.</span> <span class="toc-text">条件编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">5.4.1.</span> <span class="toc-text">基本概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%89%B9%E6%AE%8A%E7%9A%84%E9%A2%84%E5%AE%9A%E5%AE%8F"><span class="toc-number">5.5.</span> <span class="toc-text">一些特殊的预定宏</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E7%9A%84%E5%B0%81%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">动态库的封装和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">6.1.</span> <span class="toc-text">库的基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windows%E4%B8%8B%E9%9D%99%E6%80%81%E5%BA%93%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">6.2.</span> <span class="toc-text">windows下静态库创建和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">6.2.1.</span> <span class="toc-text">静态库的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">6.2.2.</span> <span class="toc-text">静态库的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">6.2.2.1.</span> <span class="toc-text">静态库优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%92%8C%E7%A3%81%E7%9B%98%E7%A9%BA%E9%97%B4"><span class="toc-number">6.2.2.2.</span> <span class="toc-text">内存和磁盘空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E5%92%8C%E5%8F%91%E5%B8%83"><span class="toc-number">6.2.2.3.</span> <span class="toc-text">程序开发和发布</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windows%E4%B8%8B%E5%8A%A8%E6%80%81%E5%BA%93%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">6.3.</span> <span class="toc-text">windows下动态库创建和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">6.3.1.</span> <span class="toc-text">动态库的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">6.3.2.</span> <span class="toc-text">动态库的使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="toc-number">7.</span> <span class="toc-text">递归函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">7.0.1.</span> <span class="toc-text">递归函数基本概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E5%BA%94%E7%94%A8"><span class="toc-number">7.1.</span> <span class="toc-text">案例应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3%E7%BC%96%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">面向接口编程</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/" title="note3.27-数据结构概念二"><img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3855299888,698829681&amp;fm=26&amp;gp=0.jpg" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note3.27-数据结构概念二"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/" title="note3.27-数据结构概念二">note3.27-数据结构概念二</a><time datetime="2021-03-08T13:44:00.000Z" title="发表于 2021-03-08 21:44:00">2021-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/07/Untitled/" title="无题"><img src="/Chenzhan666.github.io/img/back.jpg" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/07/Untitled/" title="无题">无题</a><time datetime="2021-03-07T15:49:31.927Z" title="发表于 2021-03-07 23:49:31">2021-03-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note2-25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note2.25-LCD背光调节"><img src="https://i0.hdslb.com/bfs/article/d8c27357c95b4ec212391f814a276990815f09e1.jpg@1320w_734h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note2.25-LCD背光调节"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note2-25-LCD%E8%83%8C%E5%85%89%E8%B0%83%E8%8A%82/" title="note2.25-LCD背光调节">note2.25-LCD背光调节</a><time datetime="2021-03-05T14:40:09.000Z" title="发表于 2021-03-05 22:40:09">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/05/note2-24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note2.24-多点电容触摸屏"><img src="https://i0.hdslb.com/bfs/article/6df5035bad4239b717df0b5bc957b81f1e4e1fad.jpg@1320w_854h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note2.24-多点电容触摸屏"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/05/note2-24-%E5%A4%9A%E7%82%B9%E7%94%B5%E5%AE%B9%E8%A7%A6%E6%91%B8%E5%B1%8F/" title="note2.24-多点电容触摸屏">note2.24-多点电容触摸屏</a><time datetime="2021-03-05T12:47:55.000Z" title="发表于 2021-03-05 20:47:55">2021-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/03/note2-23-SPI%E5%AE%9E%E9%AA%8C/" title="note2.23-SPI实验"><img src="https://i0.hdslb.com/bfs/article/a1afb00e2f3048d34143eb987c7a0a15d41e8bfe.jpg@1320w_932h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note2.23-SPI实验"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/03/note2-23-SPI%E5%AE%9E%E9%AA%8C/" title="note2.23-SPI实验">note2.23-SPI实验</a><time datetime="2021-03-03T13:08:21.000Z" title="发表于 2021-03-03 21:08:21">2021-03-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
