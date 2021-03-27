@@ -4,14 +4,35 @@
   <url>
     <loc>https://www.chenzhan.club/2021/03/08/note3-27-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/</loc>
     
-    <lastmod>2021-03-09</lastmod>
+    <lastmod>2021-03-27</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.chenzhan.club/2021/03/07/Untitled/</loc>
+    <loc>https://www.chenzhan.club/2021/03/27/note4-31-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</loc>
     
-    <lastmod>2021-03-07</lastmod>
+    <lastmod>2021-03-27</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenzhan.club/2021/03/23/note4-30-Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC/</loc>
+    
+    <lastmod>2021-03-27</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenzhan.club/2021/03/17/note4-29-U-Boot%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC%E5%90%AF%E5%8A%A8/</loc>
+    
+    <lastmod>2021-03-27</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenzhan.club/2021/03/13/note4-28-U-Boot/</loc>
+    
+    <lastmod>2021-03-15</lastmod>
     
   </url>
   
@@ -228,7 +249,7 @@
 
   <url>
     <loc>https://www.chenzhan.club/</loc>
-    <lastmod>2021-03-09</lastmod>
+    <lastmod>2021-03-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -236,21 +257,28 @@
   
   <url>
     <loc>https://www.chenzhan.club/tags/ARM-MX6U/</loc>
-    <lastmod>2021-03-09</lastmod>
+    <lastmod>2021-03-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.chenzhan.club/tags/Ubuntu%E5%85%A5%E9%97%A8/</loc>
-    <lastmod>2021-03-09</lastmod>
+    <lastmod>2021-03-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.chenzhan.club/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
-    <lastmod>2021-03-09</lastmod>
+    <lastmod>2021-03-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.chenzhan.club/tags/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E5%80%BC/</loc>
+    <lastmod>2021-03-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
