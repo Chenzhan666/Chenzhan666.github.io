@@ -1,0 +1,416 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note28.4-U-Boot | CHENZHAN</title><meta name="keywords" content="系统移值"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="U-BootU-Boot 简介Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。bootloader 的实际工作要复杂的多，但主要的工作是启">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note28.4-U-Boot">
+<meta property="og:url" content="https://www.chenzhan.club/2021/03/13/note28-4-U-Boot/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="U-BootU-Boot 简介Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。bootloader 的实际工作要复杂的多，但主要的工作是启">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/210b54e20bd1d14ff1e3edb020fa5a0ff719539d.jpg@518w.webp">
+<meta property="article:published_time" content="2021-03-13T14:00:42.000Z">
+<meta property="article:modified_time" content="2021-04-12T13:32:50.118Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="系统移值">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/210b54e20bd1d14ff1e3edb020fa5a0ff719539d.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/03/13/note28-4-U-Boot/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-12 21:32:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/210b54e20bd1d14ff1e3edb020fa5a0ff719539d.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note28.4-U-Boot</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-13T14:00:42.000Z" title="发表于 2021-03-13 22:00:42">2021-03-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-12T13:32:50.118Z" title="更新于 2021-04-12 21:32:50">2021-04-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note28.4-U-Boot"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="U-Boot"><a href="#U-Boot" class="headerlink" title="U-Boot"></a>U-Boot</h1><h2 id="U-Boot-简介"><a href="#U-Boot-简介" class="headerlink" title="U-Boot 简介"></a>U-Boot 简介</h2><p>Linux 系统要启动就必须需要一个 bootloader 程序，也就说芯片上电以后先运行一段 bootloader程序。这段bootloader程序会先初始化DDR等外设，然后将Linux内核从flash(NAND， NOR FLASH，SD，MMC 等)拷贝到 DDR 中，最后启动 Linux 内核。bootloader 的实际工作要复杂的多，但主要的工作是启动 Linux 内核，bootloader 和 Linux 内核的关系跟 PC 上的 BIOS 和 Windows 的关系一样，bootloader 就相当于 BIOS</p>
+<p>有很多现成的 bootloader 软件，比如 U-Boot、vivi、RedBoot 等，其中以 U-Boot 使用最为广泛</p>
+<p>uboot 的全称是 Universal Boot Loader，uboot 是一个遵循 GPL 协议的开源软件，uboot 是一 个裸机代码，可以看作是一个裸机综合例程。现在的 uboot 已经支持液晶屏、网络、USB 等高级功能</p>
+<h3 id="三种U-Boot"><a href="#三种U-Boot" class="headerlink" title="三种U-Boot"></a>三种U-Boot</h3><table>
+<thead>
+<tr>
+<th>种类</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uboot 官方的 uboot 代码</td>
+<td>由 uboot 官方维护开发的 uboot 版本，版本更新快，基本包含所 有常用的芯片</td>
+</tr>
+<tr>
+<td>半导体厂商的 uboot 代码</td>
+<td>半导体厂商维护的一个 uboot，专门针对自家的芯片，在对自家 芯片支持上要比 uboot 官方的好</td>
+</tr>
+<tr>
+<td>开发板厂商的 uboot 代码</td>
+<td>开发板厂商在半导体厂商提供的 uboot 基础上加入了对自家开发 板的支持</td>
+</tr>
+</tbody></table>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>编译完成以后 uboot 源码多了一些文件，其中 u-boot.bin 就是编译出来的 uboot 二进制文件。uboot是个裸机程序，因此需要在其前面加上头部(IVT、DCD等数据)才能在I.MX6U 上执行，图 30.2.4 中的 u-boot.imx 文件就是添加头部以后的 u-boot.bin，u-boot.imx 就是我们最 终要烧写到开发板中的 uboot 镜像文件</p>
+<h3 id="shell-脚本"><a href="#shell-脚本" class="headerlink" title="shell 脚本"></a>shell 脚本</h3><p>shell 脚本要求的，必须是“#!/bin/bash”或者“#!/bin/sh“</p>
+<p><strong>512MB(DDR3)+8GB(EMMC)核心板</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">&#x2F;*ARCH，指定架构，这里是 arm；CROSS_COMPILE 用于指定编译器，只需指明编译器前缀，比如 arm-linux-gnueabihf-gcc 编译器的前缀就是“arm-linux-gnueabihf-”；最后一个参数 distclean 是清除工程*&#x2F;</span><br><span class="line">make ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- distclean	&#x2F;&#x2F;清理工程</span><br><span class="line"></span><br><span class="line">&#x2F;*mx6ull_14x14_ddr512_emmc_defconfig配置文件*&#x2F;</span><br><span class="line">make ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- mx6ull_14x14_ddr512_emmc_defconfig							 &#x2F;&#x2F;配置uboot</span><br><span class="line"></span><br><span class="line">&#x2F;*V&#x3D;1 用于设置编译过程的信息输出级别；-j 用于设置主机使用多少线程编译</span><br><span class="line">uboot，最好设置成我们虚拟机所设置的核心数*&#x2F;</span><br><span class="line">make V&#x3D;1 ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- -j12	&#x2F;&#x2F;编译uboot</span><br></pre></td></tr></table></figure>
+<p>使用 chmod 命令给予 mx6ull_alientek_emmc.sh 文件可执行权限，然后就使用这个 shell 脚本文件来重新编译 uboot，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;mx6ull_alientek_emmc.sh</span><br></pre></td></tr></table></figure>
+<p><strong>256MB(DDR3)+256MB/512MB(NAND)核心板</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">make ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- distclean</span><br><span class="line">make ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- mx6ull_14x14_ddr256_nand_defconfig</span><br><span class="line">make V&#x3D;1 ARCH&#x3D;arm CROSS_COMPILE&#x3D;arm-linux-gnueabihf- -j12</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;mx6ull_alientek_nand.sh</span><br></pre></td></tr></table></figure>
+<h2 id="U-Boot-烧写与启动"><a href="#U-Boot-烧写与启动" class="headerlink" title="U-Boot 烧写与启动"></a>U-Boot 烧写与启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 imxdownload &#x2F;&#x2F;给予 imxdownload 可执行权限，一次即可</span><br><span class="line">.&#x2F;imxdownload u-boot.bin &#x2F;dev&#x2F;sdd</span><br></pre></td></tr></table></figure>
+<p>等待烧写完成，完成以后将 SD 卡插到开发板上，BOOT 设置从 SD 卡启 动，使用 USB 线将 将开发板的串口 1 USB_TTL 连接到电脑上。打开 SecureCRT，设置好串口参数并打开，最后复位开发板。在 SecureCRT 上出现“Hit any key to  stop autoboot: ”倒计时的时候按下键盘上的回车键，默认是 3 秒倒计时，在 3 秒倒计时如果没有按下回车键的话 uboot 就会使用默认参数来启动 Linux 内核了。如果在 3 秒倒计时结束之前按下回车键，那么就会进入 uboot 的命令行模式</p>
+<h4 id="uboot-默认输出信息"><a href="#uboot-默认输出信息" class="headerlink" title="uboot 默认输出信息"></a>uboot 默认输出信息</h4><p>具体解析查看【正点原子】I.MX6U嵌入式Linux驱动开发指南V1.5.pdf    P689</p>
+<h2 id="U-Boot-命令使用"><a href="#U-Boot-命令使用" class="headerlink" title="U-Boot 命令使用"></a>U-Boot 命令使用</h2><p>进入 uboot 的命令行模式以后输入“help”或者“？”，然后按下回车即可查看当前 uboot 所支持的命令</p>
+<h3 id="信息查询命令"><a href="#信息查询命令" class="headerlink" title="信息查询命令"></a>信息查询命令</h3><ul>
+<li>bdinfo 命令，用于查看板子信息，从中可以得出 DRAM 的起始地址和大小、启动参数保存起始地址、波特率、 sp(堆栈指针)起始地址等信息</li>
+<li>printenv 命令，用于输出环境变量信息，uboot 中的环境变量都是字符串，比如 bootdelay 这个环境变量就表示 uboot 启动延时时间，默认 bootdelay=3，也就默认延时 3 秒</li>
+<li>version 用于查看 uboot 的版本号</li>
+</ul>
+<h3 id="环境变量操作命令"><a href="#环境变量操作命令" class="headerlink" title="环境变量操作命令"></a>环境变量操作命令</h3><h4 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h4><p>命令 setenv 用于设置或者修改环境变 量的值。命令 saveenv 用于保存修改后的环境变量，一般环境变量是存放在外部 flash 中的，uboot 启动的时候会将环境变量从 flash 读取到 DRAM 中。所以使用命令 setenv 修改的是 DRAM 中的环境变量值，修改以后要使用 saveenv 命令将修改后的环境变量保存到 flash 中，否则的话 uboot 下一次重启会继续使用以前的环境变量值</p>
+<p>比如我们要将环境变量 bootdelay 改为 5，就可以使用如下所示命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setenv bootdelay 5</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure>
+<p>有时候我们修改的环境变量值可能会有空格，比如 bootcmd、bootargs 等，这个时候环境变 量值就得用单引号括起来</p>
+<h4 id="新建环境变量"><a href="#新建环境变量" class="headerlink" title="新建环境变量"></a>新建环境变量</h4><p>命令 setenv 也可以用于新建命令，用法就是修改环境变量一样</p>
+<h4 id="删除环境变量"><a href="#删除环境变量" class="headerlink" title="删除环境变量"></a>删除环境变量</h4><p>删除环境变量也是使用命令 setenv， 要删除一个环境变量只要给这个环境变量赋空值即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setenv author</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure>
+<h3 id="内存操作命令"><a href="#内存操作命令" class="headerlink" title="内存操作命令"></a>内存操作命令</h3><p>内存操作命令就是用于直接对 DRAM 进行读写操作的，常用的内存操作命令有 md、nm、 mm、mw、cp 和 cmp</p>
+<h4 id="md-命令"><a href="#md-命令" class="headerlink" title="md 命令"></a>md 命令</h4><p>md 命令用于显示内存值，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md[.b, .w, .l] address [# of objects]</span><br></pre></td></tr></table></figure>
+<p>命令中的[.b .w .l]对应 byte、word 和 long，也就是分别以 1 个字节、2 个字节、4 个字节来显示内存值。address 就是要查看的内存起始地址，[# of objects]表示要查看的数据长度，这个数据长度单位不是字节，而是跟你所选择的显示格式有关。比如你设置要查看的内存长度为 20(十六进制为 0x14)，如果显示格式为.b 的话那就表示 20 个字节；如果显示格式为.w 的话就 表示 20 个 word，也就是 20* 2=40 个字节；如果显示格式为.l 的话就表示 20 个 long，也就是 20*4=80 个字节。另外要注意： uboot 命令中的数字都是十六进制的！不是十进制的！ 比如你想查看以 0X80000000 开始的 20 个字节的内存值，显示格式为.b 的话，应该使用如下所示命令：</p>
+<p><em>md.b 80000000 14 而不是： md.b 80000000 20</em></p>
+<p>uboot 命令里面的数字都是十六进制的，所以可以不用写“0x”前缀，十进制 的 20 其十六进制为 0x14，所以命令 md 后面的个数应该是 14，如果写成 20 的话就表示查看 32(十六进制为 0x20)个字节的数据</p>
+<h4 id="nm-命令"><a href="#nm-命令" class="headerlink" title="nm 命令"></a>nm 命令</h4><p>nm 命令用于修改指定地址的内存值，命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nm [.b, .w, .l] address</span><br></pre></td></tr></table></figure>
+<p>nm 命令同样可以以.b、.w 和.l 来指定操作格式，比如现在以.l 格式修改 0x80000000 地址 的数据为 0x12345678。输入命令：</p>
+<p><em>nm.l 80000000</em></p>
+<p>80000000 表示现在要修改的内存地址，ffffff00 表示地址 0x80000000 现 在的数据，？后面就可以输入要修改后的数据 0x12345678，输入完成以后按下回车，然后再输 入‘q’即可退出</p>
+<h4 id="mm-命令"><a href="#mm-命令" class="headerlink" title="mm 命令"></a>mm 命令</h4><p>mm 命令也是修改指定地址内存值的，使用 mm 修改内存值的时候地址会自增，而使用命 令 nm 的话地址不会自增</p>
+<h4 id="mw-命令"><a href="#mw-命令" class="headerlink" title="mw 命令"></a>mw 命令</h4><p>命令 mw 用于使用一个指定的数据填充一段内存，命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mw [.b, .w, .l] address value [count]</span><br></pre></td></tr></table></figure>
+<p>mw 命令同样可以以.b、.w 和.l 来指定操作格式，address 表示要填充的内存起始地址，value 为要填充的数据，count 是填充的长度</p>
+<h4 id="cp-命令"><a href="#cp-命令" class="headerlink" title="cp 命令"></a>cp 命令</h4><p>cp 是数据拷贝命令，用于将 DRAM 中的数据从一段内存拷贝到另一段内存中，或者把 Nor  Flash 中的数据拷贝到 DRAM 中。命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp [.b, .w, .l] source target count</span><br></pre></td></tr></table></figure>
+<p>cp 命令同样可以以.b、.w 和.l 来指定操作格式，source 为源地址，target 为目的地址，count 为拷贝的长度</p>
+<h4 id="cmp-命令"><a href="#cmp-命令" class="headerlink" title="cmp 命令"></a>cmp 命令</h4><p>cmp 是比较命令，用于比较两段内存的数据是否相等，命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmp [.b, .w, .l] addr1 addr2 count</span><br></pre></td></tr></table></figure>
+<p>cmp 命令同样可以以.b、.w 和.l 来指定操作格式，addr1 为第一段内存首地址，addr2 为第 二段内存首地址，count 为要比较的长度</p>
+<h3 id="网络操作命令"><a href="#网络操作命令" class="headerlink" title="网络操作命令"></a>网络操作命令</h3><p>uboot 是支持网络的，我们在移植 uboot 的时候一般都要调通网络功能，因为在移植 linux kernel 的时候需要使用到 uboot 的网络功能做调试。uboot 支持大量的网络相关命令，比如 dhcp、 ping、nfs 和 tftpboot</p>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ipaddr</td>
+<td>开发板 ip 地址，可以不设置，使用 dhcp 命令来从路由器获取 IP 地址</td>
+</tr>
+<tr>
+<td>ethaddr</td>
+<td>开发板的 MAC 地址，一定要设置</td>
+</tr>
+<tr>
+<td>gatewayip</td>
+<td>网关地址</td>
+</tr>
+<tr>
+<td>netmask</td>
+<td>子网掩码</td>
+</tr>
+<tr>
+<td>serverip</td>
+<td>服务器 IP 地址，也就是 Ubuntu 主机 IP 地址，用于调试代码</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">setenv ipaddr 192.168.1.40</span><br><span class="line">setenv ethaddr 00:04:9f:04:d2:40</span><br><span class="line">setenv gatewayip 192.168.1.1</span><br><span class="line">setenv netmask 255.255.255.0</span><br><span class="line">setenv serverip 192.168.1.66</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure>
+<p>网络地址环境变量的设置要根据自己的实际情况，确保 Ubuntu 主机和开发板的 IP 地址在同一个网段内，比如开发板和电脑都在 192.168.1.0 这个网段内，所以设置开发板的 IP 地址为 192.168.1.50，Ubuntu 主机的地址为 192.168.1.250，因此 serverip 就是 192.168.1.250。ethaddr 为网络 MAC 地址，是一个 48bit 的地址，如果在同一个网段内有多个开发板的话一定要保证每个开发板的 ethaddr 是不同的</p>
+<h4 id="ping-命令"><a href="#ping-命令" class="headerlink" title="ping 命令"></a>ping 命令</h4><p>开发板的网络能否使用，是否可以和服务器(Ubuntu 主机)进行通信，通过 ping 命令就可 以验证，直接 ping 服务器的 IP 地址即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 192.168.1.xxx</span><br></pre></td></tr></table></figure>
+<p>只能在 uboot 中 ping 其他的机器，其他机器不能 ping uboot，因为 uboot 没有对 ping 命令做处理，如果用其他的机器 ping uboot 的话会失败！</p>
+<h4 id="dhcp-命令"><a href="#dhcp-命令" class="headerlink" title="dhcp 命令"></a>dhcp 命令</h4><p>dhcp 用于从路由器获取 IP 地址，前提得开发连接到路由器上的，如果开发板是和电脑直 连的，那么 dhcp 命令就会失效。直接输入 dhcp 命令即可通过路由器获取到 IP 地址</p>
+<p>DHCP 不单单是获取 IP 地址，其还会通过 TFTP 来 启动 linux 内核</p>
+<h4 id="nfs-命令"><a href="#nfs-命令" class="headerlink" title="nfs 命令"></a>nfs 命令</h4><p>nfs(Network File System)网络文件系统，通过 nfs 可以在计算机之间通过网络来分享资源， 比如我们将 linux 镜像和设备树文件放到 Ubuntu 中，然后在 uboot 中使用 nfs 命令将 Ubuntu 中 的 linux 镜像和设备树下载到开发板的 DRAM 中。这样做的目的是为了方便调试 linux 镜像和设备树，也就是网络调试，通过网络调试是 Linux 开发中最常用的调试方法。原因是嵌入式 linux 开发不像单片机开发，可以直接通过 JLINK 或 STLink 等仿真器将代码直接烧写到单片机内部 的 flash 中，嵌入式 Linux 通常是烧写到 EMMC、NAND Flash、SPI Flash 等外置 flash 中，但是嵌入式 Linux 开发也没有 MDK，IAR 这样的 IDE，更没有烧写算法，因此不可能通过点击一个 “download”按钮就将固件烧写到外部 flash 中。虽然半导体厂商一般都会提供一个烧写固件的 软件，但是这个软件使用起来比较复杂，这个烧写软件一般用于量产的。其远没有 MDK、IAR 的一键下载方便，在 Linux 内核调试阶段，如果用这个烧写软件的话将会非常浪费时间，而这个时候网络调试的优势就显现出来了，可以通过网络将编译好的 linux 镜像和设备树文件下载到 DRAM 中，然后就可以直接运行</p>
+<p>我们一般使用 uboot 中的 nfs 命令将 Ubuntu 中的文件下载到开发板的 DRAM 中，在使用之前需要开启 Ubuntu 主机的 NFS 服务，并且要新建一个 NFS 使用的目录，以后所有要通过 NFS 访问的文件都需要放到这个 NFS 目录中</p>
+<p>uboot 中的 nfs 命令格式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nfs [loadAddress] [[hostIPaddr:]bootfilename]</span><br></pre></td></tr></table></figure>
+<p>loadAddress 是要保存的 DRAM 地址，[[hostIPaddr:]bootfilename]是要下载的文件地址</p>
+<p>准备好以后就可以使用 nfs 命令来将 zImage 下载到开发板 DRAM 的 0X80800000 地址处， 命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nfs 80800000 192.168.1.250:&#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;nfs&#x2F;zImage</span><br></pre></td></tr></table></figure>
+<p>命令中的“ 80800000 ” 表 示 zImage 保 存 地 址 ， “192.168.1.250:/home/chenzhan/linux/nfs/zImage”表示 zImage 在 192.168.1.250 这个主机中， 路径为/home/chenzhan/linux/nfs/zImage</p>
+<p>会以“#”提示下载过程，下载完成以后会提示下载的数据大小</p>
+<p>下载完成以后查看 0x80800000 地址处的数据，使用命令 md.b 来查看前 0x100 个字节的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md.b 80800000 100</span><br></pre></td></tr></table></figure>
+<h4 id="tftp-命令"><a href="#tftp-命令" class="headerlink" title="tftp 命令"></a>tftp 命令</h4><p>tftp 命令的作用和 nfs 命令一样，都是用于通过网络下载东西到 DRAM 中，只是 tftp 命令 使用的 TFTP 协议，Ubuntu 主机作为 TFTP 服务器。因此需要在 Ubuntu 上搭建 TFTP 服务器， 需要安装 tftp-hpa 和 tftpd-hpa，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tftp-hpa tftpd-hpa</span><br><span class="line">sudo apt-get install xinetd</span><br></pre></td></tr></table></figure>
+<p>和 NFS 一样，TFTP 也需要一个文件夹来存放文件，在用户目录下新建一个目录，命令如 下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;home&#x2F;chenzhan&#x2F;linux&#x2F;tftpboot</span><br><span class="line">chmod 777 &#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;tftpboot</span><br></pre></td></tr></table></figure>
+<p>这 样 我 就 在 我 的 电 脑 上 创 建 了 一 个 名 为 tftpboot 的 目 录 ( 文件夹 ) ， 路 径 为 /home/chenzhan/linux/tftpboot。注意！我们要给 tftpboot 文件夹权限，否则的话 uboot 不能从 tftpboot 文件夹里面下载文件</p>
+<p>最后配置 tftp，安装完成以后新建文件/etc/xinetd.d/tftp，如果没有/etc/xinetd.d 目录的话自行 创建，然后在里面输入如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server tftp</span><br><span class="line">&#123;</span><br><span class="line">socket_type &#x3D; dgram</span><br><span class="line">protocol &#x3D; udp</span><br><span class="line">wait &#x3D; yes</span><br><span class="line">user &#x3D; root</span><br><span class="line">server &#x3D; &#x2F;usr&#x2F;sbin&#x2F;in.tftpd</span><br><span class="line">server_args &#x3D; -s &#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;tftpboot&#x2F;</span><br><span class="line">disable &#x3D; no</span><br><span class="line">per_source &#x3D; 11</span><br><span class="line">cps &#x3D; 100 2</span><br><span class="line">flags &#x3D; IPv4</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完了以后启动 tftp 服务，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service tftpd-hpa start</span><br></pre></td></tr></table></figure>
+<p>打开/etc/default/tftpd-hpa 文件，将其修改为如下所示内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># &#x2F;etc&#x2F;default&#x2F;tftpd-hpa</span><br><span class="line"></span><br><span class="line">TFTP_USERNAME&#x3D;&quot;tftp&quot;</span><br><span class="line">TFTP_DIRECTORY&#x3D;&quot;&#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;tftpboot&quot;</span><br><span class="line">TFTP_ADDRESS&#x3D;&quot;:69&quot; </span><br><span class="line">TFTP_OPTIONS&#x3D;&quot;-l -c -s&quot;</span><br></pre></td></tr></table></figure>
+<p>TFTP_DIRECTORY 就是我们上面创建的 tftp 文件夹目录，以后我们就将所有需要通过 TFTP 传输的文件都放到这个文件夹里面，并且要给予这些文件相应的权限</p>
+<p>最后输入如下命令， 重启 tftp 服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service tftpd-hpa restart</span><br></pre></td></tr></table></figure>
+<p>tftp 服务器已经搭建好了，接下来就是使用了。将 zImage 镜像文件拷贝到 tftpboot 文件夹 中，并且给予 zImage 相应的权限，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp zImage &#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;tftpboot&#x2F;</span><br><span class="line">cd &#x2F;home&#x2F;zuozhongkai&#x2F;linux&#x2F;tftpboot&#x2F;</span><br><span class="line">chmod 777 zImage</span><br></pre></td></tr></table></figure>
+<p>uboot 中的 tftp 命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tftpboot [loadAddress] [[hostIPaddr:]bootfilename]</span><br></pre></td></tr></table></figure>
+<p>看起来和 nfs 命 令 格式 一 样 的 ， loadAddress 是文件在 DRAM 中 的存 放 地 址 ， [[hostIPaddr:]bootfilename]是要从 Ubuntu 中下载的文件。但是和 nfs 命令的区别在于，tftp 命令 不需要输入文件在 Ubuntu 中的完整路径，只需要输入文件名即可。比如我们现在将 tftpboot 文 件夹里面的 zImage 文件下载到开发板 DRAM 的 0X80800000 地址处，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tftp 80800000 zImage</span><br></pre></td></tr></table></figure>
+<p>md.b 命令来查看前 100 个字节的数据</p>
+<p>“TFTP error: ‘Permission denied’ (0)”这样的错误提示，提示没有权限，出现这个错误一般有两个原因：</p>
+<ol>
+<li>在 Ubuntu 中创建 tftpboot 目录的时候没有给予 tftboot 相应的权限</li>
+<li>tftpboot 目录中要下载的文件没有给予相应的权限。 针对上述两个问题，使用命令“chmod 777 xxx”来给予权限，其中“xxx”就是要给予权限 的文件或文件夹</li>
+</ol>
+<h3 id="EMMC-和-SD-卡操作命令"><a href="#EMMC-和-SD-卡操作命令" class="headerlink" title="EMMC 和 SD 卡操作命令"></a>EMMC 和 SD 卡操作命令</h3><p>uboot 支持 EMMC 和 SD 卡，因此也要提供 EMMC 和 SD 卡的操作命令。一般认为 EMMC 和 SD 卡是同一个东西，所以没有特殊说明</p>
+<p>uboot 中常用于操作 MMC 设备的命令为“mmc”</p>
+<p>mmc 是一系列的命令，其后可以跟不同的参数，输入“？mmc”即可查看 mmc 有关的命 令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mmc info</td>
+<td>输出MMC设备信息</td>
+</tr>
+<tr>
+<td>mmc read</td>
+<td>读取MMC中的数据</td>
+</tr>
+<tr>
+<td>mmc wirte</td>
+<td>向MMC设备写入数据</td>
+</tr>
+<tr>
+<td>mmc rescan</td>
+<td>扫描MMC设备</td>
+</tr>
+<tr>
+<td>mmc  part</td>
+<td>列出MMC设备的分区</td>
+</tr>
+<tr>
+<td>mmc dev</td>
+<td>切换MMC设备</td>
+</tr>
+<tr>
+<td>mmc list</td>
+<td>列出当前有效的所有 MMC 设备</td>
+</tr>
+<tr>
+<td>mmc hwpartition</td>
+<td>设置 MMC 设备的分区</td>
+</tr>
+<tr>
+<td>mmc bootbus……</td>
+<td>设置指定 MMC 设备的 BOOT_BUS_WIDTH 域的值</td>
+</tr>
+<tr>
+<td>mmc bootpart……</td>
+<td>设置指定 MMC 设备的 boot 和 RPMB 分区的大小</td>
+</tr>
+<tr>
+<td>mmc partconf……</td>
+<td>设置指定 MMC 设备的 PARTITION_CONFG 域的值</td>
+</tr>
+<tr>
+<td>mmc rst</td>
+<td>复位 MMC 设备</td>
+</tr>
+<tr>
+<td>mmc setdsr</td>
+<td>设置 DSR 寄存器的值</td>
+</tr>
+</tbody></table>
+<h4 id="mmc-info-命令"><a href="#mmc-info-命令" class="headerlink" title="mmc info 命令"></a>mmc info 命令</h4><p>mmc info 命令用于输出当前选中的 mmc info 设备的信息</p>
+<p>可以看出，当前选中的 MMC设备是 EMMC，版本为 4.5，容量为 3.7GiB(EMMC 为 4GB)，速度为 52000000Hz=52MHz，8 位宽的总线。还有一个与 mmc info 命令相同功能的命令：mmcinfo，“mmc”和“info”之间没有空格</p>
+<h4 id="mmc-rescan-命令"><a href="#mmc-rescan-命令" class="headerlink" title="mmc rescan 命令"></a>mmc rescan 命令</h4><p>mmc rescan 命令用于扫描当前开发板上所有的 MMC 设备，包括 EMMC 和 SD 卡</p>
+<h4 id="mmc-list-命令"><a href="#mmc-list-命令" class="headerlink" title="mmc list 命令"></a>mmc list 命令</h4><p>mmc list 命令用于来查看当前开发板一共有几个 MMC 设备</p>
+<p>FSL_SDHC:0 是 SD 卡，FSL_SDHC:1(eMMC)是 EMMC，。默认会将 EMMC 设置为当前 MMC 设备，这就是为什么 输入“mmc info”查询到的是 EMMC 设备信息，而不是 SD 卡。要想查看 SD 卡信息，就要使 用命令“mmc dev”来将 SD 卡设置为当前的 MMC 设备</p>
+<h4 id="mmc-dev-命令"><a href="#mmc-dev-命令" class="headerlink" title="mmc dev 命令"></a>mmc dev 命令</h4><p>mmc dev 命令用于切换当前 MMC 设备</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc dev [dev] [part]</span><br></pre></td></tr></table></figure>
+<p>[dev]用来设置要切换的 MMC 设备号，[part]是分区号。如果不写分区号的话默认为分区 0。 使用如下命令切换到 SD 卡：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 0 &#x2F;&#x2F;切换到 SD 卡，0 为 SD 卡，1 为 eMMC</span><br></pre></td></tr></table></figure>
+<p>切换到 SD 卡成功，mmc0 为当前的 MMC 设备，输入命令“mmc info”即可查看 SD 卡的信息</p>
+<h4 id="mmc-part-命令"><a href="#mmc-part-命令" class="headerlink" title="mmc part 命令"></a>mmc part 命令</h4><p>有时候 SD 卡或者 EMMC 会有多个分区，可以使用命令“mmc part”来查看其分区，比如 查看 EMMC 的分区情况，输入如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 1 &#x2F;&#x2F;切换到 EMMC</span><br><span class="line">mmc part &#x2F;&#x2F;查看 EMMC 分区</span><br></pre></td></tr></table></figure>
+<p>可以看出，此时 EMMC 有两个分区，扇区 20480<del>1024000 为第一个分区， 扇区 1228800</del>6504448 为第二个分区。如果 EMMC 里面烧写了 Linux 系统的话，EMMC 是有 3 个分区的，第 0 个分区存放 uboot，第 1 个分区存放 Linux 镜像文件和设备树，第 2 个分区存 放根文件系统。但是在图中只有两个分区，那是因为第 0 个分区没有格式化，所以识别不出来，实际上第 0 个分区是存在的。一个新的 SD 卡默认只有一个分区，那就是分区 0，所以前面讲解的 uboot 烧写到 SD 卡，其实就是将 u-boot.bin 烧写到了 SD 卡的分区 0 里面。后面再学习 Linux 内核移植的时候怎么在 SD 卡中创建并格式化第二个分区，并将 Linux 镜像 文件和设备树文件存放到第二个分区中</p>
+<p>如果要将 EMMC 的分区 2 设置为当前 MMC 设置，可以使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 1 2</span><br></pre></td></tr></table></figure>
+<h4 id="mmc-read-命令"><a href="#mmc-read-命令" class="headerlink" title="mmc read 命令"></a>mmc read 命令</h4><p>mmc read 命令用于读取 mmc 设备的数据，命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc read addr blk# cnt</span><br></pre></td></tr></table></figure>
+<p>addr 是数据读取到 DRAM 中的地址，blk 是要读取的块起始地址(十六进制)，一个块是 512 字节，这里的块和扇区是一个意思，在 MMC 设备中我们通常说扇区，cnt 是要读取的块数量(十 六进制)。比如从 EMMC 的第 1536(0x600)个块开始，读取 16(0x10)个块的数据到 DRAM 的 0X80800000 地址处，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 1 0 &#x2F;&#x2F;切换到 MMC 分区 0</span><br><span class="line">mmc read 80800000 600 10 &#x2F;&#x2F;读取数据</span><br></pre></td></tr></table></figure>
+<p>可以看到“D$..baudrate=115200.board_name=EVK.board_rev=14X14.”等字 样，这个就是 uboot 中的环境变量。EMMC 核心板 uboot 环境变量的存储起始地址就是 1536*512=786432</p>
+<h4 id="mmc-write-命令"><a href="#mmc-write-命令" class="headerlink" title="mmc write 命令"></a>mmc write 命令</h4><p>要将数据写到 MMC 设备里面，可以使用命令“mmc write”，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc write addr blk# cnt</span><br></pre></td></tr></table></figure>
+<p>addr 是要写入 MMC 中的数据在 DRAM 中的起始地址，blk 是要写入 MMC 的块起始地址 (十六进制)，cnt 是要写入的块大小，一个块为 512 字节。我们可以使用命令“mmc write”来升 级 uboot，也就是在 uboot 中更新 uboot。这里要用到 nfs 或者 tftp 命令，通过 nfs 或者 tftp 命令 将新的 u-boot.bin 下载到开发板的 DRAM 中，然后再使用命令“mmc write”将其写入到 MMC 设备中。我们就来更新一下 SD 中的 uboot，先查看一下 SD 卡中的 uboot 版本号，注意编译时间，输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 0 &#x2F;&#x2F;切换到 SD 卡</span><br><span class="line">version &#x2F;&#x2F;查看版本号</span><br></pre></td></tr></table></figure>
+<p>可以看出当前 SD 卡中的 uboot 是 2019 年 4 月 15 日 12:52:04 编译的。我们现在重新编译 一下 uboot，然后将编译出来的 u-boot.imx(u-boot.bin 前面加了一些头文件)拷贝到 Ubuntu 中的 tftpboot 目录下。最后使用 tftp 命令将其下载到 0x80800000 地址处，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tftp 80800000 u-boot.imx</span><br></pre></td></tr></table></figure>
+<p>同理，如果要在 uboot 中更新 EMMC 对应的 uboot，可以使用如下所示命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mmc dev 1 0 &#x2F;&#x2F;切换到 EMMC 分区 0</span><br><span class="line">tftp 80800000 u-boot.imx &#x2F;&#x2F;下载 u-boot.imx 到 DRAM</span><br><span class="line">mmc write 80800000 2 32E &#x2F;&#x2F;烧写 u-boot.imx 到 EMMC 中</span><br><span class="line">mmc partconf 1 1 0 0 &#x2F;&#x2F;分区配置，EMMC 需要这一步！</span><br></pre></td></tr></table></figure>
+<p>千万不要写 SD 卡或者 EMMC 的前两个块(扇区)，里面保存着分区表！</p>
+<h4 id="mmc-erase-命令"><a href="#mmc-erase-命令" class="headerlink" title="mmc erase 命令"></a>mmc erase 命令</h4><p>如果要擦除 MMC 设备的指定块就是用命令“mmc erase”，命令格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmc erase blk# cnt</span><br></pre></td></tr></table></figure>
+<p>blk 为要擦除的起始块，cnt 是要擦除的数量。没事不要用 mmc erase 来擦除 MMC 设备！！！</p>
+<h3 id="FAT-格式文件系统操作命令"><a href="#FAT-格式文件系统操作命令" class="headerlink" title="FAT 格式文件系统操作命令"></a>FAT 格式文件系统操作命令</h3><p>有时候需要在 uboot 中对 SD 卡或者 EMMC 中存储的文件进行操作，这时候就要用到文件 操作命令，跟文件操作相关的命令有：fatinfo、fatls、fstype、fatload 和 fatwrite，但是这些文件 操作命令只支持 FAT 格式的文件系统！！</p>
+<ul>
+<li>fatinfo 命令用于查询指定 MMC 设置指定分区的文件系统信息</li>
+<li>fatls 命令用于查询 FAT 格式设备的目录和文件信息</li>
+<li>fstype 用于查看 MMC 设备某个分区的文件系统格式</li>
+<li>fatload 命令用于将指定的文件读取到 DRAM 中</li>
+<li>fatwirte 命令用于将 DRAM 中的数据写入到 MMC 设备中</li>
+</ul>
+<h3 id="EXT-格式文件系统操作命令"><a href="#EXT-格式文件系统操作命令" class="headerlink" title="EXT 格式文件系统操作命令"></a>EXT 格式文件系统操作命令</h3><p>uboot 有 ext2 和 ext4 这两种格式的文件系统的操作命令，常用的就四个命令，分别为： ext2load、ext2ls、ext4load、ext4ls 和 ext4write。这些命令的含义和使用与 fatload、fatls 和 fatwrit 一样，只是 ext2 和 ext4 都是针对 ext 文件系统的。比如 ext4ls 命令，EMMC 的分区 2 就是 ext4 格式的，使用 ext4ls 就可以查询 EMMC 的分区 2 中的文件和目录，输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext4ls mmc 1:2</span><br></pre></td></tr></table></figure>
+<h3 id="NAND-操作命令"><a href="#NAND-操作命令" class="headerlink" title="NAND 操作命令"></a>NAND 操作命令</h3><p>uboot 是支持 NAND Flash 的，所以也有 NAND Flash 的操作命令，前提是使用的 NAND 版 本的核心板，并且编译 NAND 核心板对应的 uboot，然后使用 imxdownload 软件将 u-boot.bin 烧 写到 SD 卡中，最后通过 SD 卡启动</p>
+<p>一般情况下 NAND 版本的核心板已经烧写好了 uboot、 linux kernel 和 rootfs 这些文件，所以可以将 BOOT 拨到 NAND，然后直接从 NAND Flash 启动 即可</p>
+<ul>
+<li>nand info 命令此命令用户打印 NAND Flash 信息</li>
+<li>nand device 用于切换 NAND Flash</li>
+<li>nand erase 命令用于擦除 NAND Flash</li>
+<li>nand write 此命令用于向 NAND 指定地址写入指定的数据，一般和“nand erase”命令配置使用来更新 NAND 中的 uboot、linux kernel 或设备树等文件</li>
+<li>nand read 命令用于从 NAND 中的指定地址读取指定大小的数据到 DRAM 中</li>
+</ul>
+<h3 id="BOOT-操作命令"><a href="#BOOT-操作命令" class="headerlink" title="BOOT 操作命令"></a>BOOT 操作命令</h3><p>uboot 的本质工作是引导 Linux，所以 uboot 肯定有相关的 boot(引导)命令来启动 Linux。常 用的跟 boot 有关的命令有：bootz、bootm 和 boot</p>
+<ul>
+<li>bootz 命令用于启动 zImage 镜像文件</li>
+<li>bootm 和 bootz 功能类似，但是 bootm 用于启动 uImage 镜像文件</li>
+<li>boot 命令也是用来启动 Linux 系统的，只是 boot 会读取环境变量 bootcmd 来启动 Linux 系 统，bootcmd 是一个很重要的环境变量！</li>
+</ul>
+<h3 id="其他常用命令"><a href="#其他常用命令" class="headerlink" title="其他常用命令"></a>其他常用命令</h3><p>uboot 中还有其他一些常用的命令，比如 reset、go、run 和 mtest 等。</p>
+<ul>
+<li>reset 命令是复位的，输入“reset”即可复位重启</li>
+<li>go 命令用于跳到指定的地址处执行应用</li>
+<li>run 命令用于运行环境变量中定义的命令</li>
+<li>mtest 命令是一个简单的内存读写测试命令，可以用来测试自己开发板上的 DDR</li>
+</ul>
+<hr>
+<p>参考资料：正点原子</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/03/13/note28-4-U-Boot/">https://www.chenzhan.club/2021/03/13/note28-4-U-Boot/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E5%80%BC/">系统移值</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/210b54e20bd1d14ff1e3edb020fa5a0ff719539d.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/03/17/note29-4-U-Boot%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC%E5%90%AF%E5%8A%A8/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/350178b826e31d6159e842b6e25c9c80d4115e1d.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note29.4-U-Boot内核移值启动</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/03/08/note27-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E4%BA%8C/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/48b6bb190e3b0f7ba120145d741ba65f3b734367.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note27.3-数据结构概念二</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/03/17/note29-4-U-Boot内核移值启动/" title="note29.4-U-Boot内核移值启动"><img class="cover" src="https://i0.hdslb.com/bfs/album/350178b826e31d6159e842b6e25c9c80d4115e1d.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-17</div><div class="title">note29.4-U-Boot内核移值启动</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/23/note30-4-Linux内核移值/" title="note30.4-Linux内核移值"><img class="cover" src="https://i0.hdslb.com/bfs/album/cfbea7b6b809364917b9a33025146598e1e6de8b.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-23</div><div class="title">note30.4-Linux内核移值</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs根文件系统/" title="note31.4-rootfs根文件系统"><img class="cover" src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-27</div><div class="title">note31.4-rootfs根文件系统</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#U-Boot"><span class="toc-number">1.</span> <span class="toc-text">U-Boot</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#U-Boot-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">U-Boot 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8DU-Boot"><span class="toc-number">1.1.1.</span> <span class="toc-text">三种U-Boot</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number">1.2.</span> <span class="toc-text">编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#shell-%E8%84%9A%E6%9C%AC"><span class="toc-number">1.2.1.</span> <span class="toc-text">shell 脚本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#U-Boot-%E7%83%A7%E5%86%99%E4%B8%8E%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">U-Boot 烧写与启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#uboot-%E9%BB%98%E8%AE%A4%E8%BE%93%E5%87%BA%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">uboot 默认输出信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#U-Boot-%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">U-Boot 命令使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.1.</span> <span class="toc-text">信息查询命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.2.</span> <span class="toc-text">环境变量操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">修改环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">新建环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">删除环境变量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.</span> <span class="toc-text">内存操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#md-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">md 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nm-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">nm 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mm-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">mm 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mw-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">mw 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cp-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.5.</span> <span class="toc-text">cp 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cmp-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.6.</span> <span class="toc-text">cmp 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.4.</span> <span class="toc-text">网络操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ping-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">ping 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dhcp-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">dhcp 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nfs-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.4.3.</span> <span class="toc-text">nfs 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tftp-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.4.4.</span> <span class="toc-text">tftp 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EMMC-%E5%92%8C-SD-%E5%8D%A1%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.</span> <span class="toc-text">EMMC 和 SD 卡操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-info-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">mmc info 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-rescan-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">mmc rescan 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-list-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.3.</span> <span class="toc-text">mmc list 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-dev-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.4.</span> <span class="toc-text">mmc dev 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-part-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.5.</span> <span class="toc-text">mmc part 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-read-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.6.</span> <span class="toc-text">mmc read 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-write-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.7.</span> <span class="toc-text">mmc write 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mmc-erase-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.5.8.</span> <span class="toc-text">mmc erase 命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FAT-%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.6.</span> <span class="toc-text">FAT 格式文件系统操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXT-%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.7.</span> <span class="toc-text">EXT 格式文件系统操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAND-%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.8.</span> <span class="toc-text">NAND 操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BOOT-%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.9.</span> <span class="toc-text">BOOT 操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.10.</span> <span class="toc-text">其他常用命令</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论"><img src="https://i0.hdslb.com/bfs/article/9a3b32d2ff5b616b0344818cad02e8ba499f6606.jpg@1320w_826h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note35.3-数据结构绪论"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论">note35.3-数据结构绪论</a><time datetime="2021-04-12T13:14:03.000Z" title="发表于 2021-04-12 21:14:03">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树"><img src="https://i0.hdslb.com/bfs/article/94d982713d5da4c87565e163d86eaefe81ff5225.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note34.5-设备树"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树">note34.5-设备树</a><time datetime="2021-04-12T13:13:46.000Z" title="发表于 2021-04-12 21:13:46">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动"><img src="https://i0.hdslb.com/bfs/article/b03d90a0505947ddf8c3384eaf3c751f06930f47.jpg@1320w_990h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note33.5-LED驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动">note33.5-LED驱动</a><time datetime="2021-03-31T13:17:02.000Z" title="发表于 2021-03-31 21:17:02">2021-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动"><img src="https://i0.hdslb.com/bfs/article/75769bed78f538cd7890ba1931904cf4662ef7d7.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note32.5-字符设备驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动">note32.5-字符设备驱动</a><time datetime="2021-03-28T13:14:49.000Z" title="发表于 2021-03-28 21:14:49">2021-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统"><img src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note31.4-rootfs根文件系统"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统">note31.4-rootfs根文件系统</a><time datetime="2021-03-27T07:48:23.000Z" title="发表于 2021-03-27 15:48:23">2021-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

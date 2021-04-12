@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note21.2-RTC实时时钟 | CHENZHAN</title><meta name="keywords" content="ARM(MX6U)"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="I.MX6U RTC 简介大多数MCU 或者 MPU 内部自带了实时时钟外设模块。如 I.MX6U 内部的 SNVS 就提供了 RTC 功能 SNVS 直译是安全的非易性存储，SNVS 里面主要是一些低功耗的外设，包括一个安全的实时计数器(RTC)、一个单调计数器(monotonic counter)和一些通用的寄存器，这里只使用实时计数器(RTC)。SNVS 里面的外设在芯片掉电以后由电池供">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note21.2-RTC实时时钟">
+<meta property="og:url" content="https://www.chenzhan.club/2021/03/01/note21-2-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="I.MX6U RTC 简介大多数MCU 或者 MPU 内部自带了实时时钟外设模块。如 I.MX6U 内部的 SNVS 就提供了 RTC 功能 SNVS 直译是安全的非易性存储，SNVS 里面主要是一些低功耗的外设，包括一个安全的实时计数器(RTC)、一个单调计数器(monotonic counter)和一些通用的寄存器，这里只使用实时计数器(RTC)。SNVS 里面的外设在芯片掉电以后由电池供">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp">
+<meta property="article:published_time" content="2021-03-01T06:52:25.000Z">
+<meta property="article:modified_time" content="2021-04-12T13:31:46.996Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="ARM(MX6U)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/03/01/note21-2-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-12 21:31:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note21.2-RTC实时时钟</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-01T06:52:25.000Z" title="发表于 2021-03-01 14:52:25">2021-03-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-12T13:31:46.996Z" title="更新于 2021-04-12 21:31:46">2021-04-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note21.2-RTC实时时钟"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="I-MX6U-RTC-简介"><a href="#I-MX6U-RTC-简介" class="headerlink" title="I.MX6U RTC 简介"></a>I.MX6U RTC 简介</h1><p>大多数MCU 或者 MPU 内部自带了实时时钟外设模块。如 I.MX6U 内部的 SNVS 就提供了 RTC 功能</p>
+<p>SNVS 直译是安全的非易性存储，SNVS 里面主要是一些低功耗的外设，包括一个安全的实时计数器(RTC)、一个单调计数器(monotonic counter)和一些通用的寄存器，这里只使用实时计数器(RTC)。SNVS 里面的外设在芯片掉电以后由电池供电继续运行，I.MX6UALPHA 开发板上有一个纽扣电池，这个纽扣电池就是在主电源关闭以后为 SNVS 供电的</p>
+<p>纽扣电池在掉电以后会继续给 SNVS 供电，因此实时计数器就会一直运行，这样的话时间信息就不会丢失。在有纽扣电池作为后备电源的情况下，不管系统主电源是否断电，SNVS 都正常运行。SNVS 有两部分：SNVS_HP 和 SNVS_LP，系统主电源断电以后 SNVS_HP 也会断电，但是在后备电源支持下，SNVS_LP 是不会断电的，而且 SNVS_LP 是和芯片复位隔离开的，因此 SNVS_LP 相关的寄存器的值会一直保存着。 SNVS 分为两个子模块：SNVS_HP 和 SNVS_LP，也就是高功耗域(SNVS_HP)和低功耗域 (SNVS_LP)，这两个域的电源来源如下： SNVS_LP：专用的 always-powered-on 电源域，系统主电源和备用电源都可以为其供电。 SNVS_HP：系统(芯片)电源。 SNVS 的这两个子模块的电源如图所示</p>
+<p><img src="/Chenzhan666.github.io/.club//Personalwebsite\blog\myBlog\source_posts\note21-RTC实时时钟\image-20210301145727911.png" alt="image-20210301145727911"></p>
+<p>图中各个部分功能如下：</p>
+<p>、VDD_HIGH_IN 是系统(芯片)主电源，这个电源会同时供给给 SNVS_HP 和 SNVS_LP</p>
+<p>、VDD_SNVS_IN 是纽扣电池供电的电源，这个电源只会供给给 SNVS_LP，保证在系统主电源 VDD_HIGH_IN 掉电以后 SNVS_LP 会继续运行</p>
+<p>、SNVS_HP 部分</p>
+<p>、SNVS_LP 部分，此部分有个 SRTC，这个就是我们要使用的 RTC。</p>
+<p>SNVS_HP 和 SNVS_LP，其内部都有一个 SRTC，但因为 SNVS_HP 在系统电源掉电以后就会关闭，所以我们使用的是 SNVS_LP 内部的 SRTC。SNVS_HP 在设备每次关闭以后时钟都被清零，然后开机以后先设置时钟</p>
+<p>不管是 SNVS_HP 里面的 RTC，还是 SNVS_LP 里面的 SRTC，本质是一个定时 器，和 EPIT 定时器一样，只要提供时钟，就会一直运行。SRTC 需要外界提供一个 32.768KHz 的时钟，I.MX6U-ALPHA 核心板上的 32.768KHz 的晶振就是提供这个时钟的。寄存器 SNVS_LPSRTCMR 和 SNVS_LPSRTCLR 保存着秒数，直接读取这两个寄存器的值就知道过了多长时间了。一般以 1970 年 1 月 1 日为起点，加上经过的秒数即可得到现在的时间和日期。SRTC 带有闹钟功能的，可以在寄存器 SNVS_LPAR 中写入闹钟时间值，当时钟值和闹钟值匹配的时候就会产生闹钟中断，要使用时钟功能的话还需要进行一些设置</p>
+<p>与 SRTC 相关的部分寄存器，首先是 SNVS_HPCOMR 寄存器，这个寄存器只用到了位：NPSWA_EN(bit31)，这个位是非特权软件访问控制位，如果非特权软件要访问 SNVS 的话此位必须为 1</p>
+<p>寄存器SNVS_LPCR寄存器，此寄存器也只用到了一个位：SRTC_ENV(bit0)， 此位为 1 的话就使能 STC 计数器</p>
+<p><del>寄存器 SNVS_SRTCMR 和 SNVS_SRTCLR，这两个寄存器保存着 RTC 的秒数，按照NXP官方的《6UL参考手册》中的说法，SNVS_SRTCMR保存着高15位，SNVS_SRTCLR 保存着低 32 位，因此 SRTC 的计数器一共是 47 位</del></p>
+<p>但是！老师在编写驱动的时候发现按照手册上说的去读取计数器值是错误的！具体表现就是 时间是混乱的，因此老师在查找了 NXP 提供的 SDK 包中的 fsl_snvs_hp.c 以及 Linux 内核中的 rtcsnvs.c 这两个驱动文件以后发现《6UL 参考手册》上对 SNVS_SRTCMR 和 SNVS_SRTCLR 的 解释是错误的，经过查阅这两个文件，<strong>得到如下结论</strong>： </p>
+<ol>
+<li>SRTC 计数器是 32 位的，不是 47 位！</li>
+<li>SNVS_SRTCMR 的 bit14:0 这 15 位是 SRTC 计数器的高 15 位</li>
+<li>SNVS_SRTCLR 的 bit31:bit15 这 17 位是 SRTC 计数器的低 17 位</li>
+</ol>
+<p>按照上面的解释去读取这两个寄存器就可以得到正确的时间，如果要调整时间的话也是向这两个寄存器写入要设置的时间值对应的秒数就可以了，但是修改这两个寄存器的话要先关闭 SRTC。关于这些寄存器详细的描述，参考 《I.MX6UL 参考手册》第 2931 页的 46.7 小节</p>
+<p>使用 I.MX6U 的 SNVS_LP 的 SRTC， 配置步骤如下</p>
+<ol>
+<li><p>初始化 SNVS_SRTC </p>
+<p>初始化 SNVS_LP 中的 SRTC</p>
+</li>
+<li><p>设置 RTC 时间 </p>
+<p>第一次使用 RTC 肯定要先设置时间</p>
+</li>
+<li><p>使能 RTC </p>
+<p>配置好 RTC 并设置好初始时间以后就可以开启 RTC </p>
+</li>
+</ol>
+<p>文件 bsp_rtc.c 里面一共有 9 个函数，函数 rtc_init 是初始化rtc的，主要是使能RTC，也可以在rtc_init函数里面设置时间。函数rtc_enable和rtc_disable 分别是 RTC 的使能和禁止函数。函数 rtc_isleapyear 用于判断某一年是否为闰年。函数 rtc_coverdate_to_seconds 负责将给定的日期和时间信息转换为对应的秒数。函数 rtc_setdatetime 用于设置时间，也就是设置寄存器 SNVS_LPSRTCMR 和 SNVS_LPSRTCLR 。 函 数 rtc_convertseconds_to_datetime 用于将给定的秒数转换为对应的时间值。函数 rtc_getseconds 获 取 SRTC 当前秒数，其实就是读取寄存器 SNVS_LPSRTCMR 和 SNVS_LPSRTCLR，然后将其 结合成 47 位的值。最后一个函数 rtc_getdatetime 是获取时间值</p>
+<p>我们在 main 函数里面先初始化 RTC，然后进入 3S 倒计时， 如果这 3S 内按下了 KEY0 按 键，那么就设置 SRTC 的日期。如果 3S 倒计时结束以后没有按下 KEY0，也就是没有设置 SRTC 时间的话就进入 while 循环，然后读取 RTC 的时间值并且显示在 LCD 上</p>
+<hr>
+<p>参考资料：正点原子    《I.MX6UL 参考手册》</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/03/01/note21-2-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/">https://www.chenzhan.club/2021/03/01/note21-2-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/ARM-MX6U/">ARM(MX6U)</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/03/02/note22-2-I2C%E5%AE%9E%E9%AA%8C/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note22.2-I2C实验</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/03/01/note20-2-RGBLCD%E6%98%BE%E7%A4%BA/"><img class="next-cover" src="https://i0.hdslb.com/bfs/article/4619e484017e9cf7bdea5f0c8fc052f8ee34994e.jpg@1320w_624h.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note20.2-RGBLCD显示</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/02/14/note10-2-I-MX6U启动方式/" title="note10.2 I.MX6U启动方式"><img class="cover" src="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-14</div><div class="title">note10.2 I.MX6U启动方式</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/15/note13-2-蜂鸣器实验/" title="note13.2 蜂鸣器实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/d9169dc108ec1dc6c330a5472858de36759703a5.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-15</div><div class="title">note13.2 蜂鸣器实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/17/note14-2-GPIO输入按键实验/" title="note14.2 GPIO输入按键实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/aee4ce6332eff5bdc8c9ec4ce19c1d606c156d7f.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-17</div><div class="title">note14.2 GPIO输入按键实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/20/note15-2-主频和时钟配置实验/" title="note15.2 主频和时钟配置实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-20</div><div class="title">note15.2 主频和时钟配置实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/27/note18-2-UART串口通信/" title="note18.2-UART串口通信"><img class="cover" src="https://i0.hdslb.com/bfs/article/0efc347b8b2fab3bbc38b50abf506085c2aa185d.jpg@1200w_688h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-27</div><div class="title">note18.2-UART串口通信</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/26/note17-2-EPIT定时器实验/" title="note17.2-EPIT定时器，按键消抖，高精度延时"><img class="cover" src="https://i0.hdslb.com/bfs/album/d186bc9ebd6166a0702afc3be8aced74148845b1.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-26</div><div class="title">note17.2-EPIT定时器，按键消抖，高精度延时</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#I-MX6U-RTC-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">I.MX6U RTC 简介</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论"><img src="https://i0.hdslb.com/bfs/article/9a3b32d2ff5b616b0344818cad02e8ba499f6606.jpg@1320w_826h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note35.3-数据结构绪论"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论">note35.3-数据结构绪论</a><time datetime="2021-04-12T13:14:03.000Z" title="发表于 2021-04-12 21:14:03">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树"><img src="https://i0.hdslb.com/bfs/article/94d982713d5da4c87565e163d86eaefe81ff5225.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note34.5-设备树"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树">note34.5-设备树</a><time datetime="2021-04-12T13:13:46.000Z" title="发表于 2021-04-12 21:13:46">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动"><img src="https://i0.hdslb.com/bfs/article/b03d90a0505947ddf8c3384eaf3c751f06930f47.jpg@1320w_990h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note33.5-LED驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动">note33.5-LED驱动</a><time datetime="2021-03-31T13:17:02.000Z" title="发表于 2021-03-31 21:17:02">2021-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动"><img src="https://i0.hdslb.com/bfs/article/75769bed78f538cd7890ba1931904cf4662ef7d7.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note32.5-字符设备驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动">note32.5-字符设备驱动</a><time datetime="2021-03-28T13:14:49.000Z" title="发表于 2021-03-28 21:14:49">2021-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统"><img src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note31.4-rootfs根文件系统"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统">note31.4-rootfs根文件系统</a><time datetime="2021-03-27T07:48:23.000Z" title="发表于 2021-03-27 15:48:23">2021-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

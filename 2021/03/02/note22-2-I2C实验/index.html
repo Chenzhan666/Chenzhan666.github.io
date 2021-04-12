@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note22.2-I2C实验 | CHENZHAN</title><meta name="keywords" content="ARM(MX6U)"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="I2C &amp; AP3216C 简介I2C 简介I2C 是一种总线协议，是 NXP 公司设计的，I2C 使用两条线在主控制器和从机之间进行数据通信。一条是 SCL(串行时钟线)，另外一条是 SDA(串行数据线)，这两条数据线需要接上拉电阻，总线空闲的时候 SCL 和 SDA 处于高电平。I2C 总线标准模式下速度可以 达到 100Kb&#x2F;S，快速模式下可以达到 400Kb&#x2F;S。I2C 总线工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note22.2-I2C实验">
+<meta property="og:url" content="https://www.chenzhan.club/2021/03/02/note22-2-I2C%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="I2C &amp; AP3216C 简介I2C 简介I2C 是一种总线协议，是 NXP 公司设计的，I2C 使用两条线在主控制器和从机之间进行数据通信。一条是 SCL(串行时钟线)，另外一条是 SDA(串行数据线)，这两条数据线需要接上拉电阻，总线空闲的时候 SCL 和 SDA 处于高电平。I2C 总线标准模式下速度可以 达到 100Kb&#x2F;S，快速模式下可以达到 400Kb&#x2F;S。I2C 总线工">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp">
+<meta property="article:published_time" content="2021-03-01T16:40:54.000Z">
+<meta property="article:modified_time" content="2021-04-12T13:31:55.817Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="ARM(MX6U)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/03/02/note22-2-I2C%E5%AE%9E%E9%AA%8C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-12 21:31:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note22.2-I2C实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-01T16:40:54.000Z" title="发表于 2021-03-02 00:40:54">2021-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-12T13:31:55.817Z" title="更新于 2021-04-12 21:31:55">2021-04-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note22.2-I2C实验"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="I2C-amp-AP3216C-简介"><a href="#I2C-amp-AP3216C-简介" class="headerlink" title="I2C &amp; AP3216C 简介"></a>I2C &amp; AP3216C 简介</h1><h2 id="I2C-简介"><a href="#I2C-简介" class="headerlink" title="I2C 简介"></a>I2C 简介</h2><p>I2C 是一种总线协议，是 NXP 公司设计的，I2C 使用两条线在主控制器和从机之间进行数据通信。一条是 SCL(串行时钟线)，另外一条是 SDA(串行数据线)，这两条数据线需要接上拉电阻，总线空闲的时候 SCL 和 SDA 处于高电平。I2C 总线标准模式下速度可以 达到 100Kb/S，快速模式下可以达到 400Kb/S。I2C 总线工作是按照一定的协议来运行的，接下来就看一下 I2C 协议。 I2C 是支持多从机的，也就是一个 I2C 控制器下可以挂多个 I2C 从设备，这些不同的 I2C 从设备有不同的器件地址，这样 I2C 主控制器就可以通过 I2C 设备的器件地址访问指定的 I2C 设备</p>
+<p>SDA 和 SCL 这两根线必须要接一个上拉电阻，一般是 4.7K。其余的 I2C 从器件都挂接到 SDA 和 SCL 这两根线上，这样就可以通过 SDA 和 SCL 这两根线来访问多个 I2C 设备</p>
+<p>I2C协议术语</p>
+<p><strong>起始位</strong> 就是 I2C 通信起始标志，通过这个起始位就可以告诉 I2C 从机，将开始进行 I2C 通信。在 SCL 为高电平的时候，SDA 出现下降沿就表示为起始位</p>
+<p><strong>停止位</strong> 停止位就是停止 I2C 通信的标志位，和起始位的功能相反。在 SCL 位高电平的时候，SDA 出现上升沿就表示为停止位</p>
+<p><strong>数据传输</strong> I2C 总线在数据传输的时候要保证在 SCL 高电平期间，SDA 上的数据稳定，因此 SDA 上 的数据变化只能在 SCL 低电平期间发生</p>
+<p><strong>应答信号</strong> 当 I2C 主机发送完 8 位数据以后会将 SDA 设置为输入状态，等待 I2C 从机应答，也就是 等到 I2C 从机告诉主机它接收到数据了。应答信号是由从机发出的，主机需要提供应答信号所需的时钟，主机发送完 8 位数据以后紧跟着的一个时钟信号就是给应答信号使用的。从机通过将 SDA 拉低来表示发出应答信号，表示通信成功，否则表示通信失败</p>
+<p><strong>I2C 写时序</strong> 主机通过 I2C 总线与从机之间进行通信不外乎两个操作：写和读</p>
+<p>写时序的具体步骤：</p>
+<ol>
+<li>开始信号</li>
+<li>发送 I2C 设备地址，每个 I2C 器件都有一个设备地址，通过发送具体的设备地址来决定访问哪个 I2C 器件。这是一个 8 位的数据，其中高 7 位是设备地址，最后 1 位是读写位，为 1 的话表示这是一个读操作，为 0 的话表示这是一个写操作</li>
+<li>I2C 器件地址后面跟着一个读写位，为 0 表示写操作，为 1 表示读操作</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>重新发送开始信号</li>
+<li>发送要写写入数据的寄存器地址</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>发送要写入寄存器的数据</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>停止信号</li>
+</ol>
+<p><strong>I2C 读时序</strong></p>
+<p>I2C 单字节读时序比写时序要复杂一点，读时序分为 4 大步，第一步是发送设备地址，第二步是发送要读取的寄存器地址，第三步重新发送设备地址，最后一步就是 I2C 从器件输出要读取的寄存器值：</p>
+<ol>
+<li>主机发送起始信号</li>
+<li>主机发送要读取的 I2C 从设备地址</li>
+<li>读写控制位，因为是向 I2C 从设备发送数据，因此是写信号</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>重新发送 START 信号</li>
+<li>主机发送要读取的寄存器地址</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>重新发送 START 信号</li>
+<li>重新发送要读取的 I2C 从设备地址</li>
+<li>读写控制位，这里是读信号，表示接下来是从 I2C 从设备里面读取数据</li>
+<li>从机发送的 ACK 应答信号</li>
+<li>从 I2C 器件里面读取到的数据</li>
+<li>主机发出 NO ACK 信号，表示读取完成，不需要从机再发送 ACK 信号了</li>
+<li>主机发出 STOP 信号，停止 I2C 通信</li>
+</ol>
+<p><strong>I2C 多字节读写时序</strong></p>
+<p>有时候我们需要读写多个字节，多字节读写时序和单字节的基本一致，只是在读写数据的时候可以连续发送多个自己的数据，其他的控制时序都是和单字节一样的</p>
+<h2 id="I-MX6U-I2C-简介"><a href="#I-MX6U-I2C-简介" class="headerlink" title="I.MX6U I2C 简介"></a>I.MX6U I2C 简介</h2><p>I.MX6U 提供了 4 个 I2C 外设，通过这四个 I2C 外设即可完成与 I2C 从器件进行通信， I.MX6U 的 I2C 外设特性如下：</p>
+<ol>
+<li>与标准 I2C 总线兼容</li>
+<li>多主机运行 </li>
+<li>软件可编程的 64 中不同的串行时钟序列</li>
+<li>软件可选择的应答位</li>
+<li>开始/结束信号生成和检测</li>
+<li>重复开始信号生成</li>
+<li>确认位生成</li>
+<li>总线忙检测</li>
+</ol>
+<p>I.MX6U 的 I2C 支持两种模式：标准模式和快速模式，标准模式下 I2C 数据传输速率最高是 100Kbits/s，在快速模式下数据传输速率最高为 400Kbits/s</p>
+<p>I2C 的几个重要的寄存器</p>
+<ul>
+<li>I2Cx_IADR(x=1~4)寄存器，这是 I2C 的地址寄存器，寄存器 I2Cx_IADR 只有 ADR(bit7:1)位有效，用来保存 I2C 从设备地址数据。当我们要访问某个 I2C 从设备的时候就需要将其设备地址写入到 ADR 里面</li>
+<li>寄存器 I2Cx_IFDR，这个是 I2C 的分频寄存器，寄存器 I2Cx_IFDR 也只有 IC(bit5:0)这个位，用来设置 I2C 的波特率，I2C 的时钟源可以选 择 IPG_CLK_ROOT=66MHz，通过设置 IC 位既可以得到想要的 I2C 波特率</li>
+<li>寄存器 I2Cx_I2CR，这个是 I2C 控制寄存器</li>
+<li>寄存器就是 I2Cx_I2DR，这是 I2C 的数据寄存器，此寄存器只有低 8 位有效，当 要发送数据的时候将要发送的数据写入到此寄存器，如果要接收数据的话直接读取此寄存器即 可得到接收到的数据</li>
+</ul>
+<h2 id="AP3216C-简介"><a href="#AP3216C-简介" class="headerlink" title="AP3216C 简介"></a>AP3216C 简介</h2><p>通过 I2C1 连接了一个三合一环境传感器：AP3216C，AP3216C 是由敦南科技推出的一款传感器，其支持环境光强度(ALS)、接近距离(PS)和红外线强度(IR)这 三个环境参数检测。该芯片可以通过 IIC 接口与主控制相连，并且支持中断，AP3216C 的特点如下：</p>
+<ol>
+<li><p>I2C 接口，快速模式下波特率可以到 400Kbit/S </p>
+</li>
+<li><p>多种工作模式选择：ALS、PS+IR、ALS+PS+IR、PD 等等</p>
+</li>
+<li><p>内建温度补偿电路</p>
+</li>
+<li><p>宽工作温度范围(-30°C ~ +80°C)</p>
+</li>
+<li><p>超小封装，4.1mm x 2.4mm x 1.35mm </p>
+</li>
+<li><p>环境光传感器具有 16 位分辨率</p>
+</li>
+<li><p>接近传感器和红外传感器具有 10 位分辨率</p>
+</li>
+</ol>
+<p>AP3216C 常被用于手机、平板、导航设备等，其内置的接近传感器可以用于检测是否有物 体接近，比如手机上用来检测耳朵是否接触听筒，如果检测到的话就表示正在打电话，手机就 会关闭手机屏幕以省电。也可以使用环境光传感器检测光照强度，可以实现自动背光亮度调节</p>
+<p>AP3216 的设备地址为 0X1E，同几乎所有的 I2C 从器件一样，AP3216C 内部也有一些寄存 器，通过这些寄存器我们可以配置 AP3216C 的工作模式，并且读取相应的数据</p>
+<p>0X00 这个寄存器是模式控制寄存器，用来设置 AP3216C 的工作模式， 一般开始先将其设置为 0X04，也就是先软件复位一次 AP3216C。接下来根据实际使用情况选 择合适的工作模式，比如设置为 0X03，也就是开启 ALS+PS+IR。从 0X0A~0X0F 这 6 个寄存 器就是数据寄存器，保存着 ALS、PS 和 IR 这三个传感器获取到的数据值。如果同时打开 ALS、 PS 和 IR 的读取间隔最少要 112.5ms，因为 AP3216C 完成一次转换需要 112.5ms。关于 AP3216C 的介绍就到这里，如果要想详细的研究此芯片的话，请大家自行查阅其数据手册。 本章实验中我们通过 I.MX6U 的 I2C1 来读取 AP3216C 内部的 ALS、PS 和 IR 这三个传感 器的值，并且在 LCD 上显示。开机会先检测 AP3216C 是否存在，一般的芯片是有个 ID 寄存 器，通过读取 ID 寄存器判断 ID 是否正确就可以检测芯片是否存在。但是 AP3216C 没有 ID 寄 存器，所以我们就通过向寄存器 0X00 写入一个值，然后再读取 0X00 寄存器，判断读出得到值 和写入的是否相等，如果相等就表示 AP3216C 存在，否则的话 AP3216C 就不存在</p>
+<ol>
+<li>初始化相应的 IO 初始化 I2C1 相应的 IO，设置其复用功能，如果要使用 AP3216C 中断功能的话，还需要设 置 AP3216C 的中断 IO</li>
+<li>初始化 I2C1 初始化 I2C1 接口，设置波特率</li>
+<li>初始化 AP3216C 初始化 AP3216C，读取 AP3216C 的数据</li>
+</ol>
+<p>文件bsp_i2c.c一共有8个函数，函数i2c_init， 用来初始化 I2C，重点是设置 I2C 的波特率，初始化完成以后开启 I2C。i2c_master_repeated_start函数用来发送一个重复开始信号，发送开始信号的时候也会顺带发送从设备地址。i2c_master_start 用于发送一个开始信号，发送开始信号的时候也顺带发送从设备地址。i2c_check_and_clear_error函数用于检查并清除错误。i2c_master_stop，用于产生一个停止信号。i2c_master_write 和 i2c_master_read，这两个函数分别用于完成向 I2C 从设备写数据和从 I2C 从设备读数据。i2c_master_transfer函数就是用户最终调用的，用于完成 I2C 通信的函数，此函数会使用前面的函数拼凑出 I2C 读/写时序。此函数就是按照  I2C 读写时序来编写的</p>
+<p>文件 bsp_ap3216c.c 共有 4 个函数， ap3216c_init 函数用 于初始化 AP3216C，初始化成功的话返回 0，如果初始化失败就返回其他值。此函数先初始化所使用到的 IO，比如初始化 I2C1 的相关 IO，并设置其复用为 I2C1。然后此函数会调用 i2c_init 来初始化 I2C1，最后初始化 AP3216C。ap3216c_writeonebyte 和 ap3216c_readonebyte，这两个函数分别是向 AP3216C 写入数据和从 AP3216C 读取数据。这两个函数都通过调用 bsp_i2c.c 中的函数 i2c_master_transfer 来完成对 AP3216C 的读写。ap3216c_readdata函数用于读取 AP3216C 中的 ALS、PS 和 IR 传感器数据</p>
+<hr>
+<p>参考资料：正点原子</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/03/02/note22-2-I2C%E5%AE%9E%E9%AA%8C/">https://www.chenzhan.club/2021/03/02/note22-2-I2C%E5%AE%9E%E9%AA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/ARM-MX6U/">ARM(MX6U)</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/3a2fd9570279ce3cffb3894ee9943ea52eec3281.jpg@1320w_742h.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/03/03/note23-2-SPI%E5%AE%9E%E9%AA%8C/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/article/a1afb00e2f3048d34143eb987c7a0a15d41e8bfe.jpg@1320w_932h.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note23.2-SPI实验</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/03/01/note21-2-RTC%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F/"><img class="next-cover" src="https://i0.hdslb.com/bfs/article/27bdacd1e9a5defa72cab581e643da8d54a5a005.jpg@1320w_928h.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note21.2-RTC实时时钟</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/02/14/note10-2-I-MX6U启动方式/" title="note10.2 I.MX6U启动方式"><img class="cover" src="https://i0.hdslb.com/bfs/article/c1f5404dfc142af3c96d83a1a37b4f32b3f84fef.jpg@1320w_934h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-14</div><div class="title">note10.2 I.MX6U启动方式</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/15/note13-2-蜂鸣器实验/" title="note13.2 蜂鸣器实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/d9169dc108ec1dc6c330a5472858de36759703a5.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-15</div><div class="title">note13.2 蜂鸣器实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/17/note14-2-GPIO输入按键实验/" title="note14.2 GPIO输入按键实验"><img class="cover" src="https://i0.hdslb.com/bfs/album/aee4ce6332eff5bdc8c9ec4ce19c1d606c156d7f.jpg@518w.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-17</div><div class="title">note14.2 GPIO输入按键实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/20/note15-2-主频和时钟配置实验/" title="note15.2 主频和时钟配置实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/c045ee3a7675559c95272fd8865fd7161ae05549.jpg@1320w_742h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-20</div><div class="title">note15.2 主频和时钟配置实验</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/27/note18-2-UART串口通信/" title="note18.2-UART串口通信"><img class="cover" src="https://i0.hdslb.com/bfs/article/0efc347b8b2fab3bbc38b50abf506085c2aa185d.jpg@1200w_688h.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-27</div><div class="title">note18.2-UART串口通信</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/02/26/note17-2-EPIT定时器实验/" title="note17.2-EPIT定时器，按键消抖，高精度延时"><img class="cover" src="https://i0.hdslb.com/bfs/album/d186bc9ebd6166a0702afc3be8aced74148845b1.png@518w.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-26</div><div class="title">note17.2-EPIT定时器，按键消抖，高精度延时</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#I2C-amp-AP3216C-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">I2C &amp; AP3216C 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#I2C-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">I2C 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-MX6U-I2C-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">I.MX6U I2C 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AP3216C-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.3.</span> <span class="toc-text">AP3216C 简介</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论"><img src="https://i0.hdslb.com/bfs/article/9a3b32d2ff5b616b0344818cad02e8ba499f6606.jpg@1320w_826h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note35.3-数据结构绪论"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论">note35.3-数据结构绪论</a><time datetime="2021-04-12T13:14:03.000Z" title="发表于 2021-04-12 21:14:03">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树"><img src="https://i0.hdslb.com/bfs/article/94d982713d5da4c87565e163d86eaefe81ff5225.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note34.5-设备树"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树">note34.5-设备树</a><time datetime="2021-04-12T13:13:46.000Z" title="发表于 2021-04-12 21:13:46">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动"><img src="https://i0.hdslb.com/bfs/article/b03d90a0505947ddf8c3384eaf3c751f06930f47.jpg@1320w_990h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note33.5-LED驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动">note33.5-LED驱动</a><time datetime="2021-03-31T13:17:02.000Z" title="发表于 2021-03-31 21:17:02">2021-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动"><img src="https://i0.hdslb.com/bfs/article/75769bed78f538cd7890ba1931904cf4662ef7d7.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note32.5-字符设备驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动">note32.5-字符设备驱动</a><time datetime="2021-03-28T13:14:49.000Z" title="发表于 2021-03-28 21:14:49">2021-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统"><img src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note31.4-rootfs根文件系统"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统">note31.4-rootfs根文件系统</a><time datetime="2021-03-27T07:48:23.000Z" title="发表于 2021-03-27 15:48:23">2021-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

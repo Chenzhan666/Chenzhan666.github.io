@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note30.4-Linux内核移值 | CHENZHAN</title><meta name="keywords" content="系统移值"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="创建 VSCode 工程 重点是.vscode&#x2F;settings.json 这个文件  修改顶层 Makefile 直接在顶层 Makefile 文件里面定义 ARCH 和 CROSS_COMPILE 这两 个的变量值为 arm 和 arm-linux-gnueabihf- 在编译的时候就不用输入很长的命令了  配置并编译 Linux 内核  默认配置文件保存在 arch&#x2F;arm&#x2F;confi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note30.4-Linux内核移值">
+<meta property="og:url" content="https://www.chenzhan.club/2021/03/23/note30-4-Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="创建 VSCode 工程 重点是.vscode&#x2F;settings.json 这个文件  修改顶层 Makefile 直接在顶层 Makefile 文件里面定义 ARCH 和 CROSS_COMPILE 这两 个的变量值为 arm 和 arm-linux-gnueabihf- 在编译的时候就不用输入很长的命令了  配置并编译 Linux 内核  默认配置文件保存在 arch&#x2F;arm&#x2F;confi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/cfbea7b6b809364917b9a33025146598e1e6de8b.png@518w.webp">
+<meta property="article:published_time" content="2021-03-23T12:54:25.000Z">
+<meta property="article:modified_time" content="2021-04-12T13:33:13.400Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="系统移值">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/cfbea7b6b809364917b9a33025146598e1e6de8b.png@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/03/23/note30-4-Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-04-12 21:33:13'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/cfbea7b6b809364917b9a33025146598e1e6de8b.png@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note30.4-Linux内核移值</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-23T12:54:25.000Z" title="发表于 2021-03-23 20:54:25">2021-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-12T13:33:13.400Z" title="更新于 2021-04-12 21:33:13">2021-04-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note30.4-Linux内核移值"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<ul>
+<li><p>创建 VSCode 工程</p>
+<p>重点是.vscode/settings.json 这个文件</p>
+</li>
+<li><p>修改顶层 Makefile</p>
+<p>直接在顶层 Makefile 文件里面定义 ARCH 和 CROSS_COMPILE 这两 个的变量值为 arm 和 arm-linux-gnueabihf- 在编译的时候就不用输入很长的命令了</p>
+</li>
+<li><p>配置并编译 Linux 内核</p>
+<ul>
+<li><p>默认配置文件保存在 arch/arm/configs 目录中</p>
+<p>比如：imx_v7_mfg_defconfig 这个默认配置文件，此配置文件默认支持 I.MX6UL 这款芯片， 此文件编译出来的 zImage 可以通过 NXP 官方提供的 MfgTool 工具烧写！imx_v7_mfg_defconfig 中的“mfg”的意思就是 MfgTool</p>
+</li>
+<li><p>进入到 Ubuntu 中的 Linux 源码根目录下，执行如下命令配置 Linux 内核（在修改完顶层Makefile 后）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean &#x2F;&#x2F;第一次编译 Linux 内核之前先清理一下</span><br><span class="line">make imx_v7_mfg_defconfig &#x2F;&#x2F;配置 Linux 内核</span><br></pre></td></tr></table></figure>
+<p>配置完成以后就可以编译了，使用如下命令编译 Linux 内核：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j16 &#x2F;&#x2F;编译 Linux 内核（j16指使用16核编译）</span><br></pre></td></tr></table></figure></li>
+<li><p>Linux 内核编译完成以后会在 arch/arm/boot 目录下生成 zImage 镜像文件，如果使用设备树 的话还会在 arch/arm/boot/dts 目录下开发板对应的.dtb(设备树)文件</p>
+</li>
+</ul>
+</li>
+<li><p>根文件系统缺失错误</p>
+<p>Linux 内核启动以后是需要根文件系统的，根文件系统存在哪里是由 uboot 的 bootargs 环境变 量指定 ， bootargs 会传递给 Linux 内核作为命令行参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)</span><br></pre></td></tr></table></figure>
+<p>提示内核崩溃，因为 VFS(虚拟文件系统)不能挂载根文件系统，因为根文件系统目录不存在。即使根文件系统目录存在，如果根文件系统目录里面是空的依旧会提示内核崩溃。 这个就是根文件系统缺失导致的内核崩溃，但是内核是启动了的，只是根文件系统不存在而已</p>
+</li>
+<li><p>在 Linux 中添加自己的开发板</p>
+<p>将 arch/arm/configs 目 录 下 的 imx_v7_mfg_defconfig 重新复制一份 ，命名为 imx_alientek_emmc_defconfig</p>
+<p>以后 imx_alientek_emmc_defconfig 就是正点原子的 EMMC 版开发板默认配置文件了（我们的默认配置文件），以后就可以使用如下命令来配置正点原子 EMMC 版开发板对应的 Linux 内核了：make imx_alientek_emmc_defconfig</p>
+</li>
+<li><p>添加开发板对应的设备树文件</p>
+<p>.dts 是设备树源码文件，编译 Linux 的时候会将其编译为.dtb 文件。imx6ull-alientek-emmc.dts （自己的设备树文件）创建好以后还需要修改文件 arch/arm/boot/dts/Makefile ， 找 到 “ dtb- $(CONFIG_SOC_IMX6ULL)”配置项，在此配置项中加入“imx6ull-alientek-emmc.dtb”</p>
+</li>
+<li><p>输入如下命令查看 cpu 信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;proc&#x2F;cpuinfo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>vmlinux、Image，zImage、uImage 的区别</p>
+<p>vmlinux 是 ELF 格式的文件，但是在实 际中我们不会使用 vmlinux，而是使用 zImage 或 uImage 这样的 Linux 内核镜像文件</p>
+<ol>
+<li>vmlinux 是编译出来的最原始的内核文件，是未压缩的</li>
+<li>Image 是 Linux 内核镜像文件，但是 Image 仅包含可执行的二进制数据。Image 就是使 用 objcopy 取消掉 vmlinux 中的一些其他信息，比如符号表什么的。但是 Image 是没有压缩过 的，Image 保存在 arch/arm/boot 目录下</li>
+<li>zImage 是经过 gzip 压缩后的 Image</li>
+<li>uImage 是老版本 uboot 专用的镜像文件，uImag 是在 zImage 前面加了一个长度为 64 字节的“头”，这个头信息描述了该镜像文件的类型、加载位置、生成时间、大小等信息。但是 新的 uboot 已经支持了 zImage 启动！所以已经很少用到 uImage 了，除非你用的很古老的 uboot</li>
+</ol>
+<p>使用“make”、“make all”、“make zImage”这些命令就可以编译出 zImage 镜像</p>
+</li>
+<li><p>Linux 内核启动之前要求如下：</p>
+<ol>
+<li>关闭 MMU</li>
+<li>关闭 D-cache</li>
+<li>I-Cache 无所谓</li>
+<li>r0=0</li>
+<li>r1=machine nr(也就是机器 ID)</li>
+<li>r2=atags 或者设备树(dtb)首地址</li>
+</ol>
+</li>
+<li><p>Linux 内核的入口点 stext 其实相当于内核的入口函数</p>
+</li>
+<li><p>Linux 内核将每种处理器都抽象为一个 proc_info_list 结构体，每种处理器都对应一个 procinfo。因此可以通过处理器 ID 来找到对应的 procinfo 结构，__lookup_processor_type 函数找 到对应处理器的 procinfo 以后会将其保存到 r5 寄存器中</p>
+</li>
+<li><p>proc_info_list 在文件 arch/arm/include/asm/procinfo.h 中</p>
+</li>
+<li><p>start_kernel 通过调用众多的子函数来完成 Linux 启动之前的一些初始化工作</p>
+</li>
+<li><p>idle 空闲进程 就和空闲任务一样，当 CPU 没有事情做的时候就在 idle 空闲进程里面“瞎逛游”，当其他进程要工作的时候就会抢占 idle 进程，从而夺取 CPU 使用权</p>
+</li>
+<li><p>在 Linux 终端中输入“ps -A”就可以打印出当前系统中的所有进程，其中就能看到 init 进 程和 kthreadd 进程</p>
+</li>
+<li><p>kernel_init 函数就是 init 进程具体做的工作，定义在文件 init/main.c 中</p>
+</li>
+<li><p>调用函数 prepare_namespace 来挂载根文件系统。跟文件系统也是由命令行参数指定的，也就是 uboot 的 bootargs 环境变量</p>
+</li>
+<li><p>Linux 内核最终是需要和根文件系统打交道的，需要挂载根文件系统，并且执行根文件系统中的 init 程序，以此来进去用户态</p>
+</li>
+<li><p>在实际的产品中，禁止任何超频！务必严格按照 I.MX6ULL 手册上给出的标准工作频率来 运行！！如果想要更高的性能，请购买相应型号的处理器！</p>
+</li>
+<li><p>学习的时候为了高性能，大家可以使用 performance 模式。但是在以后的实际产品开发 中，从省电的角度考虑，建议大家使用 ondemand 模式，一来可以省电，二来可以减少发热</p>
+</li>
+<li><p>重新修改过默认配置文件，编译之前先清理一下工程！</p>
+</li>
+<li><p>图形化配置界面，一定不要清理工程！</p>
+</li>
+<li><p>使用命令“make dtbs”重新编译一 下设备树</p>
+</li>
+<li><p>网络驱动分两部分：内部 MAC+外部 PHY，内部 MAC 驱动是由 NXP 提供</p>
+</li>
+<li><pre><code>cp arch/arm/boot/zImage /home/chenzhan/linux/tftpboot/ -f
+cp arch/arm/boot/dts/imx6ull-alientek-emmc.dtb /home/chenzhan/linux/tftpboot/ -f
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+tftp 80800000 zImage 
+tftp 83000000 imx6ull-alientek-emmc.dtb
+bootz 80800000 - 83000000</code></pre>
+</li>
+</ul>
+<hr>
+<p>参考资料：正点原子</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/03/23/note30-4-Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC/">https://www.chenzhan.club/2021/03/23/note30-4-Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E5%80%BC/">系统移值</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/cfbea7b6b809364917b9a33025146598e1e6de8b.png@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note31.4-rootfs根文件系统</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/03/17/note29-4-U-Boot%E5%86%85%E6%A0%B8%E7%A7%BB%E5%80%BC%E5%90%AF%E5%8A%A8/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/350178b826e31d6159e842b6e25c9c80d4115e1d.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note29.4-U-Boot内核移值启动</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/03/17/note29-4-U-Boot内核移值启动/" title="note29.4-U-Boot内核移值启动"><img class="cover" src="https://i0.hdslb.com/bfs/album/350178b826e31d6159e842b6e25c9c80d4115e1d.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-17</div><div class="title">note29.4-U-Boot内核移值启动</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs根文件系统/" title="note31.4-rootfs根文件系统"><img class="cover" src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-27</div><div class="title">note31.4-rootfs根文件系统</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/03/13/note28-4-U-Boot/" title="note28.4-U-Boot"><img class="cover" src="https://i0.hdslb.com/bfs/album/210b54e20bd1d14ff1e3edb020fa5a0ff719539d.jpg@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-13</div><div class="title">note28.4-U-Boot</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">35</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论"><img src="https://i0.hdslb.com/bfs/article/9a3b32d2ff5b616b0344818cad02e8ba499f6606.jpg@1320w_826h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note35.3-数据结构绪论"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note35-3-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%AA%E8%AE%BA/" title="note35.3-数据结构绪论">note35.3-数据结构绪论</a><time datetime="2021-04-12T13:14:03.000Z" title="发表于 2021-04-12 21:14:03">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树"><img src="https://i0.hdslb.com/bfs/article/94d982713d5da4c87565e163d86eaefe81ff5225.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note34.5-设备树"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/04/12/note34-5-%E8%AE%BE%E5%A4%87%E6%A0%91/" title="note34.5-设备树">note34.5-设备树</a><time datetime="2021-04-12T13:13:46.000Z" title="发表于 2021-04-12 21:13:46">2021-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动"><img src="https://i0.hdslb.com/bfs/article/b03d90a0505947ddf8c3384eaf3c751f06930f47.jpg@1320w_990h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note33.5-LED驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/31/note33-5-LED%E9%A9%B1%E5%8A%A8/" title="note33.5-LED驱动">note33.5-LED驱动</a><time datetime="2021-03-31T13:17:02.000Z" title="发表于 2021-03-31 21:17:02">2021-03-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动"><img src="https://i0.hdslb.com/bfs/article/75769bed78f538cd7890ba1931904cf4662ef7d7.jpg@1320w_742h.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note32.5-字符设备驱动"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/28/note32-5-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8/" title="note32.5-字符设备驱动">note32.5-字符设备驱动</a><time datetime="2021-03-28T13:14:49.000Z" title="发表于 2021-03-28 21:14:49">2021-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统"><img src="https://i0.hdslb.com/bfs/album/70f78b669890b61676ae026d8035d7ca62a9743e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note31.4-rootfs根文件系统"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/03/27/note31-4-rootfs%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="note31.4-rootfs根文件系统">note31.4-rootfs根文件系统</a><time datetime="2021-03-27T07:48:23.000Z" title="发表于 2021-03-27 15:48:23">2021-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
