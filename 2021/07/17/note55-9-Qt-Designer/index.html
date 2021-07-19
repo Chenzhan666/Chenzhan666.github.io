@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note55.9-Qt_Designer | CHENZHAN</title><meta name="keywords" content="Qt"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基类  QMainWindow：主窗口类，主窗口具有主菜单栏、工具栏和状态栏。类似于一般的应用程序的主窗口。如果您想做个嵌套的窗口程序开发的软件，不妨选择这个 QMainWindow。 QWidget：是可视界面类的基类，也就是说QMainWindow类也是由QWidget继承封装而来。所以 QWidget 要比 QMainWindow 功能少一些。 QDialog：对话框类，建立一个对话框界">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note55.9-Qt_Designer">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/17/note55-9-Qt-Designer/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="基类  QMainWindow：主窗口类，主窗口具有主菜单栏、工具栏和状态栏。类似于一般的应用程序的主窗口。如果您想做个嵌套的窗口程序开发的软件，不妨选择这个 QMainWindow。 QWidget：是可视界面类的基类，也就是说QMainWindow类也是由QWidget继承封装而来。所以 QWidget 要比 QMainWindow 功能少一些。 QDialog：对话框类，建立一个对话框界">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp">
+<meta property="article:published_time" content="2021-07-17T10:51:32.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:15:00.772Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/17/note55-9-Qt-Designer/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-19 16:15:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note55.9-Qt_Designer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:15:00.772Z" title="更新于 2021-07-19 16:15:00">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note55.9-Qt_Designer"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p>基类</p>
+<ul>
+<li>QMainWindow：主窗口类，主窗口具有主菜单栏、工具栏和状态栏。类似于一般的应用程序的主窗口。如果您想做个嵌套的窗口程序开发的软件，不妨选择这个 QMainWindow。</li>
+<li>QWidget：是可视界面类的基类，也就是说QMainWindow类也是由QWidget继承封装而来。所以 QWidget 要比 QMainWindow 功能少一些。</li>
+<li>QDialog：对话框类，建立一个对话框界面。比较少使用此项作为基类。一般以 QMainWindow</li>
+<li>和 QWidget 作为基类的居多。<u><strong>注因为 QWidget 不带窗口标题栏等，嵌入式里最好 QWidget。</strong></u></li>
+</ul>
+<p>活动项目的项目根节点都是用粗体字体表示的。如果打开了多个项目，那么我们只需要观察哪个是加粗的项目名就表示当前活动项目。</p>
+<p>项目内的文件简介：</p>
+<ul>
+<li>01_hello_world.pro 是项目管理文件，这个项目管理文件十分重要，当您加入了文件或者删除了文件，Qt Creator 会自动修改这个* .pro 文件。有时候需要打开这个*.pro 文件添加我们的设置项。</li>
+<li>Header 分组，这个节点下存放的是项目内所有的头文件*.h。 </li>
+<li>Source 分组，这个节点下存放的是项目内的所有 C++源码文件*.cpp。 </li>
+<li>Forms 分组，这个节点下是存放项目内所有界面文件* .ui。*.ui 文件由 XML 语言描述组成，编译时会生成相应的 cpp 文件，这样交叉编译器就可以编译它了。</li>
+</ul>
+<p>*<em>项目文件****</em>.pro**</p>
+<p>core 与 gui 库是 Qt 的默认设置</p>
+<p>SOURCES 下的是源文件</p>
+<p>HEADERS 下是头文件</p>
+<p>FORMS 下是 ui 界面文件</p>
+<p>如果需要修改生成目标的可执行程序名字，可赋值 TARGET = xxx。否则 TARGET 将默认</p>
+<p>取值为项目的名字。</p>
+<p>*<em>样式文件****</em>.ui**</p>
+<p>mainwindow.ui 是一个 xml 类型的文件，它的 xml 内容如下。这个文件是生成的不能手动编辑。只能够通过图形界面修改其属性。</p>
+<p>①是控件栏，有各种各样的控件，上方的 Filter 是过滤器，输入首写字母就可以快速定到我们想要找的控件。</p>
+<p>②显示的是我们的窗口程序了，上面已经带有 MainWindow 对象及其几个子对象，默认MainWindow 就带有菜单栏和状态栏。</p>
+<p>③是对象栏，②处用到的对象都在③处显示。</p>
+<p>④是属性栏，点击③处对象栏的某个对象，就可以在④属性栏里编辑它的属性了。属性项有很多，包括位置，大小，文字，颜色，字体等等。</p>
+<p>*<em>头文件****</em>.h**</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">namespace Ui &#123; class MainWindow; &#125;</span><br></pre></td></tr></table></figure>
+<p>定义名称空间 Ui ，里面有一个类 MainWindow</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class MainWindow : public QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line">    MainWindow(QWidget *parent &#x3D; nullptr);</span><br><span class="line">    ~MainWindow();</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    Ui::MainWindow *ui;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个 class MainWindow 和上面 的 namespace Ui { class MainWindow; } 不是同一个对象。实际上，这个文件里的 namespace Ui { class MainWindow; }类有一个成员*ui 就是指 Ui::MainWindow 的指针。这都是为了使用.ui 文件设计界面的。</p>
+<p>MainWindow 的声明中第一行是 Q_OBJECT，这是一个宏，由 Qt 进行处理，这也是 Qt 针对 C++扩展的地方，所有用到信号的类都要加这个宏。</p>
+<p>*<em>源文件****</em>.cpp**</p>
+<p>mainwindow.cpp</p>
+<p>ui_mainwindow.h 这个文件是 Qt 根据.ui 文件自动生成的，也就是说 ui_mainwindow.h 要点击编构建后才生成，我们才能看到这个文件。构建/编译后可以在 debug/release 的目录找到这个文件。</p>
+<p>在 MainWindow 构造函数中用“**,**”隔开，new 一个 Ui 中的 MainWindow。这里是一种初始化成员的方法。</p>
+<p>ui-&gt;setupUi(this);这句话是进行界面初始化，将 this（指的是 MainWindow 类的本身），作为参数传到 setupUi 里，ui 界面文件的对象会以 this 为父对象，所有子对象都将显示在MainWindow 里。我们要想使用 ui 里的对象，必须将代码写在 ui-&gt;setupUi(this)这句话之后，因为 ui-&gt;setupUi(this)会先初始化里面的对象，只有初始化里面的对象我们才能使用这个对象。</p>
+<p><strong>小提示：</strong>this 在成员函数的开始执行前构造的，在成员的执行结束后清除。</p>
+<p>main.cpp</p>
+<p>在每一个使用 Qt 的应用程序中都必须使用一个QApplication 对象。QApplication 管理了各种各样的应用程序的广泛资源，比如默认的字体和光标。</p>
+<p>几乎在使用 Qt 的所有情况下，main()只需要在把控制转交给 Qt 库之前执行一些初始化，然后 Qt 库通过事件来向程序告知用户的行为。argc 是命令行变量的数量，argv 是命令行变量的数组。</p>
+<p>调用方法 show()。这样程序界面才能显示。</p>
+<p><strong>使用</strong> <strong>UI</strong> <strong>设计器开发程序</strong></p>
+<p>在 UI 设计器里有两种方法可以连接信号与槽</p>
+<p>所谓信号即是一个对象发出的信号，槽即是当这个对象发出这个信号时，对应连接的槽就发被执行或者触发。</p>
+<p>要想事件做出对应的动作就必须用到信号与槽。</p>
+<p>方法一：</p>
+<p>点击信号槽连接的按钮，进入信号槽连接模式，进入信号与槽的连接模式后，将鼠标选中我们的“关闭程序”按钮，按住按钮，然后用鼠标向外拖动，此时就会出现信号槽连接的符号。</p>
+<p>左边的“关闭程序”pushButton 按钮的信号，可以看到一个对象的信号可以有多种。右边的 QMainWindow 的槽函数，如果有其他对象，右边不一定只有MainWidnow 的槽函数（槽），也有可能是其他对象的槽。我们选择按钮的 clicked()信号，将其连接 MainWindow 对象的 close()槽。这样就完成了信号与槽的连接。可以预知这个信号与槽的功能，当“关闭程序”pushButton 发出了 clicked()信号（也就是单击信号）。这个信号由“关闭程序”pushButton 被单击时发出。它就会触发 MainWindow 的 close()。进而使整个程序关闭。MainWindow 的 close()就是退出关闭程序，退出程序的意思。</p>
+<p>方法二：</p>
+<p>选中“关闭程序”pushButton 按钮，然后右键。选择“转到槽”。</p>
+<p>点击“转到槽”后，弹出窗口，先让我们选择信号。发现这个 clicked()信号并不是 pushButton 的，而是 QAbstactButton 的。只是 pusbButton 继承了 QAbstracButton，同时把这个信号也继承了下来。</p>
+<p>不用重写 pushButton 的 clicked()事件。pushButton 只需要继承父类的 clicked()事件即可！</p>
+<p>点击 OK 后，就会跳转到槽函数里，这个代码由 Qt Creator 自动生成。</p>
+<p>同时在 mainwindow.h 里声明了这个槽函数。</p>
+<p>返回到 mainwindow.cpp 找到 on_pushButton_clicked 这个槽函数里。在这个槽数里写上this-&gt;close();调用 close()方法关闭整个程序。</p>
+<hr>
+<p>参考资料：正点原子嵌入式Qt开发指南V1.0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/17/note55-9-Qt-Designer/">https://www.chenzhan.club/2021/07/17/note55-9-Qt-Designer/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/Qt/">Qt</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note56.9-Qt_Qt信号与槽</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/"><img class="next-cover" src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note54.6-系统信息与系统资源</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt信号与槽/" title="note56.9-Qt_Qt信号与槽"><img class="cover" src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-19</div><div class="title">note56.9-Qt_Qt信号与槽</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

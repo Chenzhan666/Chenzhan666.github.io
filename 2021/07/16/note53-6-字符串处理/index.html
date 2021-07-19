@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note53.6-字符串处理 | CHENZHAN</title><meta name="keywords" content="LinuxC"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="字符串输出 使用以下函数需要包含头文件&lt;stdio.h&gt; puts()函数用来向标准输出设备（屏幕、显示器）输出字符串并自行换行。把字符串输出到标准输出设备，将’ \0 ‘转换为换行符’ \n ‘。 putchar()函数可以把参数 c 指定的字符（一个无符号字符）输出到标准输出设备，其输出可以是一个字符，可以是介于 0~127 之间的一个十进制整型数（包含 0 和 127，输出其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note53.6-字符串处理">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="字符串输出 使用以下函数需要包含头文件&lt;stdio.h&gt; puts()函数用来向标准输出设备（屏幕、显示器）输出字符串并自行换行。把字符串输出到标准输出设备，将’ \0 ‘转换为换行符’ \n ‘。 putchar()函数可以把参数 c 指定的字符（一个无符号字符）输出到标准输出设备，其输出可以是一个字符，可以是介于 0~127 之间的一个十进制整型数（包含 0 和 127，输出其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp">
+<meta property="article:published_time" content="2021-07-16T06:11:11.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:18:21.025Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="LinuxC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-19 16:18:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note53.6-字符串处理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:18:21.025Z" title="更新于 2021-07-19 16:18:21">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note53.6-字符串处理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p><strong>字符串输出</strong></p>
+<p><strong>使用以下函数需要包含头文件&lt;stdio.h&gt;</strong></p>
+<p>puts()函数用来向标准输出设备（屏幕、显示器）输出字符串并自行换行。把字符串输出到标准输出设备，将’ \0 ‘转换为换行符’ \n ‘。</p>
+<p>putchar()函数可以把参数 c 指定的字符（一个无符号字符）输出到标准输出设备，其输出可以是一个字符，可以是介于 0~127 之间的一个十进制整型数（包含 0 和 127，输出其对应的 ASCII 码字符），也可以是用 char 类型定义好的一个字符型变量</p>
+<p>fputc()与 putchar()类似，也用于输出参数 c 指定的字符（一个无符号字符），与 putchar()区别在于，putchar()只能输出到标准输出设备，而 fputc()可把字符输出到指定的文件中，既可以是标准输出、标准错误设备，也可以是一个普通文件</p>
+<p>fputs()与 puts()类似，也用于输出一条字符串，与 puts()区别在于，puts()只能输出到标准输出设备，而 fputs()可把字符串输出到指定的文件中，既可以是标准输出、标准错误设备，也可以是一个普通文件</p>
+<p>gets()函数用于从标准输入设备（譬如键盘）中获取用户输入的字符串</p>
+<p>用户从键盘输入的字符串数据首先会存放在一个输入缓冲区中，gets()函数会从输入缓冲区中读取字符</p>
+<p>串存储到字符指针变量 s 所指向的内存空间，当从输入缓冲区中读走字符后，相应的字符<strong>便不存在</strong>缓冲区了。</p>
+<p>输入的字符串中就算是有空格也可以直接输入，字符串输入完成之后按回车即可，gets()函数不检查缓冲区溢出。</p>
+<p>程序中使用 gets()函数是<strong>非常不安全</strong>的</p>
+<p><strong>gets()与scanf()的区别</strong></p>
+<ul>
+<li>gets()函数允许输入的字符串带有空格、制表符，输入的空格和制表符也是字符串的一部分，仅以回车换行符作为字符串的分割符；而对于 scanf 以%s 格式输入的时候，空格、换行符、TAB 制表符等都是作为字符串分割符存在，即分隔符前后是两个字符串，读取字符串时并不会将分隔符读取出来作为字符串的组成部分，一个%s 只能读取一个字符串，若要多去多个字符串，则需要使用多个%s、并且需要使用多个字符数组存储。</li>
+<li>gets()会将回车换行符从输入缓冲区中取出来，然后将其丢弃，所以使用 gets()读走缓冲区中的字符串数据之后，缓冲区中将不会遗留下回车换行符；而对于 scanf()来说，使用 scanf()读走缓冲区中的字符串数据时，并不会将分隔符（空格、TAB 制表符、回车换行符等）读走将其丢弃，所以使用 scanf()读走缓冲区中的字符串数据之后，缓冲区中依然还存在用户输入的分隔符。</li>
+</ul>
+<p>scanf()%s不读取缓冲区中的分割符和换行符</p>
+<p>对于%c 读入时，空格、换行符、TAB 这些都是正常字符</p>
+<p>gets()会将换行符读取出来并将其丢弃，剩下一个空字符串</p>
+<p>getchar()函数也是从输入缓冲区读取字符数据，但只读取一个字符，包括空格、TAB 制表符、换行回车符等</p>
+<p>fgets()与 gets()的区别主要是三点：</p>
+<ul>
+<li>gets()只能从标准输入设备中获取输入字符串，而 fgets()既可以从标准输入设备获取字符串、也可以从一个普通文件中获取输入字符串。</li>
+<li>fgets()可以设置获取字符串的最大字符数。</li>
+<li>gets()会将缓冲区中的换行符’\n’读取出来、将其丢弃、将’\n’替换为字符串结束符’\0’；fgets()也会将缓冲区中的换行符读取出来，但并不丢弃，而是作为字符串组成字符存在，读取完成之后自动在最后添加字符串结束字符’\0’。</li>
+</ul>
+<p>fgetc()与 getchar()一样，用于读取一个输入字符，fgetc()与 getchar()的区别在于，fgetc 可以指定输入字符的文件，既可以从标准输入设备输入字符，也可以从一个普通文件中输入字符，其它方面与 getchar 函数相同</p>
+<p><strong>字符串长度</strong></p>
+<p>使用该函数需要包含头文件&lt;string.h&gt;。</p>
+<p>C 语言函数库中提供了一个用于计算字符串长度的函数 strlen()</p>
+<p><strong>sizeof</strong> <strong>和</strong> <strong>strlen</strong> <strong>的区别</strong></p>
+<p>在程序当中，我们通常也会使用 sizeof 来计算长度，那 strlen 和 sizeof 有什么区别呢？</p>
+<ul>
+<li>sizeof 是 C 语言内置的操作符关键字，而 strlen 是 C 语言库函数；</li>
+<li>sizeof 仅用于计算数据类型的大小或者变量的大小，而 strlen 只能以结尾为’ \0 ‘的字符串作为参数；</li>
+<li>编译器在编译时就计算出了 sizeof 的结果，而 strlen 必须在运行时才能计算出来；</li>
+<li>sizeof 计算数据类型或变量会占用内存的大小，strlen 计算字符串实际长度。</li>
+</ul>
+<p><strong>字符串拼接</strong></p>
+<p>C 语言函数库中提供了 strcat()函数或 strncat()函数用于将两个字符串连接（拼接）起来</p>
+<p>strcat()函数会把 src 所指向的字符串追加到 dest 所指向的字符串末尾，所以必须要保证 dest 有足够的存储空间来容纳两个字符串，否则会导致溢出错误；dest 末尾的’ \0 ‘结束字符会被覆盖，src 末尾的结束字符’ \0 ‘会一起被复制过去，最终的字符串只有一个’ \0 ‘</p>
+<p>strncat()与 strcat()的区别在于，strncat 可以指定源字符串追加到目标字符串的字符数量</p>
+<p>如果源字符串 src 包含 n 个或更多个字符，则 strncat()将 n+1 个字节追加到 dest 目标字符串（src 中的 n个字符加上结束字符’ \0 ‘）</p>
+<p><strong>字符串拷贝</strong></p>
+<p>C 语言函数库中提供了 strcpy()函数和 strncpy()函数用于实现字符串拷贝</p>
+<p>strcpy()会把 src（必须包含结束字符’ \0 ‘）指向的字符串复制（包括字符串结束字符’ \0 ‘）到 dest，所以必须保证 dest 指向的内存空间足够大，能够容纳下 src 字符串，否则会导致溢出错误</p>
+<p>strncpy()与 strcpy()的区别在于，strncpy()可以指定从源字符串 src 复制到目标字符串 dest 的字符数量</p>
+<p>除了 strcpy()和 strncpy()之外，其实还可以使用 memcpy()、memmove()以及 bcopy()这些库函数实现拷贝操作</p>
+<p><strong>内存填充</strong></p>
+<p>在编程中，经常需要将某一块内存中的数据全部设置为指定的值，譬如在定义数组、结构体这种类型变量时，通常需要对其进行初始化操作，而初始化操作一般都是将其占用的内存空间全部填充为 0</p>
+<p>memset()函数用于将某一块内存的数据全部设置为指定的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;string.h&gt;</span><br><span class="line">void *memset(void *s, int c, size_t n);</span><br></pre></td></tr></table></figure>
+<p>使用该函数需要包含头文件&lt;string.h&gt;。</p>
+<p><strong>函数参数和返回值含义如下：</strong></p>
+<p><strong>s：</strong>需要进行数据填充的内存空间起始地址。</p>
+<p><strong>c：</strong>要被设置的值，该值以 int 类型传递。</p>
+<p><strong>n：</strong>填充的字节数。</p>
+<p><strong>返回值：</strong>返回指向内存空间 s 的指针。</p>
+<p>参数 c 虽然是以 int 类型传递，但 memset()函数在填充内存块时是使用该值的无符号字符形式，也就是函数内部会将该值转换为 unsigned char 类型的数据，以字节为单位进行数据填充。</p>
+<p>bzero()函数用于将一段内存空间中的数据全部设置为 0</p>
+<p>可以对数组 str 进行初始化操作，将其存储的数据全部设置为 0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bzero(str, sizeof(str));</span><br></pre></td></tr></table></figure>
+<p><strong>字符串比较</strong></p>
+<p>C 语言函数库提供了用于字符串比较的函数 strcmp()和 strncmp()，strcmp()函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;string.h&gt;</span><br><span class="line">int strcmp(const char *s1, const char *s2);</span><br></pre></td></tr></table></figure>
+<p><strong>函数参数和返回值含义如下：</strong></p>
+<p><strong>s1**</strong>：**进行比较的字符串 1。</p>
+<p><strong>s2**</strong>：**进行比较的字符串 2。</p>
+<p><strong>返回值：</strong></p>
+<ul>
+<li>如果返回值小于 0，则表示 str1 小于 str2 </li>
+<li>如果返回值大于 0，则表示 str1 大于 str2 </li>
+<li>如果返回值等于 0，则表示字符串 str1 等于字符串 str2 </li>
+</ul>
+<p>strcmp 进行字符串比较，主要是通过比较字符串中的字符对应的 ASCII 码值，strcmp 会根据 ASCII 编码依次比较 str1 和 str2 的每一个字符，直到出现了不同的字符，或者某一字符串已经到达末尾（遇见了字符串结束字符’ \0 ‘）</p>
+<p>strncmp()与 strcmp()函数一样，也用于对字符串进行比较操作，但最多比较前 n 个字符</p>
+<p><strong>字符串查找</strong></p>
+<p>字符串查找在平时的编程当中也是一种很常见的操作，譬如从一个给定的字符串当中查找某一个字符</p>
+<p>或者一个字符串，并获取它的位置。C 语言函数库中也提供了一些用于字符串查找的函数，包括 strchr()、strrchr()、strstr()、strpbrk()、index()以及 rindex()等</p>
+<p>使用 strchr()函数可以查找到给定字符串当中的某一个字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;string.h&gt;</span><br><span class="line">char *strchr(const char *s, int c);</span><br></pre></td></tr></table></figure>
+<p><strong>函数参数和返回值含义如下：</strong></p>
+<p><strong>s：</strong>给定的目标字符串。</p>
+<p><strong>c：</strong>需要查找的字符。</p>
+<p><strong>返回值：</strong>返回字符 c 第一次在字符串 s 中出现的位置，如果未找到字符 c，则返回 NULL。</p>
+<p>字符串结束字符’ \0 ‘也将作为字符串的一部分，因此，如果将参数 c 指定为’ \0 ‘，则函数将返回指向结束字符的指针。strchr 函数在字符串 s 中从前到后（或者称为从左到右）查找字符 c，找到字符 c 第一次出现的位置就返回，返回值指向这个位置，如果找不到字符 c 就返回 NULL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">char *ptr &#x3D; NULL;</span><br><span class="line">char str[] &#x3D; &quot;Hello World!&quot;;</span><br><span class="line">ptr &#x3D; strchr(str, &#39;W&#39;);</span><br><span class="line">if (NULL !&#x3D; ptr) &#123;</span><br><span class="line">printf(&quot;Character: %c\n&quot;, *ptr);</span><br><span class="line">printf(&quot;Offset: %ld\n&quot;, ptr - str);&#x2F;&#x2F;打印目标的数组下标</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>strrchr()与 strchr()函数一样，它同样表示在字符串中查找某一个字符，返回字符第一次在字符串中出现的位置，如果没找到该字符，则返回值 NULL，但两者唯一不同的是，strrchr()函数在字符串中是从后到前（或者称为从右向左）查找字符，找到字符第一次出现的位置就返回，返回值指向这个位置</p>
+<p>strstr()可在给定的字符串 haystack 中查找第一次出现子字符串 needle 的位置，不包含结束字符’ \0 ‘</p>
+<p>C 函数库中还提供其它的字符串（或字符）查找函数，譬如 strpbrk()、index()以及 rindex()等</p>
+<p><strong>字符串与数字互转</strong></p>
+<p><strong>字符串转整形数据</strong></p>
+<p>atoi()、atol()、atoll()三个函数可用于将字符串分别转换为 int、long int 以及 long long 类型的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">int atoi(const char *nptr);</span><br><span class="line">long atol(const char *nptr);</span><br><span class="line">long long atoll(const char *nptr);</span><br></pre></td></tr></table></figure>
+<p>使用这些函数需要包含头文件&lt;stdlib.h&gt;。</p>
+<p>strtol()、strtoll()两个函数可分别将字符串转为 long int 类型数据和 long long ing 类型数据，与 atol()、atoll()之间的区别在于，strtol()、strtoll()可以实现将多种不同进制数（譬如二进制表示的数字字符串、八进制表示的数字字符串、十六进制表示的数数字符串）表示的字符串转换为整形数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">long int strtol(const char *nptr, char **endptr, int base);</span><br><span class="line">long long int strtoll(const char *nptr, char **endptr, int base);</span><br></pre></td></tr></table></figure>
+<p>需要进行转换的目标字符串可以以任意数量的空格或者 0 开头，转换时跳过前面的空格字符，直到遇上数字字符或正负符号（’ + ‘或’ - ‘）才开始做转换，而再遇到非数字或字符串结束时(‘ /0 ‘)才结束转换，并将结果返回</p>
+<p>在 base=0 （数字基数，合法范围，比如base = 2，合法数值为0，1）的情况下，如果字符串包含一个了“0x”前缀，表示该数字将以 16 为基数；如果包含的是“0”前缀，表示该数字将以 8 为基数。 当 base=16 时，字符串可以使用“0x”前缀。</p>
+<p>strtoul()返回值类型是 unsignedlong int，strtoull()返回值类型是 unsigned long long int</p>
+<p><strong>字符串转浮点型数据</strong></p>
+<p>atof()用于将字符串转换为一个 double 类型的浮点数据</p>
+<p>strtof()、strtod()以及 strtold()三个库函数可分别将字符串转换为 float 类型数据、double 类型数据、longdouble 类型数据</p>
+<p><strong>数字转字符串</strong></p>
+<p>数字转换为字符串推荐大家使用前面介绍的格式化 IO 相关库函数，譬如使用 printf()将数字转字符串、并将其输出到标准输出设备或者使用 sprintf()或 snprintf()将数字转换为字符串并存储在缓冲区中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">int main(void) &#123;</span><br><span class="line"> char str[20] &#x3D; &#123;0&#125;;</span><br><span class="line"> sprintf(str, &quot;%d&quot;, 500);</span><br><span class="line"> puts(str);</span><br><span class="line"> memset(str, 0x0, sizeof(str));</span><br><span class="line"> sprintf(str, &quot;%f&quot;, 500.111);</span><br><span class="line"> puts(str);</span><br><span class="line"> memset(str, 0x0, sizeof(str));</span><br><span class="line"> sprintf(str, &quot;%u&quot;, 500);</span><br><span class="line"> puts(str);</span><br><span class="line"> exit(0);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p><strong>给应用程序传参</strong></p>
+<p>如果在执行应用程序时，需要向应用程序传递参数，则写法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line"> &#x2F;* 代码 *&#x2F;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line"> &#x2F;* 代码 *&#x2F;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>传递进来的参数以字符串的形式存在，字符串的起始地址存储在 argv 数组中，参数 argc 表示传递进来的参数个数，包括应用程序自身路径名，多个不同的参数之间使用空格分隔开来，如果参数本身带有空格、则可以使用双引号” “或者单引号’ ‘的形式来表示</p>
+<p><strong>正则表达式</strong></p>
+<p>在许多的应用程序当中，通常会有这样的需要：给定一个字符串，检查该字符串是否符合某种条件或规则、或者从给定的字符串中找出符合某种条件或规则的子字符串，将匹配到的字符串提取出来</p>
+<p>正则表达式，又称为规则表达式（英语: Regular Expression），<strong>正则表达式通常被用来检索、替换那些符合某个模式（规则）的字符串，正则表达式描述了一种字符串的匹配模式（pattern），可以用来检查一个给定的字符串中是否含有某种子字符串、将匹配的字符串替换或者从某个字符串中取出符合某个条件的子字符串</strong>。</p>
+<p>在 Linux 系统下运行命令的时候，相信大家都使用过?或 * 通配符来查找硬盘上的文件或者文本中的某个字符串，?通配符匹配 0 个或 1 个字符，而*通配符匹配 0 个或多个字符正则表达式其实也是一个字符串，该字符串由普通字符（譬如，数字 0~9、大小写字母以及其它字符）和特殊字符（称为“元字符”）所组成，由这些字符组成一个“规则字符串”，这个“规则字符串”用来表达对给定字符串的一种查找、匹配逻辑</p>
+<p>占位！后续待正点原子更新&lt;=-=&gt;</p>
+<hr>
+<p>参考资料：正点原子嵌入式Linux C应用编程指南V1.0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/">https://www.chenzhan.club/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/LinuxC/">LinuxC</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note54.6-系统信息与系统资源</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note52.6-文件属性与目录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/05/30/note41-6-内存管理进程映射(暂空)/" title="note41.6-内存管理进程映射(暂空)"><img class="cover" src="/Chenzhan666.github.io/img/back.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">note41.6-内存管理进程映射(暂空)</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/05/07/note40-6-UnixC一些基础/" title="note40.6-LinuxC一些基础"><img class="cover" src="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-07</div><div class="title">note40.6-LinuxC一些基础</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note48-6-文件IO/" title="note48.6-文件IO"><img class="cover" src="https://i0.hdslb.com/bfs/article/1057a8324c02b7cc61fdc333bd5995b32b5f7425.jpg@942w_539h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note48.6-文件IO</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note49-6-深入探究文件I-O/" title="note49.6-深入探究文件I/O"><img class="cover" src="https://i0.hdslb.com/bfs/article/01fdecee75c10eced27b726569894167ff673b73.png@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note49.6-深入探究文件I/O</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note51-6-标准IO库/" title="note51.6-标准IO库"><img class="cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note51.6-标准IO库</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note52-6-文件属性与目录/" title="note52.6-文件属性与目录"><img class="cover" src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note52.6-文件属性与目录</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

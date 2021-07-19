@@ -1,0 +1,208 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note56.9-Qt_Qt信号与槽 | CHENZHAN</title><meta name="keywords" content="Qt"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Qt 信号与槽机制 ​    信号与槽（Signal &amp; Slot）是 Qt 编程的基础，也是 Qt 的一大创新。因为有了信号与槽的编程机制，在 Qt 中处理界面各个组件的交互操作时变得更加直观和简单。 ​    信号（Signal）就是在特定情况下被发射的事件，例如 PushButton (按键)最常见的信号就是鼠标单击时发射的 clicked() 信号，一个 ComboBox (组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note56.9-Qt_Qt信号与槽">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="Qt 信号与槽机制 ​    信号与槽（Signal &amp; Slot）是 Qt 编程的基础，也是 Qt 的一大创新。因为有了信号与槽的编程机制，在 Qt 中处理界面各个组件的交互操作时变得更加直观和简单。 ​    信号（Signal）就是在特定情况下被发射的事件，例如 PushButton (按键)最常见的信号就是鼠标单击时发射的 clicked() 信号，一个 ComboBox (组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp">
+<meta property="article:published_time" content="2021-07-19T06:10:04.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:11:37.040Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-19 16:11:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note56.9-Qt_Qt信号与槽</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:11:37.040Z" title="更新于 2021-07-19 16:11:37">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note56.9-Qt_Qt信号与槽"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p><strong>Qt</strong> <strong>信号与槽机制</strong></p>
+<p>​    信号与槽（Signal &amp; Slot）是 Qt 编程的基础，也是 Qt 的一大创新。因为有了信号与槽的编程机制，在 Qt 中处理界面各个组件的交互操作时变得更加直观和简单。</p>
+<p>​    信号（Signal）就是在特定情况下被发射的事件，例如 PushButton (按键)最常见的信号就是鼠标单击时发射的 clicked() 信号，一个 ComboBox (组合框)最常见的信号是选择的列表项变化时发CurrentIndexChanged() (更改索引)信号。</p>
+<p>​    槽（Slot）就是对信号响应的函数。槽就是一个函数，与一般的 C++函数是一样的，可以定义在类的任何部分（public、private 或 protected），可以具有任何参数，也可以被直接调用。槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射时，关联的槽函数被自动执行。</p>
+<p>​    信号与槽关联是用 QObject::connect() 函数实现的，其基本格式是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QObject::connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
+<p>​    connect() 是 QObject 类的一个静态函数，而 <strong>QObject 是所有 Qt 类的基类</strong>，在实际调用时可以忽略前面的限定符，所以可以直接写为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connect(sender, SIGNAL(signal()), receiver, SLOT(slot()));</span><br></pre></td></tr></table></figure>
+<p>​    sender 是发射信号的对象的名称，signal() 是信号名称。信号可以看做是特殊的函数，需要带括号，有参数时还需要指明参数。receiver 是接收信号的对象名称，slot() 是槽函数的名称，需要带括号，有参数时还需要指明参数。</p>
+<p>​    SIGNAL 和 SLOT 是 Qt 的宏，用于指明信号和槽，并将它们的参数转换为相应的字符串。</p>
+<p>​    在  ui_mainwindow.h 这个文件里的setupUi() 函数中有如下的语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(close()));</span><br></pre></td></tr></table></figure>
+<p>​    其作用就是将 pushButton 按钮的 clicked() 信号与窗体（MainWindow）的槽函数 close() 相关联，这样，当单击 pushButton 按钮（就是界面上的“X”按钮）时，就会执行 MainWindow的 close() 槽函数。</p>
+<p><strong>关于信号与槽的使用，有以下一些规则需要注意：</strong></p>
+<p><strong>一个信号可以连接多个槽</strong>，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(clicked()), this, SLOT(hide());</span><br><span class="line">connect(pushButton, SIGNAL(clicked()), this, SLOT(close());</span><br></pre></td></tr></table></figure>
+<p>​    这是当一个对象 pushButton 的被单击时，所在窗体有两个槽进行响应，一个 hide()用于隐藏主窗体，一个 close 用于关闭主窗体。这里只是举个例子，实际上当执行 close()后，hide()这个槽已经没有什么意义了，因为已经程序退出了，但是实际它有执行，因为它连接在 close()的前面。当一个信号与多个槽函数关联时，槽函数按照建立连接时的顺序依次执行。</p>
+<p>​    当信号和槽函数带有参数时，在 connect()函数里，要写明参数的类型，但可以不写参数名称。</p>
+<p><strong>多个信号可以连接同一个槽</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">connect(pushButton,SIGNAL(clicked()),this,SLOT(close()));</span><br><span class="line">connect(pushButton_2,SIGNAL(clicked()),this,SLOT(close()));</span><br><span class="line">connect(pushButton_3,SIGNAL(clicked()),this,SLOT(close()));</span><br></pre></td></tr></table></figure>
+<p>​    这样，当任何一个 pushButton 被单击时，都会执行 close()函数，进而关闭或者退出程序。</p>
+<p><strong>一个信号可以连接另外一个信号</strong>（说明了 connect 万物皆可连）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connect(pushButton,SIGNAL(objectNameChanged(QString)),this,SIGNAL(windowTitelChanged(QString)));</span><br></pre></td></tr></table></figure>
+<p>​    这样，当一个信号发射时，也会发射另外一个信号，实现某些特殊的功能。</p>
+<p>​    严格的情况下，信号与槽的参数个数和类型需要一致，至少信号的参数不能少于槽的参数。如果不匹配，会出现编译错误或运行错误。</p>
+<p>​    在使用信号与槽的类中，必须在类的定义中加入宏 Q_OBJECT（特别重要）。</p>
+<p>​    当一个信号被发射时，与其关联的槽函数通常被立即执行，就像正常调用一个函数一样。只有当信号关联的所有槽函数执行完毕后，才会执行发射信号处后面的代码。</p>
+<p>​    总结，发送者与发送的信号是在一起的，接收者与接收的信号/槽是在一起的。它们不能在connect()方法里写乱顺序！由发送者发送出信号到接收者用信号/槽接收。</p>
+<p>​    断开连接的方法，使用 disconnect()。disconnect()，这个方法重载了好几个函数，解开格式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bool QObject::disconnect(const QObject *sender, const char *signal, const QObject *receiver, const char *method)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>断开一切与 myObject 连接的信号或槽。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disconnect(myObject, 0, 0, 0);</span><br></pre></td></tr></table></figure>
+<p>​    相当于非静态重载函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myObject-&gt;disconnect();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>断开所有连接到特定信号的东西。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disconnect(myObject, SIGNAL(mySignal()), 0, 0);</span><br></pre></td></tr></table></figure>
+<p>​    相当于非静态重载函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myObject-&gt;disconnect(SIGNAL(mySignal()));</span><br></pre></td></tr></table></figure>
+<ul>
+<li>与指定的接收者断开连接。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disconnect(myObject, 0, myReceiver, 0);</span><br></pre></td></tr></table></figure>
+<p>​    相当于非静态重载函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myObject-&gt;disconnect(myReceiver);</span><br></pre></td></tr></table></figure>
+<p>​    信号与槽机制是 Qt GUI 编程的基础，使用信号与槽机制可以比较容易地将信号与响应代码关联起来。</p>
+<p>​    信号只需声明，无需定义。</p>
+<p>​    可以看到信号无需public 等关键字修饰。</p>
+<p>​    创建槽的方法也很简单，也是直接在 mianwindow.h 里直接声明槽，在 mianwindow.cpp 里实现槽的定义，<strong>声明槽必须写槽的定义(定义指函数体的实现)，否则编译器编译时将会报错</strong>。</p>
+<p><strong>槽有以下特点：</strong></p>
+<ol>
+<li>槽可以是任何成员函数、普通全局函数、静态函数</li>
+<li>槽函数和信号的参数和返回值要一致</li>
+</ol>
+<p>信号槽连接的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">connect(pushButton, SIGNAL(clicked()), this, SLOT(pushButtonClicked()));</span><br><span class="line">connect(this, SIGNAL(pushButtonTextChanged()), this,SLOT(changeButtonText()));</span><br></pre></td></tr></table></figure>
+<p>​    按住 Ctrl 键，再点击 clicked()，进入 clicked()这个信号的定义处。</p>
+<p>​    返回上一步按 Alt + 方向左键</p>
+<hr>
+<p>参考文档：正点原子嵌入式Qt开发指南V1.0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/">https://www.chenzhan.club/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/Qt/">Qt</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note55.9-Qt_Designer</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img class="cover" src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-17</div><div class="title">note55.9-Qt_Designer</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note54.6-系统信息与系统资源 | CHENZHAN</title><meta name="keywords" content="LinuxC"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在应用程序当中，有时往往需要去获取到一些系统相关的信息，譬如时间、日期、以及其它一些系统相关信息，如何通过 Linux 系统调用或 C 库函数获取系统信息，譬如获取系统时间、日期以及设置系统时间、日期等；除此之外，还会向大家介绍 Linux 系统下的&#x2F;proc 虚拟文件系统，包括&#x2F;proc 文件系统是什么以及如何从&#x2F;proc 文件系统中读取系统、进程有关信息，有关系统资源的使用，譬如系统内存资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note54.6-系统信息与系统资源">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="在应用程序当中，有时往往需要去获取到一些系统相关的信息，譬如时间、日期、以及其它一些系统相关信息，如何通过 Linux 系统调用或 C 库函数获取系统信息，譬如获取系统时间、日期以及设置系统时间、日期等；除此之外，还会向大家介绍 Linux 系统下的&#x2F;proc 虚拟文件系统，包括&#x2F;proc 文件系统是什么以及如何从&#x2F;proc 文件系统中读取系统、进程有关信息，有关系统资源的使用，譬如系统内存资">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp">
+<meta property="article:published_time" content="2021-07-16T07:19:24.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:16:37.467Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="LinuxC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-19 16:16:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note54.6-系统信息与系统资源</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:16:37.467Z" title="更新于 2021-07-19 16:16:37">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note54.6-系统信息与系统资源"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p>在应用程序当中，有时往往需要去获取到一些系统相关的信息，譬如时间、日期、以及其它一些系统相关信息，如何通过 Linux 系统调用或 C 库函数获取系统信息，譬如获取系统时间、日期以及设置系统时间、日期等；除此之外，还会向大家介绍 Linux 系统下的/proc 虚拟文件系统，包括/proc 文件系统是什么以及如何从/proc 文件系统中读取系统、进程有关信息，有关系统资源的使用，譬如系统内存资源的申请与使用等</p>
+<h1 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a><strong>系统信息</strong></h1><h2 id="系统标识-uname"><a href="#系统标识-uname" class="headerlink" title="系统标识 uname"></a><strong>系统标识</strong> <strong>uname</strong></h2><p>系统调用 uname()用于获取有关当前操作系统内核的名称和信息</p>
+<p>需要包含头文件&lt;sys/utsname.h&gt;</p>
+<p>uname()函数用法非常简单，先定义一个 struct utsname 结构体变量，调用 uname()函数时传入变量的地址即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct utsname 结构体</span><br><span class="line">struct utsname &#123;</span><br><span class="line"> char sysname[]; &#x2F;* 当前操作系统的名称 *&#x2F;</span><br><span class="line"> char nodename[]; &#x2F;* 网络上的名称（主机名） *&#x2F;</span><br><span class="line"> char release[]; &#x2F;* 操作系统内核版本 *&#x2F;</span><br><span class="line"> char version[]; &#x2F;* 操作系统发行版本 *&#x2F;</span><br><span class="line"> char machine[]; &#x2F;* 硬件架构类型 *&#x2F;</span><br><span class="line"> #ifdef _GNU_SOURCE</span><br><span class="line"> char domainname[];&#x2F;* 当前域名 *&#x2F;</span><br><span class="line"> #endif</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到，struct utsname 结构体中的所有成员变量都是字符数组，所以获取到的信息都是字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">测试结果如下：</span><br><span class="line">操作系统名称: Linux</span><br><span class="line">主机名: chenzhan-virtual-machine</span><br><span class="line">内核版本: 4.15.0-133-generic</span><br><span class="line">发行版本: #137~16.04.1-Ubuntu SMP Fri Jan 15 02:55:18 UTC 2021</span><br><span class="line">硬件架构: x86_64</span><br></pre></td></tr></table></figure>
+<p>sysinfo 系统调用可用于获取一些系统统计信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">struct sysinfo &#123;</span><br><span class="line"> long uptime; &#x2F;* 自系统启动之后所经过的时间（以秒为单位） *&#x2F;</span><br><span class="line"> unsigned long loads[3]; &#x2F;* 1, 5, and 15 minute load averages *&#x2F;</span><br><span class="line"> unsigned long totalram; &#x2F;* 总的可用内存大小 *&#x2F;</span><br><span class="line"> unsigned long freeram; &#x2F;* 还未被使用的内存大小 *&#x2F;</span><br><span class="line"> unsigned long sharedram; &#x2F;* Amount of shared memory *&#x2F;</span><br><span class="line"> unsigned long bufferram; &#x2F;* Memory used by buffers *&#x2F;</span><br><span class="line"> unsigned long totalswap; &#x2F;* Total swap space size *&#x2F;</span><br><span class="line"> unsigned long freeswap; &#x2F;* swap space still available *&#x2F;</span><br><span class="line"> unsigned short procs; &#x2F;* 系统当前进程数量 *&#x2F;</span><br><span class="line"> unsigned long totalhigh; &#x2F;* Total high memory size *&#x2F;</span><br><span class="line"> unsigned long freehigh; &#x2F;* Available high memory size *&#x2F;</span><br><span class="line"> unsigned int mem_unit; &#x2F;* 内存单元大小（以字节为单位） *&#x2F;</span><br><span class="line"> char _f[20-2*sizeof(long)-sizeof(int)]; &#x2F;* Padding to 64 bytes *&#x2F;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>gethostname 函数可用于单独获取 Linux 系统主机名，与 struct utsname 数据结构体中的 nodename 变量一样</p>
+<p>sysconf()函数是一个库函数，可在运行时获取系统的一些配置信息，譬如页大小（page size）、主机名的最大长度、进程可以打开的最大文件数、每个用户 ID 的最大并发进程数等</p>
+<p>使用该函数需要包含头文件&lt;unistd.h&gt;</p>
+<p>调用 sysconf()函数获取系统的配置信息，参数 name 指定了要获取哪个配置信息，参数 name 可取以下任何一个值（都是宏定义，可通过 man 手册查询）： </p>
+<ul>
+<li><strong>_SC_ARG_MAX**</strong>：<strong>exec 族函数的参数的最大长度，exec 族函数后面会介绍，这里先不管！</strong></li>
+<li>_SC_CHILD_MAX：<strong>每个用户的最大并发进程数，也就是同一个用户可以同时运行的最大进程数。</strong></li>
+<li>__SC_HOST_NAME_MAX：主机名的最大长度。</li>
+<li>__SC_LOGIN_NAME_MAX：登录名的最大长度。</li>
+<li>__SC_CLK_TCK：每秒时钟滴答数，也就是系统节拍率。</li>
+<li>__SC_OPEN_MAX：一个进程可以打开的最大文件数。</li>
+<li>__SC_PAGESIZE：系统页大小（page size）。</li>
+<li>__SC_TTY_NAME_MAX：终端设备名称的最大长度。</li>
+</ul>
+<p>用的比较多的是SC_PAGESIZE 和_SC_CLK_TCK</p>
+<p>若指定的参数 name 为无效值，则 sysconf()函数返回-1，并会将 errno 设置为 EINVAL。否则返回的值便是对应的配置值。注意，返回值是一个 long 类型的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">测试结果：</span><br><span class="line">每个用户的最大并发进程数: 7638</span><br><span class="line">系统节拍率: 100</span><br><span class="line">系统页大小: 4096</span><br></pre></td></tr></table></figure>
+<h1 id="时间、日期"><a href="#时间、日期" class="headerlink" title="时间、日期"></a><strong>时间、日期</strong></h1><p>GMT（Greenwich Mean Time）中文全称是格林威治标准时间</p>
+<p>UTC（Coordinated Universal Time）指的是世界协调时间（又称世界标准时间、世界统一时间），是经过平均太阳时(以格林威治时间 GMT 为准)、地轴运动修正后的新时标以及以「秒」为单位的国际原子时所综合精算而成的时间，计算过程相当严谨精密，因此若以「世界标准时间」的角度来说，UTC 比 GMT 来得更加精准</p>
+<p><strong>在 Ubuntu 系统下，可以使用”date -u”命令查看到当前的 UTC 时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2021年 07月 16日 星期五 07:42:47 UTC</span><br></pre></td></tr></table></figure>
+<p><strong>在 Ubuntu 系统下，可以使用 date 命令查看系统当前的本地时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2021年 07月 16日 星期五 15:47:14 CST</span><br></pre></td></tr></table></figure>
+<p>CST 在这里其实指的是 China Standard Time（中国标准时间）的缩写，表示当前查看到的时间是中国标准时间，也就是我国所使用的标准时间–北京时间</p>
+<p>在 Ubuntu 系统下，时区信息通常以标准格式保存在一些文件当中，这些文件通常位于/usr/share/zoneinfo目录下，该目录下的每一个文件（包括子目录下的文件）都包含了一个特定国家或地区内时区制度的相关信息，且往往根据其所描述的城市或地区缩写来加以命名，譬如 EST（美国东部标准时间）、CET（欧洲中部时间）、UTC（世界标准时间）、Hongkong、Iran、Japan（日本标准时间）等，也把这些文件称为时区配置文件</p>
+<p>系统的本地时间由时区配置文件/etc/localtime 定义，通常链接到/usr/share/zoneinfo 目录下的某一个文件（或其子目录下的某一个文件）</p>
+<p>如果我们要修改 Ubuntu 系统本地时间的时区信息，可以直接将/etc/localtime 链接到/usr/share/zoneinfo目录下的任意一个时区配置文件，譬如 EST（美国东部标准时间），首先进入到/etc 目录下，执行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf localtime #删除原有链接文件</span><br><span class="line">sudo ln -s &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;EST localtime #重新建立链接文件</span><br></pre></td></tr></table></figure>
+<h2 id="Linux-系统中的时间"><a href="#Linux-系统中的时间" class="headerlink" title="Linux 系统中的时间"></a><strong>Linux</strong> <strong>系统中的时间</strong></h2><p><strong>点时间和段时间</strong></p>
+<p><strong>实时时钟</strong> <strong>RTC</strong></p>
+<p>操作系统中一般会有两个时钟，一个系统时钟（system clock），一个实时时钟（Real time clock），也叫 RTC；系统时钟由系统启动之后由内核来维护，譬如使用 date 命令查看到的就是系统时钟，所以在系统关机情况下是不存在的；而实时时钟一般由 RTC 时钟芯片提供，RTC 芯片有相应的电池为其供电，以保证系统在关机情况下 RTC 能够继续工作、继续计时。</p>
+<p><strong>Linux</strong> <strong>系统如何记录时间</strong></p>
+<p>Linux 系统在开机启动之后首先会读取 RTC 硬件获取实时时钟作为系统时钟的初始值，之后内核便开始维护自己的系统时钟。所以由此可知，RTC 硬件只有在系统开机启动时会读取一次，目的是用于对系统时钟进行初始化操作，之后的运行过程中便不会再对其进行读取操作了。而在系统关机时，内核会将系统时钟写入到 RTC 硬件、已进行同步操作。</p>
+<p><strong>jiffies</strong> <strong>的引入</strong></p>
+<p>jiffies 是内核中定义的一个全局变量，内核使用 jiffies 来记录系统从启动以来的系统节拍数，所以这个变量用来记录以系统节拍时间为单位的时间长度，Linux 内核在编译配置时定义了一个节拍时间，使用节拍率（一秒钟多少个节拍数）来表示，譬如常用的节拍率为 100Hz（一秒钟 100 个节拍数，节拍时间为 1s / 100）、500Hz（一秒钟 500 个节拍，节拍时间为 1s / 500）等。可以发现配置的节拍率越低，每一个系统节拍的时间就越短，也就意味着 jiffies 记录的时间精度越高，高节拍率会导致系统中断的产生更加频繁，频繁的中断会加剧系统的负担，一般默认情况下都是采用 100Hz 作为系统节拍率。</p>
+<p>内核其实通过 jiffies 来维护系统时钟，全局变量 jiffies 在系统开机启动时会设置一个初始值，上面也给大家提到过，RTC 实时时钟会在系统开机启动时读取一次，目的是用于对系统时钟进行初始化，这里说的初始化其实指的就是对内核的 jiffies 变量进行初始化操作，操作系统使用 jiffies 这个全局变量来记录当前时间，当我们需要获取到系统当前时间点时，就可以使用 jiffies 变量去计算，当然并不需要我们手动去计算，Linux 系统提供了相应的系统调用或 C库函数用于获取当前时间，譬如系统调用 time()、gettimeofday()，其实质上就是通过 jiffies 变量换算得到。</p>
+<h3 id="获取时间-time-gettimeofday"><a href="#获取时间-time-gettimeofday" class="headerlink" title="获取时间 time/gettimeofday"></a><strong>获取时间</strong> <strong>time/gettimeofday</strong></h3><p>系统调用 time()用于获取当前时间，以秒为单位，返回得到的值是自 1970-01-01 00:00:00 +0000 (UTC)以来的秒数</p>
+<p>使用该函数需要包含头文件&lt;time.h&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;time.h&gt;</span><br><span class="line">time_t time(time_t *tloc);</span><br></pre></td></tr></table></figure>
+<p>time 函数获取得到的是一个时间段，也就是从 1970-01-01 00:00:00 +0000 (UTC)到现在这段时间所经过的秒数，所以你要计算现在这个时间点，只需要使用 time()得到的秒数加 1970-01-01 00:00:00，可以直接使用相关系统调用或 C 库函数来得到当前时间</p>
+<p>自 1970-01-01 00:00:00 +0000 (UTC)以来经过的总秒数，我们把这个称之为日历时间或 time_t 时间</p>
+<p>gettimeofday()函数提供微秒级时间精度</p>
+<p>ctime()是一个 C 库函数，可以将日历时间转换为可打印输出的字符串形式</p>
+<p>但 ctime()是一个不可重入函数，存在一些安全上面的隐患，ctime_r()是 ctime()的可重入版本，一般推荐大家使用可重入函数 ctime_r()，可重入函数 ctime_r()多了一个参数 buf，也就是缓冲区首地址，所以 ctime_r()函数需要调用者提供用于存放字符串的缓冲区</p>
+<p>Tips：在 Linux 系统中，有一些系统调用或 C 库函数提供了可重入版本与不可重入版本的函数接口，可重入版本函数所对应的函数名一般都会有一个” _r “后缀来表明它是一个可重入函数。</p>
+<p>ctime（或ctime_r）转换得到的时间是计算机所在地对应的本地时间（譬如在中国对应的便是北京时间），并不是 UTC 时间</p>
+<p>localtime()函数可以把 time()或 gettimeofday()得到的秒数（time_t 时间或日历时间）变成一个 struct tm结构体所表示的时间，该时间对应的是本地时间</p>
+<p>gmtime()函数也可以把 time_t 时间变成一个 struct tm 结构体所表示的时间，与 localtime()所不同的是，gmtime()函数所得到的是 UTC 国际标准时间，并不是计算机的本地时间</p>
+<p>mktime()可以将使用 struct tm 结构体表示的分解时间转换为 time_t时间（日历时间）</p>
+<p>asctime()数与 ctime()函数的作用一样，但是将 struct tm 表示的分解时间转换为固定格式的字符串</p>
+<p> strftime()，此函数也可以将一个 struct tm 变量表示的分解时间转换为为格式化字符串，可以根据自己的喜好自定义时间的显示格式</p>
+<p>使用 settimeofday()函数可以设置时间，也就是设置系统的本地时间</p>
+<h4 id="进程时间"><a href="#进程时间" class="headerlink" title="进程时间"></a><strong>进程时间</strong></h4><p>进程时间指的是进程从创建后（也就是程序运行后）到目前为止这段时间内使用 CPU 资源的时间总数，出于记录的目的，内核把 CPU 时间（进程时间）分为以下两个部分：</p>
+<ul>
+<li>用户 CPU 时间：进程在用户空间（用户态）下运行所花费的 CPU 时间。有时也成为虚拟时间（virtualtime）。</li>
+<li>系统 CPU 时间：进程在内核空间（内核态）下运行所花费的 CPU 时间。这是内核执行系统调用或代表进程执行的其它任务（譬如，服务页错误）所花费的时间。</li>
+</ul>
+<p>一般来说，进程时间指的是用户 CPU 时间和系统 CPU 时间的总和，也就是总的 CPU 时间。</p>
+<p>Tips：进程时间不等于程序的整个生命周期所消耗的时间，如果进程一直处于休眠状态（进程被挂起、不会得到系统调度），那么它并不会使用 CPU 资源，所以休眠的这段时间并不计算在进程时间中。</p>
+<p>times()函数用于获取当前进程时间</p>
+<p>使用该函数需要包含头文件&lt;sys/times.h&gt;</p>
+<p>如果我们想查看程序运行到某一个位置时的进程时间，或者计算出程序中的某一段代码执行过程所花费的进程时间，都可以使用 times()函数来实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">测试结果：</span><br><span class="line">时间总和: 1.630000 秒</span><br><span class="line">用户 CPU 时间: 0.610000 秒</span><br><span class="line">系统 CPU 时间: 0.000000 秒</span><br></pre></td></tr></table></figure>
+<p>库函数 clock()提供了一个更为简单的方式用于进程时间，它的返回值描述了进程使用的总的 CPU 时间（也就是进程时间，包括用户 CPU 时间和系统 CPU 时间）</p>
+<h3 id="产生随机数"><a href="#产生随机数" class="headerlink" title="产生随机数"></a><strong>产生随机数</strong></h3><p><strong>随机数与伪随机数</strong></p>
+<p>随机数是随机出现，没有任何规律的一组数列。在我们编程当中，是没有办法获得真正意义上的随机数列的，这是一种理想的情况，在我们的程序当中想要使用随机数列，只能通过算法得到一个伪随机数序列，那在编程当中说到的随机数，基本都是指伪随机数。</p>
+<p>C 语言函数库中提供了很多函数用于产生伪随机数，其中最常用的是通过 rand()和 srand()产生随机数</p>
+<p>rand()函数用于获取随机数，多次调用 rand()可得到一组随机数序列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">int rand(void);</span><br></pre></td></tr></table></figure>
+<p>如果没有调用 srand()设置随机数种子的情况下，rand()会将 1 作为随机数种子，如果随机数种子相同，那么每一次启动应用程序所得到的随机数序列就是一样的，所以每次启动应用程序需要设置不同的随机数种子，这样就可以使得程序每次运行所得到随机数序列不同</p>
+<p>使用 srand()函数为 rand()设置随机数种子</p>
+<p>常用的用法 srand(time(NULL));</p>
+<p>程序中将 rand()的随机数种子设置为 srand(time(NULL))，直接等于 time_t 时间值，意味着每次启动种子都不一样，所以能够产生不同的随机数数组</p>
+<p>random()、srandom()、initstate()、setstate()也是可以产生随机数的 API 函数</p>
+<p>使用 man 手册查看系统调用或 C 库函数帮助信息时，在帮助信息页面 SEE ALSO 栏会列举出与本函数有关联的一些命令、系统调用或 C 库函数等</p>
+<h4 id="休眠"><a href="#休眠" class="headerlink" title="休眠"></a><strong>休眠</strong></h4><p>有时需要将进程暂停或休眠一段时间，进入休眠状态之后，程序将暂停运行，直到休眠结束。常用的系统调用和 C 库函数有 sleep()、usleep()以及 nanosleep()，这些函数在应用程序当中通常作为延时使用，譬如延时 1 秒钟</p>
+<p><strong>秒级休眠: sleep</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">unsigned int sleep(unsigned int seconds);</span><br></pre></td></tr></table></figure>
+<p><strong>微秒级休眠: uslee</strong></p>
+<p>#include &lt;unistd.h&gt;</p>
+<p><strong>高精度休眠: nanosleep</strong></p>
+<p>nanosleep()具有更高精度来设置休眠时间长度，支持纳秒级时长设置</p>
+<p>使用该函数需要包含头文件&lt;time.h&gt;。</p>
+<p>休眠状态下，该进程会失去 CPU使用权，退出系统调度队列，直到休眠结束</p>
+<h3 id="申请堆内存"><a href="#申请堆内存" class="headerlink" title="申请堆内存"></a><strong>申请堆内存</strong></h3><p>在操作系统下，内存资源是由操作系统进行管理、分配的，当应用程序想要内存时（这里指的是堆内存），可以向操作系统申请内存，然后使用内存；当不再需要时，将申请的内存释放、归还给操作系统</p>
+<p><strong>在堆上分配内存：**</strong>malloc** <strong>和</strong> <strong>free</strong></p>
+<p>Linux C 程序当中一般使用 malloc()函数为程序分配一段堆内存，而使用 free()函数来释放这段内存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">void *malloc(size_t size);</span><br></pre></td></tr></table></figure>
+<p><strong>函数参数和返回值含义如下：</strong></p>
+<p><strong>size：</strong>需要分配的内存大小，以字节为单位。</p>
+<p><strong>返回值：</strong>返回值为 void *类型，如果申请分配内存成功，将返回一个指向该段内存的指针，void *并不是说没有返回值或者返回空指针，而是返回的指针类型未知,所以在调用 malloc()时通常需要进行强制类型转换，将 void *指针类型转换成我们希望的类型；如果分配内存失败（譬如系统堆内存不足）将返回 NULL，如果参数 size 为 0，返回值也是 NULL。</p>
+<p>malloc()在堆区分配一块指定大小的内存空间，用来存放数据。这块内存空间在函数执行完成后不会被初始化，它们的值是未知的，所以通常需要程序员对 malloc()分配的堆内存进行初始化操作。</p>
+<p>在堆上分配的内存，需要开发者自己手动释放掉，通常使用 free()函数释放堆内存，free()函数原型如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">void free(void *ptr);</span><br></pre></td></tr></table></figure>
+<p><strong>函数参数和返回值含义如下：</strong></p>
+<p><strong>ptr**</strong>：**指向需要被释放的堆内存对应的指针。</p>
+<p><strong>返回值：</strong>无返回值。</p>
+<p>Linux 系统中，当一个进程终止时，内核会自动关闭它没有关闭的所有文件（该进程打开的文件，但是在进程终止时未调用 close()关闭它）。对于内存来说也是如此，当进程终止时，内核会将其占用的所有内存都返还给操作系统，这包括在堆内存中由 malloc()函数所分配的内存空间，但是如果持续占用，将会导致内存泄漏</p>
+<p><strong>在堆上分配内存的其它方法</strong></p>
+<p>calloc()函数用来动态地分配内存空间并初始化为 0</p>
+<p><strong>分配对其内存</strong></p>
+<p>posix_memalign()、aligned_alloc()、memalign()、valloc()、pvalloc()</p>
+<p>使用posix_memalign()、aligned_alloc()、valloc()时需要包含头文件&lt;stdlib.h&gt;，使用memalign()、pvalloc()这两个函数时需要包含头文件&lt;malloc.h&gt;</p>
+<p>malloc()、calloc()分配内存返回的地址其实也是对齐的，但是它俩的对齐都是固定的</p>
+<p>posix_memalign()函数用于在堆上分配 size 个字节大小的对齐内存空间，将*memptr 指向分配的空间，分配的内存地址将是参数 alignment 的整数倍。参数 alignment 表示对齐字节数，alignment 必须是 2 的幂次方（譬如 2^4、2^5、2^8 等），同时也要是 sizeof(void *)的整数倍，对于 32 位系统来说，sizeof(void *)等于4，如果是 64 位系统 sizeof(void *)等于 8。</p>
+<p>aligned_alloc()函数用于分配 size 个字节大小的内存空间，返回指向该空间的指针。</p>
+<p>memalign()与 aligned_alloc()参数是一样的，它们之间的区别在于：对于参数 size 必须是参数 alignment的整数倍这个限制条件，memalign()并没有这个限制条件</p>
+<p>Tips：memalign()函数已经过时了，并不提倡使用！</p>
+<p>valloc()分配 size 个字节大小的内存空间，返回指向该内存空间的指针，内存空间的地址是页大小（pagesize）的倍数。</p>
+<p>Tips：valloc()函数已经过时了，并不提倡使用！</p>
+<h3 id="proc-文件系统"><a href="#proc-文件系统" class="headerlink" title="proc 文件系统"></a><strong>proc</strong> <strong>文件系统</strong></h3><p>proc 文件系统是一个虚拟文件系统，它以文件系统的方式为应用层访问系统内核数据提供了接口，用户和应用程序可以通过 proc 文件系统得到系统信息和进程相关信息，对 proc 文件系统的读写作为与内核进行通信的一种手段。但是与普通文件不同的是，proc 文件系统是动态创建的，文件本身并不存在于磁盘当中、只存在于内存当中,与 devfs 一样，都被称为虚拟文件系统。</p>
+<p>最初构建 proc 文件系统是为了提供有关系统中进程相关的信息，但是由于这个文件系统非常有用，因此内核中的很多信息也开始使用它来报告，或启用动态运行时配置。内核构建 proc 虚拟文件系统，它会将内核运行时的一些关键数据信息以文件的方式呈现在 proc 文件系统下的一些特定文件中，这样相当于将一些不可见的内核中的数据结构以可视化的方式呈现给应用层。</p>
+<p>proc 文件系统挂载在系统的/proc 目录下，对于内核开发者（譬如驱动开发工程师）来说，proc 文件系统给了开发者一种调试内核的方法：通过查看/proc/xxx 文件来获取到内核特定数据结构的值，在添加了新功能前后进行对比，就可以判断此功能所产生的影响是否合理。</p>
+<p>可以看到/proc 目录下有很多以数字命名的文件夹，譬如 100038、2299、98560，这些数字对应的其实就是<strong>一个一个的进程 PID 号，每一个进程在内核中都会存在一个编号，通过此编号来区分不同的进程</strong>，这个编号就是 PID 号</p>
+<p>/proc 目录下除了文件夹之外，还有很多的虚拟文件，譬如 buddyinfo、cgroups、cmdline、version 等等，</p>
+<p>不同的文件记录了不同信息，关于这些文件记录的信息和意思如下：</p>
+<ul>
+<li>cmdline：内核启动参数； </li>
+<li>cpuinfo：CPU 相关信息；</li>
+<li>iomem：IO 设备的内存使用情况；</li>
+<li>interrupts：显示被占用的中断号和占用者相关的信息；</li>
+<li>ioports：IO 端口的使用情况；</li>
+<li>kcore：系统物理内存映像，不可读取；</li>
+<li>loadavg：系统平均负载；</li>
+<li>meminfo：物理内存和交换分区使用情况；</li>
+<li>modules：加载的模块列表；</li>
+<li>mounts：挂载的文件系统列表；</li>
+<li>partitions：系统识别的分区表；</li>
+<li>swaps：交换分区的利用情况；</li>
+<li>version：内核版本信息；</li>
+<li>uptime：系统运行时间；</li>
+</ul>
+<p><strong>proc</strong> <strong>文件系统的使用</strong></p>
+<p>proc 文件系统的使用就是去读取/proc 目录下的这些文件，获取文件中记录的信息，可以直接使用 cat 命令读取，也可以在应用程序中调用 open()打开、然后再使用 read()函数读取。</p>
+<p><strong>使用</strong> <strong>cat</strong> <strong>命令读取</strong></p>
+<p>在 Linux 系统下直接使用 cat 命令查看/proc 目录下的虚拟文件，譬如”cat /proc/version”查看内核版本相关信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux version 4.15.0-133-generic (buildd@lgw01-amd64-024) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)) #137~16.04.1-Ubuntu SMP Fri Jan 15 02:55:18 UTC 2021</span><br></pre></td></tr></table></figure>
+<h3 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h3><p>占位。。等原子个更新《- -》</p>
+<hr>
+<p>参考资料：正点原子嵌入式Linux C应用编程指南V1.0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/">https://www.chenzhan.club/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/LinuxC/">LinuxC</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note55.9-Qt_Designer</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note53.6-字符串处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/05/30/note41-6-内存管理进程映射(暂空)/" title="note41.6-内存管理进程映射(暂空)"><img class="cover" src="/Chenzhan666.github.io/img/back.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">note41.6-内存管理进程映射(暂空)</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/05/07/note40-6-UnixC一些基础/" title="note40.6-LinuxC一些基础"><img class="cover" src="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-07</div><div class="title">note40.6-LinuxC一些基础</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note48-6-文件IO/" title="note48.6-文件IO"><img class="cover" src="https://i0.hdslb.com/bfs/article/1057a8324c02b7cc61fdc333bd5995b32b5f7425.jpg@942w_539h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note48.6-文件IO</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note49-6-深入探究文件I-O/" title="note49.6-深入探究文件I/O"><img class="cover" src="https://i0.hdslb.com/bfs/article/01fdecee75c10eced27b726569894167ff673b73.png@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note49.6-深入探究文件I/O</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note51-6-标准IO库/" title="note51.6-标准IO库"><img class="cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note51.6-标准IO库</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/16/note53-6-字符串处理/" title="note53.6-字符串处理"><img class="cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="title">note53.6-字符串处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text">系统信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%A0%87%E8%AF%86-uname"><span class="toc-number">1.1.</span> <span class="toc-text">系统标识 uname</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E6%9C%9F"><span class="toc-number">2.</span> <span class="toc-text">时间、日期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4"><span class="toc-number">2.1.</span> <span class="toc-text">Linux 系统中的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%97%B6%E9%97%B4-time-gettimeofday"><span class="toc-number">2.1.1.</span> <span class="toc-text">获取时间 time&#x2F;gettimeofday</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%97%B6%E9%97%B4"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">进程时间</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="toc-number">2.1.2.</span> <span class="toc-text">产生随机数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%91%E7%9C%A0"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">休眠</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7%E5%A0%86%E5%86%85%E5%AD%98"><span class="toc-number">2.1.3.</span> <span class="toc-text">申请堆内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proc-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.1.4.</span> <span class="toc-text">proc 文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-number">2.1.5.</span> <span class="toc-text">定时器</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

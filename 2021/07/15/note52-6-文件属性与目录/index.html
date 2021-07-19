@@ -1,0 +1,332 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note52.6-文件属性与目录 | CHENZHAN</title><meta name="keywords" content="LinuxC"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="可以通过 stat 命令或者 ls -l 命令来查看文件类型  ‘ - ‘：普通文件 ‘ d ‘：目录文件 ‘ c ‘：字符设备文件 ‘ b ‘：块设备文件 ‘ l ‘：符号链接文件 ‘ s ‘：套接字文件 ‘ p ‘：管道文件  目录文件 字符设备文件和块设备文件 字符设备文件（character）、块设备文件（block） 字符设备文件一般存放在 Linux 系统&#x2F;dev&#x2F;目录下，所以&#x2F;d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note52.6-文件属性与目录">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="可以通过 stat 命令或者 ls -l 命令来查看文件类型  ‘ - ‘：普通文件 ‘ d ‘：目录文件 ‘ c ‘：字符设备文件 ‘ b ‘：块设备文件 ‘ l ‘：符号链接文件 ‘ s ‘：套接字文件 ‘ p ‘：管道文件  目录文件 字符设备文件和块设备文件 字符设备文件（character）、块设备文件（block） 字符设备文件一般存放在 Linux 系统&#x2F;dev&#x2F;目录下，所以&#x2F;d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp">
+<meta property="article:published_time" content="2021-07-15T07:49:19.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:20:30.951Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="LinuxC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-19 16:20:30'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note52.6-文件属性与目录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:20:30.951Z" title="更新于 2021-07-19 16:20:30">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note52.6-文件属性与目录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p>可以通过 stat 命令或者 ls -l 命令来查看文件类型</p>
+<ul>
+<li>‘ - ‘：普通文件</li>
+<li>‘ d ‘：目录文件</li>
+<li>‘ c ‘：字符设备文件</li>
+<li>‘ b ‘：块设备文件</li>
+<li>‘ l ‘：符号链接文件</li>
+<li>‘ s ‘：套接字文件</li>
+<li>‘ p ‘：管道文件</li>
+</ul>
+<p><strong>目录文件</strong></p>
+<p><strong>字符设备文件和块设备文件</strong></p>
+<p>字符设备文件（character）、块设备文件（block）</p>
+<p>字符设备文件一般存放在 Linux 系统/dev/目录下，所以/dev 也称为虚拟文件系统 devfs</p>
+<p>设备文件对应于硬件设备</p>
+<p><strong>符号链接文件</strong>（link）类似于 Windows 系统中的快捷方式文件，是一种特殊文件，它的内容指向的是另一个文件路径，当对符号链接文件进行操作时，系统根据情况会对这个操作转移到它指向的文件上去，而不是对它本身进行操作，譬如，读取一个符号链接文件内容时，实际上读到的是它指向的文件的内容</p>
+<p><strong>管道文件</strong>（pipe）主要用于进程间通信</p>
+<p><strong>套接字文件</strong>（socket）也是一种进程间通信的方式，与管道文件不同的是，它们可以在不同主机上的进程间通信，实际上就是网络通信</p>
+<p>Linux 下可以使用 stat 命令查看文件的属性，其实这个命令内部就是通过调用 stat()函数来获取文件属性的，stat 函数是 Linux 中的系统调用，用于获取文件相关的信息</p>
+<p>structstat 是内核定义的一个结构体，在&lt;sys/stat.h&gt;头文件中申明，所以可以在应用层使用，这个结构体中的所有元素加起来构成了文件的属性信息</p>
+<p>st_mode 是 structstat 结构体中的一个成员变量，是一个 32 位无符号整形数据，该变量记录了文件的类型、文件的权限这些信息</p>
+<p>struct timespec 结构体该结构体定义在&lt;time.h&gt;头文件中，是 Linux 系统中时间相关的结构体，应用程序中包含了&lt;time.h&gt;头文件</p>
+<p>在 Linux 系统中，time_t 时间指的是一个时间段，从某一个时间点到某一个时间点所经过的秒数，譬如对于文件的三个时间属性来说，指的是从过去的某一个时间点（这个时间点是一个起始基准时间点）到文件最后被访问、文件内容最后被修改、文件状态最后被改变的这个时间点所经过的秒数</p>
+<p>可以通过 localtime()/localtime_r()或者 strftime()来得到更利于我们查看的时间表达方式“2020-10-10 18:30:30”</p>
+<p>fstat 与 stat 区别在于，stat 是从文件名出发得到文件属性信息，不需要先打开文件；而 fstat 函数则是从文件描述符出发得到文件属性信息，所以使用 fstat 函数之前需要先打开文件得到文件描述符</p>
+<p>lstat()与 stat、fstat 的区别在于，对于符号链接文件，stat、fstat 查阅的是符号链接文件所指向的文件对应的文件属性信息，而 lstat 查阅的是符号链接文件本身的属性信息</p>
+<p>Linux 是一个多用户操作系统，系统中一般存在着好几个不同的用户，而 Linux 系统中的每一个文件都有一个与之相关联的用户和用户组，通过这个信息可以判断文件的所有者和所属组</p>
+<p>文件所属组则表示该文件属于哪一个用户组。在 Linux 中，系统并不是通过用户名或用户组名来识别不同的用户和用户组，而是通过 ID。ID 就是一个编号，Linux 系统会为每一个用户或用户组分配一个 ID，将用户名或用户组名与对应的 ID 关联起来，所以系统通过用户 ID（UID）或组 ID（GID）就可以识别出不同的用户和用户组</p>
+<p>Tips：用户 ID 简称 UID、用户组 ID 简称 GID。</p>
+<p>文件的用户 ID 和组 ID 分别由 struct stat 结构体中的 st_uid 和 st_gid 所指定</p>
+<ul>
+<li>实际用户 ID 和实际组 ID 标识我们究竟是谁，也就是执行该进程的用户是谁、以及该用户对应的所属组；实际用户 ID 和实际组 ID 确定了进程所属的用户和组。</li>
+<li>进程的有效用户 ID、有效组 ID 以及附属组 ID 用于文件访问权限检查。</li>
+</ul>
+<p>对于有效用户 ID 和有效组 ID 来说，这是进程所持有的概念，对于文件来说，并无此属性！有效用户 ID 和有效组 ID 是站在操作系统的角度，用于给操作系统判断当前执行该进程的用户在当前环境下对某个文件是否拥有相应的权限</p>
+<p><strong>chown 是一个系统调用，该系统调用可用于改变文件的所有者（用户 ID）和所属组（组 ID）</strong></p>
+<p>将 testApp.c</p>
+<p>文件的所有者和所属组修改为 root：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown root:root testApp.c</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int chown(const char *pathname, uid_t owner, gid_t group);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只有超级用户进程能更改文件的用户 ID；</li>
+<li>普通用户进程可以将文件的组 ID 修改为其所从属的任意附属组 ID，前提条件是该进程的有效用户 ID 等于文件的用户 ID；而超级用户进程可以将文件的组 ID 修改为任意值。</li>
+</ul>
+<p>在 Linux 系统下，可以使用 getuid 和 getgid 两个系统调用分别用于获取当前进程的用户 ID 和用户组ID，这里说的进程的用户 ID 和用户组 ID 指的就是进程的实际用户 ID 和实际组 ID</p>
+<p><strong>0 指的就是 root用户和 root 用户组</strong></p>
+<p>struct stat 结构体中的 st_mode 字段记录了文件的访问权限位</p>
+<p>文件的权限可以分为两个大类，分别是普通权限和特殊权限（也可称为附加权限）。普通权限包括对文件的读、写以及执行，而特殊权限则包括一些对文件的附加权限，譬如Set-User-ID、Set-Group-ID以及Sticky</p>
+<p><strong>普通权限</strong></p>
+<p>每个文件都有 9 个普通的访问权限位，可将它们分为 3 类</p>
+<table>
+<thead>
+<tr>
+<th>st_mode 权限表示宏</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S_IRUSR</td>
+<td>文件所有者读权限</td>
+</tr>
+<tr>
+<td>S_IWUSR</td>
+<td>文件所有者写权限</td>
+</tr>
+<tr>
+<td>S_IXUSR</td>
+<td>文件所有者执行权限</td>
+</tr>
+<tr>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody></table>
+<p>一串字符串就描述了该文件的 9 个访问权限以及文件类型，譬如”- （文件类型）| rwx（所有者权限） | rwx（同组用户权限） | rx（其他用户权限）”： </p>
+<p>“ - “表示该文件是一个普通文件。</p>
+<p><strong>r</strong> 表示具有读权限；</p>
+<p><strong>w</strong> 表示具有写权限；</p>
+<p><strong>x</strong> 表示具有执行权限； </p>
+<p>**-**表示无此权限</p>
+<ul>
+<li>如果进程的有效用户 ID 等于文件所有者 ID（st_uid），意味着该进程以文件所有者的角色存在；</li>
+<li>如果进程的有效用户 ID 并不等于文件所有者 ID，意味着该进程并不是文件所有者身份；但是进程的有效用户组 ID 或进程的附属组 ID 之一等于文件的组 ID（st_gid），那么意味着该进程以文件所属组成员的角色存在，也就是文件所属组的同组用户成员。 </li>
+<li>如果进程的有效用户 ID 不等于文件所有者 ID、并且进程的有效用户组 ID 或进程的所有附属组 ID均不等于文件的组 ID（st_gid），那么意味着该进程以其它用户的角色存在。</li>
+<li>如果进程的有效用户 ID 等于 0（root 用户），则无需进行权限检查，直接对该文件拥有最高权限。</li>
+</ul>
+<p>st_mode 字段中除了记录文件的 9 个普通权限之外，还记录了文件的 3 个特殊权限，也就是 S 字段权限位，S 字段三个 bit 位中，从高位到低位依次表示文件的 set-user-ID 位权限、set-groupID 位权限以及 sticky 位权限</p>
+<ul>
+<li>当进程对文件进行操作的时候、将进行权限检查，如果文件的 set-user-ID 位权限被设置，内核会将进程的有效 ID 设置为该文件的用户 ID（文件所有者 ID），意味着该进程直接获取了文件所有者的权限、以文件所有者的身份操作该文件。</li>
+<li>当进程对文件进行操作的时候、将进行权限检查，如果文件的 set-group-ID 位权限被设置，内核会将进程的有效用户组 ID 设置为该文件的用户组 ID（文件所属组 ID），意味着该进程直接获取了文件所属组成员的权限、以文件所属组成员的身份操作该文件。</li>
+</ul>
+<p>Linux 系统下绝大部分的文件都没有设置 set-user-ID 位权限和 set-group-ID 位权限，所以通常情况下，进程的有效用户等于实际用户（有效用户 ID 等于实际用户 ID），有效组等于实际组（有效组 ID 等于实际组 ID）</p>
+<p><strong>普通文件权限方案（S/U/G/O）</strong></p>
+<ul>
+<li>目录的读权限：可列出（譬如：通过 ls 命令）目录之下的内容（即目录下有哪些文件）。</li>
+<li>目录的写权限：可以在目录下创建文件、删除文件。</li>
+<li>目录的执行权限：可访问目录下的文件，譬如对目录下的文件进行读、写、执行等操作。</li>
+</ul>
+<p>为了确保使用的是 ls 命令本身，执行时需要给出路径的完整路径/bin/ls</p>
+<p>要想访问目录下的文件，譬如查看文件的 inode 节点、大小、权限等信息，还需要对目录拥有执行权限</p>
+<p>反之，若拥有对目录的执行权限、而无读权限，只要知道目录内文件的名称，仍可对其进行访问，但不能列出目录下的内容（即目录下包含的其它文件的名称）。</p>
+<p>要想在目录下创建文件或删除原有文件，需要同时拥有对该目录的执行和写权限。</p>
+<p>所以由此可知，如果需要对文件进行读、写或执行等操作，不光是需要拥有该文件本身的读、写或执行权限，还需要拥有文件所在目录的执行权限。</p>
+<p><strong>检查文件权限</strong> <strong>access</strong></p>
+<p>使用该函数需要包含头文件&lt;unistd.h&gt;</p>
+<p><strong>修改文件权限</strong> <strong>chmod</strong>/<strong>fchmod</strong> </p>
+<p>使用该函数需要包含头文件&lt;sys/stat.h&gt;。</p>
+<p>rwxrwxrwx（0777）</p>
+<p>rw-r–r–（0644）</p>
+<p>umask命令用于查看/设置权限掩码，权限掩码主要用于对新建文件的权限进行屏蔽</p>
+<p>调用 open 函数新建文件时，文件实际的权限并不等于 mode 参数所描述的权限，而是通过如下关系得到实际权限：mode &amp; ~umask</p>
+<p>譬如调用 open 函数新建文件时，mode 参数指定为 0777，假设 umask 为 0002，那么实际权限为：0777 &amp; (~0002) = 0775</p>
+<p>umask 权限掩码是进程的一种属性，用于指明该进程新建文件或目录时，应屏蔽哪些权限位。进程的umask 通常继承至其父进程</p>
+<p>umask 函数用于设置进程的权限掩码，该函数是一个系统调用（可通过”man 2 umask”命令查看）</p>
+<p>使用该命令需要包含头文件&lt;sys/types.h&gt;和&lt;sys/stat.h&gt;</p>
+<p><strong>文件的时间属性</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>st_atim</td>
+<td>文件最后被访问的时间</td>
+</tr>
+<tr>
+<td>st_mtim</td>
+<td>文件内容最后被修改的时间</td>
+</tr>
+<tr>
+<td>st_ctim</td>
+<td>文件状态最后被改变的时间</td>
+</tr>
+</tbody></table>
+<ul>
+<li>文件最后被访问的时间：访问指的是读取文件内容，文件内容最后一次被读取的时间，譬如使用read()函数读取文件内容便会改变该时间属性；</li>
+<li>文件内容最后被修改的时间：文件内容发生改变，譬如使用 write()函数写入数据到文件中便会改变该时间属性；</li>
+<li>文件状态最后被改变的时间：状态更改指的是该文件的 inode 节点最后一次被修改的时间，譬如更改文件的访问权限、更改文件的用户 ID、用户组 ID、更改链接数等</li>
+</ul>
+<p><strong>utime()、utimes()修改时间属性</strong></p>
+<p>time()是 Linux 系统调用，用于获取当前时间（也可以直接将 times 参数设置为 NULL，这样就不需要使用 time 函数来获取当前时间了），单位为秒</p>
+<p>可以使用 date 命令查看当前系统时间</p>
+<p>用于显式修改文件时间戳，它们是 <strong>futimens()和 utimensat()</strong></p>
+<ul>
+<li>可按纳秒级精度设置时间戳。相对于提供微秒级精度的 utimes()，这是重大改进！</li>
+<li>可单独设置某一时间戳。譬如，只设置访问时间、而修改时间保持不变，如果要使用 utime()或 utimes()来实现此功能，则需要首先使用 stat()获取另一个时间戳的值，然后再将获取值与打算变更的时间戳一同指定。</li>
+<li>可独立将任一时间戳设置为当前时间。使用 utime()或 utimes()函数虽然也可以通过将 times 参数设置为 NULL 来达到将时间戳设置为当前时间的效果，但是不能单独指定某一个时间戳，必须全部设置为当前时间（不考虑使用额外函数获取当前时间的方式，譬如 time()）。</li>
+</ul>
+<p><strong>符号链接（软链接）与硬链接</strong></p>
+<p>Tips：使用 ln 命令可以为一个文件创建软链接文件或硬链接文件，用法如下：</p>
+<p>硬链接：ln 源文件 链接文件</p>
+<p>软链接：ln -s 源文件 链接文件</p>
+<p>使用 ln 命令创建的两个硬链接文件与源文件 test_file 都拥有相同的 inode 号，既然inode 相同，也就意味着它们指向了物理硬盘的同一个区块，仅仅只是文件名字不同而已，创建出来的硬链接文件与源文件对文件系统来说是完全平等的关系inode 数据结结构中会记录文件的链接数，这个链接数指的就是硬链接数，struct stat 结构体中的st_nlink 成员变量就记录了文件的链接数</p>
+<p>当为文件每创建一个硬链接，inode 节点上的链接数就会加一，每删除一个硬链接，inode 节点上的链接数就会减一，直到为 0，inode 节点和对应的数据块才会被文件系统所回收，也就意味着文件已经从文件系统中被删除了</p>
+<p>当源文件被删除之后，软链接文件依然存在，但此时它指向的是一个无效的文件路径，这种链接文件被称为悬空链接</p>
+<p><strong>创建硬链接</strong> **link()**需要包含头文件&lt;unistd.h&gt;。</p>
+<p><strong>创建软链接</strong> **symlink()**需要包含头文件&lt;unistd.h&gt;</p>
+<p>使用系统调用 readlink<strong>读取软链接文件</strong>中存储的路径信息</p>
+<p>目录（文件夹）在 Linux 系统也是一种文件，是一种特殊文件，同样可以使用前面给大家介绍 open、read 等这些系统调用以及 C 库函数对其进行操作，但是目录作为一种特殊文件，并不适合使用前面介绍的文件 I/O 方式进行读写等操作。在 Linux 系统下，会有一些专门的系统调用或 C 库函数用于对文件夹进行操作，譬如：打开、创建文件夹、删除文件夹、读取文件夹以及遍历文件夹中的文件等</p>
+<ul>
+<li>普通文件由 inode 节点和数据块构成</li>
+<li>目录由 inode 节点和目录块构成</li>
+</ul>
+<p>在 Linux 系统下，提供了专门用于创建目录 mkdir()以及删除目录 rmdir 相关的系统调用</p>
+<p>可以使用 opendir()、readdir()和 closedir()来打开、读取以及关闭目录</p>
+<p>Tips：“流”是从自然界中抽象出来的一种概念，有点类似于自然界当中的水流，在文件操作中，文件内容数据类似池塘中存储的水，N 个字节数据被读取出来或将 N 个字节数据写入到文件中，这些数据就构成了字节流。</p>
+<p>“流”这个概念是动态的，而不是静态的。编程当中提到这个概念，一般都是与 I/O 相关，所以也经常叫做 I/O 流；但对于目录这种特殊文件来说，这里将目录块中存储的数据称为目录流，存储了一个一个的目录项（目录条目）。</p>
+<p>rewinddir()是 C 库函数，可将目录流重置为目录起点，以便对 readdir()的下一次调用将从目录列表中的第一个文件开始</p>
+<p>Linux 下的每一个进程都有自己的当前工作目录（current working directory），当前工作目录是该进程解析、搜索相对路径名的起点（不是以” / “斜杆开头的绝对路径）</p>
+<p>一般情况下，运行一个进程时、其父进程的当前工作目录将被该进程所继承，成为该进程的当前工作目录。可通过 getcwd 函数来获取进程的当前工作目录</p>
+<p>系统调用 chdir()和 fchdir()可以用于更改进程的当前工作目录</p>
+<p>unlink()用于删除一个文件（不包括目录）</p>
+<p>remove()是一个 C 库函数，用于移除一个文件或空目录</p>
+<p>借助于 rename()既可以对文件进行重命名，又可以将文件移至同一文件系统中的另一个目录下</p>
+<p>根据 oldpath、newpath 的不同，有以下不同的情况需要进行说明：</p>
+<ul>
+<li>若 newpath 参数指定的文件或目录已经存在，则将其覆盖；</li>
+<li>若 newpath 和 oldpath 指向同一个文件，则不发生变化（且调用成功）。</li>
+<li>rename()系统调用对其两个参数中的软链接均不进行解引用。如果 oldpath 是一个软链接，那么将重命名该软链接；如果 newpath 是一个软链接，则会将其移除、被覆盖。 </li>
+<li>如果 oldpath 指代文件，而非目录，那么就不能将 newpath 指定为一个目录的路径名。要想重命名一个文件到某一个目录下，newpath 必须包含新的文件名。</li>
+<li>如果 oldpath 指代为一个目录，在这种情况下，newpath 要么不存在，要么必须指定为一个空目录。</li>
+<li>oldpath 和 newpath 所指代的文件必须位于同一文件系统。由前面的介绍，可以得出此结论！不能对.（当前目录）和..（上一级目录）进行重命名。</li>
+</ul>
+<hr>
+<p>参考资料：正点原子嵌入式Linux C应用编程指南V1.0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/">https://www.chenzhan.club/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/LinuxC/">LinuxC</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note53.6-字符串处理</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/15/note51-6-%E6%A0%87%E5%87%86IO%E5%BA%93/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note51.6-标准IO库</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/05/30/note41-6-内存管理进程映射(暂空)/" title="note41.6-内存管理进程映射(暂空)"><img class="cover" src="/Chenzhan666.github.io/img/back.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">note41.6-内存管理进程映射(暂空)</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/05/07/note40-6-UnixC一些基础/" title="note40.6-LinuxC一些基础"><img class="cover" src="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-07</div><div class="title">note40.6-LinuxC一些基础</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note48-6-文件IO/" title="note48.6-文件IO"><img class="cover" src="https://i0.hdslb.com/bfs/article/1057a8324c02b7cc61fdc333bd5995b32b5f7425.jpg@942w_539h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note48.6-文件IO</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note49-6-深入探究文件I-O/" title="note49.6-深入探究文件I/O"><img class="cover" src="https://i0.hdslb.com/bfs/article/01fdecee75c10eced27b726569894167ff673b73.png@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note49.6-深入探究文件I/O</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note51-6-标准IO库/" title="note51.6-标准IO库"><img class="cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note51.6-标准IO库</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/16/note53-6-字符串处理/" title="note53.6-字符串处理"><img class="cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="title">note53.6-字符串处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note40.6-LinuxC一些基础 | CHENZHAN</title><meta name="keywords" content="LinuxC"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#ifndef是”if not defined”的简写，是宏定义的一种，可以根据是否已经定义了一个变量来进行分支选择，一般用于调试等  作用1：防止头文件的重复包含和编译  作用2：便于程序的调试和移植  配套使用：#endif  类型：宏定义条件编译  #endif用于结束条件编译，编译时与前面最近的#if、#ifdef或#ifndef作为一对，经常一起使用，编译两者之间的部分程序段  b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note40.6-LinuxC一些基础">
+<meta property="og:url" content="https://www.chenzhan.club/2021/05/07/note40-6-UnixC%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="#ifndef是”if not defined”的简写，是宏定义的一种，可以根据是否已经定义了一个变量来进行分支选择，一般用于调试等  作用1：防止头文件的重复包含和编译  作用2：便于程序的调试和移植  配套使用：#endif  类型：宏定义条件编译  #endif用于结束条件编译，编译时与前面最近的#if、#ifdef或#ifndef作为一对，经常一起使用，编译两者之间的部分程序段  b">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp">
+<meta property="article:published_time" content="2021-05-07T14:24:16.000Z">
+<meta property="article:modified_time" content="2021-07-19T08:32:15.359Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="LinuxC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/05/07/note40-6-UnixC%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-19 16:32:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note40.6-LinuxC一些基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-07T14:24:16.000Z" title="发表于 2021-05-07 22:24:16">2021-05-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-19T08:32:15.359Z" title="更新于 2021-07-19 16:32:15">2021-07-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note40.6-LinuxC一些基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<ul>
+<li><p>#ifndef是”if not defined”的简写，是宏定义的一种，可以根据是否已经定义了一个变量来进行分支选择，一般用于调试等</p>
+<p> 作用1：防止头文件的重复包含和编译</p>
+<p> 作用2：便于程序的调试和移植</p>
+<p> 配套使用：#endif</p>
+<p> 类型：宏定义条件编译</p>
+</li>
+<li><p>#endif用于结束条件编译，编译时与前面最近的#if、#ifdef或#ifndef作为一对，经常一起使用，编译两者之间的部分程序段</p>
+</li>
+<li><p>bit[5:3]：bit5、bit4、bit3</p>
+</li>
+<li><p>构建过程：源代码(.c)-预编译-&gt;头文件和宏扩展-编译-&gt;汇编码(.s)-汇编-&gt;目标码(.o)-链接-&gt;可执行代码(a.out)</p>
+<ul>
+<li>vi hello.c - 编写源代码<br>gcc -E hello.c -o hello.i - 预编译(编译预处理)<br>gcc -S hello.i - 获得汇编代码(hello.s)<br>gcc -c hello.s - 获得目标代码(hello.o)<br>gcc hello.o -o hello - 获得可执行代码(hello)<br>./hello - 运行可执行代码</li>
+</ul>
+</li>
+<li><p>文件名后缀</p>
+<ul>
+<li>.h - C语言源代码头文件                  <br>.c - 预处理前的C语言源代码文件      &gt; 可读文本<br>.s - 汇编语言文件                            /<br>.o - 目标文件                                   <br>.a - 静态库文件                                 &gt; 不可读的二进制<br>.so - 共享(动态)库文件                     /<br>.out - 可执行文件                           /</li>
+</ul>
+</li>
+<li><p>编译选项</p>
+<ul>
+<li>gcc [选项] [参数] 文件1 文件2 …<br>-o: 指定输出文件<pre><code>    如：gcc hello.c -o hello</code></pre>
+-E: 预编译，缺省输出到屏幕，用-o指定输出文件<pre><code>    如：gcc -E hello.c -o hello.i</code></pre>
+-S: 编译，将高级语言文件编译成汇编语言文件<pre><code>    如：gcc -S hello.c</code></pre>
+-c: 汇编，将汇编语言文件汇编成机器语言文件<pre><code>    如：gcc -c hello.s</code></pre>
+-Wall：产生全部警告<pre><code>    如：gcc -Wall wall.c</code></pre>
+-Werror：将警告作为错误处理<pre><code>    如：gcc -Werror werror.c</code></pre>
+-x: 指定源代码的语言<pre><code>    xxx.c - C语言
+    xxx.cpp - C++语言
+    xxx.for - Fortran语言
+    xxx.java - Java语言
+    ...
+    gcc -x c++ cpp.c -lstdc++ -o cpp</code></pre>
+-O0/O1/O2/O3: 指定优化等级，O0不优化，缺省O1优化</li>
+</ul>
+</li>
+<li><p>外部变量声明<br>extern double e</p>
+</li>
+<li><p>重定义<br>一个头文件可能会被多个源文件包含，写在头文件里的函数定义也会因此被预处理器扩展到多个包含该头文件的源文件中，并在编译阶段被编译到等多个不同的目标文件中，这将导致链接错误：multiple definition，多重定义</p>
+</li>
+<li><p>gcc -I&lt;头文件的附加搜索路径&gt;</p>
+<ul>
+<li>#include &lt;my.h&gt;<br>先找-I指定的目录，再找系统目录。</li>
+<li>#include “my.h”<br>先找-I指定的目录，再找当前目录，最后找系统目录。</li>
+</ul>
+</li>
+<li><p>头文件的系统目录：<br>/usr/include - 标准C库<br>/usr/local/include - 第三方库<br>/usr/lib/gcc/i686-linux-gnu/5.4.0/include - 编译器库</p>
+</li>
+<li><p>预处理指令<br>#include - 将指定的文件内容插至此指令处<br>#define - 定义宏<br>#undef - 删除宏<br>#if - 如果<br>#ifdef - 如果宏已定义<br>#ifndef - 如果宏未定义<br>#else - 否则，与#if/#ifdef/#ifndef配合使用<br>#elif - 否则如果，与#if/#ifdef/#ifndef配合使用<br>#endif - 结束判定，与#if/#ifdef/#ifndef配合使用<br>#error - 产生错误，结束预处理<br>#warning - 产生警告，继续预处理</p>
+<p>#line - 指定行号<br>#pragma - 设定编译器的状态或者指示编译器的操作<br>#pragma GCC dependency 被依赖文件<br>#pragma GCC poison 语法禁忌<br>#pragma pack(按几字节对齐：1/2/4/8)<br>#pragma pack() - 按缺省字节数对齐</p>
+</li>
+<li><p>预定义宏<br>无需自行定义，预处理器会根据事先设定好的规则将这些宏扩展成其对应的值。<br>__ BASE_FILE__ : 正在被处理的源文件名<br>__ FILE__ : 所在文件名<br>__ LINE__ : 所在行的行号<br>__ FUNCTION__ : 所在函数的函数名<br>__ func__ : 同__ FUNCTION __<br>__ DATE__ : 处理日期<br>__ TIME__ : 处理时间<br>__ INCLUDE_LEVEL__ : 包含层数，从0开始<br>__cplusplus: C++有定义，C无定义</p>
+</li>
+<li><p>环境变量<br>在进程向下文中保存的一些数据：键(功能，是什么)=值(内容)。<br>env<br>C_INCLUDE_PATH<br>C语言头文件的附加搜索路径，相当于-I选项。<br>CPATH<br>同C_INCLUDE_PATH<br>CPLUS_INCLUDE_PATH<br>C++语言头文件的附加搜索路径，相当于-I选项。<br>LIBRARY_PATH<br>链接库路径<br>LD_LIBRARY_PATH<br>加载库路径<br>#include “/…/…/xxx.h” - 移植性差<br>#include “xxx.h”<br>gcc -I/…/… … - 推荐<br>C_INCLUDE_PATH/CPATH=/…/…:/… - 易冲突</p>
+</li>
+<li><p>库<br>a.c -&gt; a.out<br>单一模型：将程序中所有功能全部实现于一个单一的源文件内部。编译时间长，不易于维护和升级，不易于协作开发。<br>分离模型：将程序中的不同功能模块划分到不同的源文件中。缩短编译时间，易于维护和升级，易于协作开发。<br>a.o <br>b.o   | -&gt; 库 + 其它模块 -&gt; …<br>c.o   |<br>…    /</p>
+</li>
+<li><p>静态库<br>静态库的本质就是将多个目标文件打包成一个文件。<br>链接静态库就是将库中被调用的代码复制到调用模块中。<br>使用静态库的程序通常会占用较大的空间，库中代码一旦修改，所有使用该库的程序必须重新链接。<br>使用静态库的程序在运行无需依赖库，其执行效率高。<br>静态库的形式：libxxx.a<br>构建静态库：<br>.c -&gt; .o -&gt; .a<br>ar -r libxxx.a x.o y.o z.o<br>使用静态库：<br>gcc … -lxxx -L&lt;库路径&gt;<br>export LIBRARY_PATH=&lt;库路径&gt;<br>gcc … -lxxx</p>
+</li>
+<li><p>动态(共享)库<br>动态库和静态库最大的不同就是，链接动态库并不需要将库中被调用的代码复制到调用模块中，相反被嵌入到调用模块中的仅仅是被调用代码在动态库中的相对地址。<br>如果动态库中的代码同时为多个进程所用，动态库的实例在整个内存空间中仅需一份，因此动态库也叫共享库或共享对象(Shared Object, so)。<br>使用动态库的模块所占空间较小，即使修改了库中的代码，只要接口保持不变，无需重新链接。<br>使用动态库的代码在运行时需要依赖库，执行效率略低。<br>动态库的形式：libxxx.so<br>构建动态库：<br>gcc -c -fpic xxx.c -&gt; xxx.o</p>
+<pre><code>           |</code></pre>
+<p>   生成位置无关码<br>库内部的函数调用也用相对地址表示<br>gcc -shared -o libxxx.so x.o y.o z.o<br>使用动态库：<br>gcc … -lxxx -L&lt;库路径&gt;<br>export LIBRARY_PATH=&lt;库路径&gt;<br>gcc … -lxxx<br>运行时所调用的动态库必须位于LD_LIBRARY_PATH环境变量所表示的路径中。<br>gcc缺省链接共享库，可通过-static选项强制链接静态库。</p>
+</li>
+<li><p>动态加载动态库<br>#include &lt;dlfcn.h&gt; \ 系统提供的针对动态<br>-ldl                             / 库的动态加载函数集<br>void* dlopen(const char* filename, int flag);</p>
+<p>成功返回动态库的句柄，失败返回NULL。</p>
+<p>FILE* fp = fopen(…);<br>fread(fp…);</p>
+<p>fwrite(fp…);</p>
+<p>filename - 动态库路径，若只给文件名，则根据LD_LIBRARY_PATH环境变量搜索动态库<br>flag - 加载方式，可取以下值：<br>RTLD_LAZY - 延迟加载，使用动态中的符号时才加载<br>RTLD_NOW - 立即加载<br>该函数所返回的动态库句柄唯一地标识了系统内核所维护的动态库对象，将作为后续函数调用的参数。<br>void* dlsym(void* handle, const char* symbol);<br>成功返回函数地址，失败返回NULL。<br>handle - 动态库句柄<br>symbol - 符号(函数或全局变量)名<br>该函数所返回的函数指针是void * 类型，需要强制类型转换为实际的函数指针类型才能调用。<br>int dlclose(void* handle);<br>成功返回0，失败返回非零。<br>handle - 动态库句柄<br>char* dlerror(void);<br>之前若有错误发生则返回错误信息字符串，否则返回NULL。</p>
+</li>
+<li><p>辅助工具<br>1.查看符号表：nm<br>列出目标文件(.o)、可执行文件、静态库文件(.a)或动态库文件(.so)中的符号<br>代码：nm.c<br>2.显示二进制模块的反汇编信息：objdump -S<br>3.删除目标文件(.o)、可执行文件、静态库文件(.a)或动态库文件(.so)中的符号表和调试信息：strip<br>4.查看可执行程序文件或动态库文件所依赖的动态库文件：ldd</p>
+</li>
+<li><p>错误号和错误信息<br>1.通过函数的返回值表达错误<br>返回整数的函数：通过返回合法值域以外的值表示错误<br>int age(char const* name) {</p>
+<pre><code>...
+return 1000;</code></pre>
+<p>}<br>返回指针的函数：通过返回NULL指针表示错误<br>不需要通过返回值输出信息的函数：返回0表示成功，返回-1表示失败。<br>int delete(char const* filename) {</p>
+<pre><code>...
+return 0;
+...
+return -1;</code></pre>
+<p>}</p>
+</li>
+<li><p>通过错误号和错误信息表示产生错误的具体原因<br>#include &lt;errno.h&gt;<br>全局变量：errno，整数，标识最近一次系统调用的错误<br>#include &lt;string.h&gt;<br>char* strerror(int errnum); // 根据错误号返回错误信息<br>#include &lt;stdio.h&gt;<br>void perror(const char* s); // 打印最近错误的错误信息<br>printf函数的%m标记被替换为最近错误的错误信息<br>代码：errno.c<br>虽然所有的错误号都不是0，但是因为在函数执行成功的情况下错误号全局变量errno不会被清0，因此不能用errno是否为0作为函数成功失败的判断条件，是否出错还是应该根据函数的返回值来决定。<br>返回值 = 函数调用(…);<br>if (返回值表示函数调用失败) {</p>
+<pre><code>根据errno判断发生了什么错误
+针对不同的错误提供不同的处理</code></pre>
+<p>}</p>
+</li>
+<li><p>环境变量<br>每个进程都有一张独立的环境变量表，其中的每个条目都是一个形如“键=值”形式的环境变量。<br>env<br>全局变量：environ，需要自己在代码做外部声明。<br>environ-&gt;|    *    |-&gt;AAA=aaa\0</p>
+<pre><code>              |    *    |-&gt;BBB=bbb\0
+              |    *    |-&gt;CCC=ccc\0
+              |NULL|</code></pre>
+<p>所谓环境变量表就是一个以NULL指针结束的字符指针数组，其中的每个元素都是一个字符指针，指向一个以空字符结尾的字符串，该字符串就是形如”键=值”形式的环境变量。<br>argv-&gt; *      *      *     NULL</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>​          a.out  -c    b.c</td>
+<td></td>
+</tr>
+<tr>
+<td>根据环境变量名获取其值</td>
+<td></td>
+</tr>
+<tr>
+<td>char* getenv(char const* name);</td>
+<td></td>
+</tr>
+<tr>
+<td>成功返回变量名匹配的变量值，失败返回NULL。</td>
+<td></td>
+</tr>
+<tr>
+<td>name - 环境变量名，即等号左边的部分</td>
+<td></td>
+</tr>
+<tr>
+<td>添加或修改环境变量</td>
+<td></td>
+</tr>
+<tr>
+<td>int putenv(char* string);</td>
+<td></td>
+</tr>
+<tr>
+<td>成功返回0，失败返回-1。</td>
+<td></td>
+</tr>
+<tr>
+<td>string - 形如“键=值”形式的环境变量字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>若其键已存在，则修改其中，若其键不存在，则添加新变量</td>
+<td></td>
+</tr>
+<tr>
+<td>添加或修改环境变量</td>
+<td></td>
+</tr>
+<tr>
+<td>int setenv(const char* name, const char* value,</td>
+<td></td>
+</tr>
+<tr>
+<td>​    int overwrite);</td>
+<td></td>
+</tr>
+<tr>
+<td>成功返回0，失败返回-1。</td>
+<td></td>
+</tr>
+<tr>
+<td>name - 环境变量名，即等号左边的部分</td>
+<td></td>
+</tr>
+<tr>
+<td>value - 环境变量值，即等号右边的部分</td>
+<td></td>
+</tr>
+<tr>
+<td>overwrite - 当name参数所表示的环境变量名已存在，此参数取0则保持该变量的原值不变，若此参数取非0，则将该变量的值修改为value。</td>
+<td></td>
+</tr>
+<tr>
+<td>删除环境变量</td>
+<td></td>
+</tr>
+<tr>
+<td>int unsetenv(const char* name);</td>
+<td></td>
+</tr>
+<tr>
+<td>成功返回0，失败返回-1。</td>
+<td></td>
+</tr>
+<tr>
+<td>name - 环境变量名，即等号左边的部分</td>
+<td></td>
+</tr>
+<tr>
+<td>清空环境变量</td>
+<td></td>
+</tr>
+<tr>
+<td>int clearenv(void);</td>
+<td></td>
+</tr>
+<tr>
+<td>成功返回0，失败返回-1。</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>内存<br>1.虚拟内存、物理内存、半导体内存和换页文件<br>虚拟内存：地址空间，虚拟的存储区域，应用程序所访问的都是虚拟内存。<br>物理内存：存储空间，实际的存储区域，只有系统内核可以访问物理内存。<br>虚拟内存和物理内存之间存在对应关系，当应用程序访问虚拟内存时，系统内核会依据这种对应关系找到与之相应的物理内存。上述对应关系存储在内核中的内存映射表中。<br>物理内存包括半导体内存和换页文件两部分。<br>当半导体内存不够用时，可以把一些长期闲置的代码和数据从半导体内存中缓存到换页文件中，这叫页面换出，一旦需要使用被换出的代码和数据，再把它们从换页文件恢复到半导体内存中，这叫页面换入。因此，系统中的虚拟内存比半导体内存大得多。</p>
+<ol start="2">
+<li>进程映射(Process Maps)<br>每个进程都拥有独立的4G字节的虚拟内存，分别被映射到不同的物理内存区域。<br>内存映射和换入换出都是以页为单位，1页=4096字节。<br>4G虚拟内存中高地址的1G被映射到内核的代码和数据区，这1个G在各个进程间共享。用户的应用程序只能直接访问低地址的3个G虚拟内存，因此该区域被称为用户空间，而高地址的1个G虚拟内存则被称为内核空间。用户空间中的代码只能直接访问用户空间的数据，如果要想访问内核空间中的代码和数据必须借助专门的系统调用完成。<br>用户空间的3G虚拟内存可以进一步被划分为如下区域：<pre><code>   ------------------
+      系统内核(1G)</code></pre>
+高地址——————<pre><code>        命令行参数
+        和环境变量
+   ------------------
+              栈区：非静态局部变量
+   -  -  -  -  -  -  -  -
+                v</code></pre>
+ 3G<pre><code>                ^
+   -  -  -  -  -  -  -  -
+             堆区：动态内存分配(malloc函数族)
+   -----------------
+           BSS区：无初值的全局和静态局部变量
+   -----------------
+           数据区：非const型有初值的全局和静态局部变量
+   -----------------
+        只读常量：字面值常量，const型有初值的全局
+                         和静态局部变量
+    代码区(正文段)：可执行指令</code></pre>
+低地址—————–</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p>参考资料：</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/05/07/note40-6-UnixC%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80/">https://www.chenzhan.club/2021/05/07/note40-6-UnixC%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/LinuxC/">LinuxC</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/05/30/note41-6-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E6%98%A0%E5%B0%84(%E6%9A%82%E7%A9%BA)/"><img class="prev-cover" src="/Chenzhan666.github.io/img/back.jpg" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note41.6-内存管理进程映射(暂空)</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/05/05/note39-5-platform%E8%AE%BE%E5%A4%87/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/16c02c734b6b26b511551c1d7a0754c26f0e8e78.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note39.5-platform设备</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/05/30/note41-6-内存管理进程映射(暂空)/" title="note41.6-内存管理进程映射(暂空)"><img class="cover" src="/Chenzhan666.github.io/img/back.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">note41.6-内存管理进程映射(暂空)</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note48-6-文件IO/" title="note48.6-文件IO"><img class="cover" src="https://i0.hdslb.com/bfs/article/1057a8324c02b7cc61fdc333bd5995b32b5f7425.jpg@942w_539h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note48.6-文件IO</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note49-6-深入探究文件I-O/" title="note49.6-深入探究文件I/O"><img class="cover" src="https://i0.hdslb.com/bfs/article/01fdecee75c10eced27b726569894167ff673b73.png@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note49.6-深入探究文件I/O</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note51-6-标准IO库/" title="note51.6-标准IO库"><img class="cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note51.6-标准IO库</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/16/note53-6-字符串处理/" title="note53.6-字符串处理"><img class="cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="title">note53.6-字符串处理</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note52-6-文件属性与目录/" title="note52.6-文件属性与目录"><img class="cover" src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note52.6-文件属性与目录</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">56</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note55.9-Qt_Designer"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer">note55.9-Qt_Designer</a><time datetime="2021-07-17T10:51:32.000Z" title="发表于 2021-07-17 18:51:32">2021-07-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源"><img src="https://i0.hdslb.com/bfs/archive/137d2059af52b87d6ae1a7212ea34bc53d06d8ab.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note54.6-系统信息与系统资源"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note54-6-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90/" title="note54.6-系统信息与系统资源">note54.6-系统信息与系统资源</a><time datetime="2021-07-16T07:19:24.000Z" title="发表于 2021-07-16 15:19:24">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理"><img src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note53.6-字符串处理"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/16/note53-6-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" title="note53.6-字符串处理">note53.6-字符串处理</a><time datetime="2021-07-16T06:11:11.000Z" title="发表于 2021-07-16 14:11:11">2021-07-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录"><img src="https://i0.hdslb.com/bfs/album/b10ec2eb9a92b9226e0c6ebea573167e64291cf7.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note52.6-文件属性与目录"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/15/note52-6-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E7%9B%AE%E5%BD%95/" title="note52.6-文件属性与目录">note52.6-文件属性与目录</a><time datetime="2021-07-15T07:49:19.000Z" title="发表于 2021-07-15 15:49:19">2021-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
