@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note60.6-进程 | CHENZHAN</title><meta name="keywords" content="LinuxC"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="进程与程序main()函数由谁调用？​    操作系统下的应用程序在运行 main()函数之前需要先执行一段引导代码，最终由这段引导代码去调用应用程序的 main()函数，在编写应用程序的时候，不用考虑引导代码的问题，在编译链接时，由链接器将引导代码链接到我们的应用程序当中，一起构成最终的可执行文件。 main()函数的原型是： 123int main(void)或int main(int a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note60.6-进程">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="进程与程序main()函数由谁调用？​    操作系统下的应用程序在运行 main()函数之前需要先执行一段引导代码，最终由这段引导代码去调用应用程序的 main()函数，在编写应用程序的时候，不用考虑引导代码的问题，在编译链接时，由链接器将引导代码链接到我们的应用程序当中，一起构成最终的可执行文件。 main()函数的原型是： 123int main(void)或int main(int a">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp">
+<meta property="article:published_time" content="2021-07-22T07:36:50.000Z">
+<meta property="article:modified_time" content="2021-07-23T07:54:14.392Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="LinuxC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-23 15:54:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note60.6-进程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-22T07:36:50.000Z" title="发表于 2021-07-22 15:36:50">2021-07-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-23T07:54:14.392Z" title="更新于 2021-07-23 15:54:14">2021-07-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note60.6-进程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<h1 id="进程与程序"><a href="#进程与程序" class="headerlink" title="进程与程序"></a><strong>进程与程序</strong></h1><h2 id="main-函数由谁调用？"><a href="#main-函数由谁调用？" class="headerlink" title="main()函数由谁调用？"></a><strong>main()函数由谁调用？</strong></h2><p>​    操作系统下的应用程序在运行 main()函数之前需要先执行一段引导代码，最终由这段引导代码去调用应用程序的 main()函数，在编写应用程序的时候，不用考虑引导代码的问题，在编译链接时，由链接器将引导代码链接到我们的应用程序当中，一起构成最终的可执行文件。</p>
+<p>main()函数的原型是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int main(void)</span><br><span class="line">或</span><br><span class="line">int main(int argc, char *argv[])</span><br></pre></td></tr></table></figure>
+<p>​    在 Linux 下输入可执行文件的相对路径或绝对路径就可以运行该程序，譬如./app或/home/dt/app，还可根据应用程序是否接受传参在执行命令时在后面添加传入的参数信息，譬如./app arg1 arg2 或/home/dt/app arg1 arg2。当执行程序时，加载器负责将此应用程序加载内存中去执行。</p>
+<h2 id="程序如何结束？"><a href="#程序如何结束？" class="headerlink" title="程序如何结束？"></a><strong>程序如何结束？</strong></h2><p>正常终止包括：</p>
+<ul>
+<li>main()函数中通过 return 语句返回来终止进程；</li>
+<li>应用程序中调用 exit()函数终止进程；</li>
+<li>应用程序中调用_exit()或_Exit()终止进程；</li>
+</ul>
+<p>异常终止包括：</p>
+<ul>
+<li>应用程序中调用 abort()函数终止进程；</li>
+<li>进程接收到一个信号，譬如 SIGKILL 信号。</li>
+</ul>
+<p><strong>注册进程终止处理函数 atexit()</strong></p>
+<p>​    atexit()库函数用于注册一个进程在<strong>正常终止</strong>时要调用的函数</p>
+<p>​    如果程序当中使用了_exit()或_Exit()终止进程而并非是 exit()函数，那么将不会执行注册的终止处理函数。</p>
+<h2 id="何为进程？"><a href="#何为进程？" class="headerlink" title="何为进程？"></a><strong>何为进程？</strong></h2><p>​    进程其实就是一个可执行程序的实例，可执行程序就是一个可执行文件，文件是一个静态的概念，存放磁盘中，如果可执行文件没有被运行，那它将不会产生什么作用，当它被运行之后，它将会对系统环境产生一定的影响，所以可执行程序的实例就是可执行文件被运行。</p>
+<p>​    进程是一个动态过程，而非静态文件，它是程序的一次运行过程，当应用程序被加载到内存中运行之后它就称为了一个进程，当程序运行结束后也就意味着进程终止，这就是进程的一个生命周期。</p>
+<h2 id="进程号"><a href="#进程号" class="headerlink" title="进程号"></a><strong>进程号</strong></h2><p>​    Linux 系统下的每一个进程都有一个进程号（processID，简称 PID），进程号是一个正数，用于唯一标识系统中的某一个进程。在 Ubuntu 系统下执行 ps 命令可以查到系统中进程相关的一些信息，包括每个进程的进程号</p>
+<p>​    进程号的作用就是用于唯一标识系统中某一个进程，在某些系统调用中，进程号可以作为传入参数、有时也可作为返回值。譬如系统调用 kill()允许调用者向某一个进程发送一个信号，如何表示这个进程呢？则是通过进程号进行标识。</p>
+<p>​    在应用程序中，可通过系统调用 getpid()来获取本进程的进程号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">pid_t getpid(void);		&#x2F;&#x2F;函数返回值为 pid_t 类型变量，便是对应的进程号。</span><br></pre></td></tr></table></figure>
+<p>​    可以使用 getppid()系统调用获取父进程的进程号</p>
+<h1 id="进程的环境变量"><a href="#进程的环境变量" class="headerlink" title="进程的环境变量"></a><strong>进程的环境变量</strong></h1><p>​    每一个进程都有一组与其相关的环境变量，这些环境变量以字符串形式存储在一个字符串数组列表中，把这个数组称为环境列表。其中每个字符串都是以“名称=值（name=value）”形式定义，所以环境变量是“名称-值”的成对集合，譬如在 shell 终端下可以使用 <strong>env 命令</strong>查看到 shell 进程的所有环境变量</p>
+<p>​    使用 export 命令还可以添加一个新的环境变量或删除一个环境变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LINUX_APP&#x3D;123456 # 添加 LINUX_APP 环境变量</span><br></pre></td></tr></table></figure>
+<p>​    使用”export -n LINUX_APP”命令则可以删除 LINUX_APP 环境变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export -n LINUX_APP # 删除 LINUX_APP 环境变量</span><br></pre></td></tr></table></figure>
+<h2 id="应用程序中获取环境变量"><a href="#应用程序中获取环境变量" class="headerlink" title="应用程序中获取环境变量"></a><strong>应用程序中获取环境变量</strong></h2><p>​    进程的环境变量是从其父进程中继承过来的，譬如在 shell 终端下执行一个应用程序，那么该进程的环境变量就是从其父进程（shell 进程）中继承过来的。新的进程在创建之前，会继承其父进程的环境变量副本。</p>
+<p>​    环境变量存放在一个字符串数组中，在应用程序中，通过 environ 变量指向它，environ 是一个全局变量，在我们的应用程序中只需申明它即可使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extern char **environ; &#x2F;&#x2F; 申明外部全局变量 environ</span><br></pre></td></tr></table></figure>
+<p><strong>获取指定环境变量</strong> <strong>getenv()</strong></p>
+<p>​    如果只想要获取某个指定的环境变量，可以使用库函数 getenv()</p>
+<p>​    使用 getenv()需要注意，不应该去修改其返回的字符串，修改该字符串意味着修改了环境变量对应的值，Linux 提供了相应的修改函数，如果需要修改环境变量的值应该使用这些函数，不应直接改动该字符串。</p>
+<h2 id="添加-删除-修改环境变量"><a href="#添加-删除-修改环境变量" class="headerlink" title="添加/删除/修改环境变量"></a><strong>添加/删除/修改环境变量</strong></h2><p>​    C 语言函数库中提供了用于修改、添加、删除环境变量的函数，譬如 putenv()、setenv()、unsetenv()、clearenv()函数等。</p>
+<p><strong>putenv()函数</strong></p>
+<p>​    putenv()函数可向进程的环境变量数组中添加一个新的环境变量，或者修改一个已经存在的环境变量对应的值</p>
+<p>​    该函数调用成功之后，参数 string 所指向的字符串就成为了进程环境变量的一部分了，换言之，putenv()函数将设定 environ 变量（字符串数组）中的某个元素（字符串指针）指向该 string 字符串，而不是指向它的复制副本，这里需要注意！因此，不能随意修改参数 string 所指向的内容，这将影响进程的环境变量，出于这种原因，参数 string 不应为自动变量（即在栈中分配的字符数组），因为定义吃变量。</p>
+<p><strong>setenv()函数</strong></p>
+<p>​    setenv()函数可以替代 putenv()函数，用于向进程的环境变量列表中添加一个新的环境变量或修改现有环境变量对应的值</p>
+<p>​    setenv()函数为形如 name=value 的字符串分配一块内存缓冲区，并将参数 name 和参数 value 所指向的字符串复制到此缓冲区中，以此来创建一个新的环境变量，所以，由此可知，setenv()与 putenv()函数有两个区别：</p>
+<ul>
+<li>putenv()函数并不会为 name=value 字符串分配内存；</li>
+<li>setenv()可通过参数overwrite控制是否需要修改现有变量的值而仅以添加变量为目的，显然putenv()并不能进行控制。</li>
+</ul>
+<p>​    推荐使用 setenv()函数，这样使用自动变量作为 setenv()的参数也不会有问题。</p>
+<p>​    可以通过一种更简单地方式向进程环境变量表中添加环境变量，用法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NAME&#x3D;value .&#x2F;app</span><br></pre></td></tr></table></figure>
+<p>​    在执行程序的时候，在其路径前面添加环境变量，以 name=value 的形式添加，如果是多个环境变量，则在./app 前面放置多对 name=value 即可，以空格分隔。</p>
+<p><strong>unsetenv()函数</strong></p>
+<p>​    unsetenv()函数可以从环境变量表中移除参数 name 标识的环境变量</p>
+<h2 id="清空环境变量"><a href="#清空环境变量" class="headerlink" title="清空环境变量"></a><strong>清空环境变量</strong></h2><p>​    需要清除环境变量表中的所有变量，然后再进行重建，可以通过将全局变量 environ 赋值为 NULL来清空所有变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">environ &#x3D; NULL;</span><br></pre></td></tr></table></figure>
+<p>​    也可通过 clearenv()函数来操作</p>
+<p>​    clearenv()函数内部的做法其实就是将environ赋值为NULL。在某些情况下，使用setenv()函数和clearenv()函数可能会导致程序内存泄漏，前面提到过，setenv()函数会为环境变量分配一块内存缓冲区，随之称为进程的一部分；而调用 clearenv()函数时没有释放该缓冲区（clearenv()调用并不知晓该缓冲区的存在，故而也无法将其释放），反复调用者两个函数的程序，会不断产生内存泄漏。</p>
+<h2 id="环境变量的作用"><a href="#环境变量的作用" class="headerlink" title="环境变量的作用"></a><strong>环境变量的作用</strong></h2><p>​    环境变量常见的用途之一是在 shell 中，每一个环境变量都有它所表示的含义，譬如 HOME 环境变量表示用户的家目录，USER 环境变量表示当前用户名，SHELL 环境变量表示 shell 解析器名称，PWD 环境变量表示当前所在目录等</p>
+<h1 id="进程的内存布局"><a href="#进程的内存布局" class="headerlink" title="进程的内存布局"></a><strong>进程的内存布局</strong></h1><p>C 语言程序由以下几部分组成的：</p>
+<ul>
+<li><strong>正文段</strong>。也可称为代码段(text)，这是 CPU 执行的机器语言指令部分，文本段具有只读属性，以防止程序由于意外而修改其指令；正文段是可以共享的，即使在多个进程间也可同时运行同一段程序。</li>
+<li><strong>初始化数据段</strong>。通常将此段称为数据段(data)，包含了显式初始化的全局变量和静态变量，当程序加载到内存中时，从可执行文件中读取这些变量的值。</li>
+<li><strong>未初始化数据段</strong>。包含了未进行显式初始化的全局变量和静态变量，通常将此段称为 bss 段，这一名词来源于早期汇编程序中的一个操作符，意思是“由符号开始的块”（block started by symbol），在程序开始执行之前，系统会将本段内所有内存初始化为 0，可执行文件并没有为 bss 段变量分配存储空间，在可执行文件中只需记录 bss 段的位置及其所需大小，直到程序运行时，由加载器来分配这一段内存空间。</li>
+<li><strong>栈</strong>。函数内的局部变量以及每次函数调用时所需保存的信息都放在此段中，每次调用函数时，函数传递的实参以及函数返回值等也都存放在栈中。栈是一个动态增长和收缩的段，由栈帧组成，系统会为每个当前调用的函数分配一个栈帧，栈帧中存储了函数的局部变量（所谓自动变量）、实参和返回值。</li>
+<li><strong>堆</strong>。可在运行时动态进行内存分配的一块区域，譬如使用 malloc()分配的内存空间，就是从系统堆内存中申请分配的。</li>
+</ul>
+<p>​    Linux 下的 size 命令可以查看二进制可执行文件的文本段、数据段、bss 段的段大小</p>
+<p>​    虚拟地址递增方向由低地址到高地址，分别存放文本段（程序代码段）、初始化数据段，这两都是从可执行文件中读入的；接下来是为初始化数据段（bss），这里加载器初始为0；然后是堆区，堆区是向上增长的，既从低地址向高地址增长；接下来是栈，栈从栈顶向下增长，既从高地址向低地址增长；最后就是放在最高地址的命令行参数和环境变量。</p>
+<h1 id="进程的虚拟地址空间"><a href="#进程的虚拟地址空间" class="headerlink" title="进程的虚拟地址空间"></a><strong>进程的虚拟地址空间</strong></h1><p>​    在 Linux 系统中，采用了虚拟内存管理技术，在 Linux 系统中，每一个进程都在自己独立的地址空间中运行，在 32 位系统中，每个进程的逻辑地址空间均为 4GB，这 4GB 的内存空间按照 3:1 的比例进行分配，其中用户进程享有 3G 的空间，而内核独自享有剩下的 1G 空间。</p>
+<p>Linux系统下逻辑地址空间划分：</p>
+<p>​    Kernel Space(1GB) 0xFFFFFFFF-0xC0000000</p>
+<p>​    User Mode Space(3GB) 0xC0000000-0x0</p>
+<p>​    虚拟地址会通过硬件 MMU（内存管理单元）映射到实际的物理地址空间中，建立虚拟地址到物理地址的映射关系后，对虚拟地址的读写操作实际上就是对物理地址的读写操作，MMU 会将虚拟地址“翻译”为对应的物理地址</p>
+<p>​    Linux 系统下，应用程序运行在一个虚拟地址空间中，所以程序中读写的内存地址对应也是虚拟地址，并不是真正的物理地址，譬如应用程序中读写 0x80800000 这个地址，实际上并不对应于硬件的 0x80800000这个物理地址。</p>
+<p>​    程序访问存储器所使用的逻辑地址就是虚拟地址，通过逻辑地址映射到真正的物理内存上。所有应用程序运行在自己的虚拟地址空间中，使得进程的虚拟地址空间和物理地址空间隔离开来，这样做带来了很多的优点：</p>
+<ul>
+<li>进程与进程、进程与内核相互隔离。一个进程不能读取或修改另一个进程或内核的内存数据，这是因为每一个进程的虚拟地址空间映射到了不同的物理地址空间。提高了系统的安全性与稳定性。</li>
+<li>在某些应用场合下，两个或者更多进程能够共享内存。因为每个进程都有自己的映射表，可以让不同进程的虚拟地址空间映射到相同的物理地址空间中。通常，共享内存可用于实现进程间通信。</li>
+<li>便于实现内存保护机制。譬如在多个进程共享内存时，允许每个进程对内存采取不同的保护措施，例如，一个进程可能以只读方式访问内存，而另一进程则能够以可读可写的方式访问。</li>
+<li>编译应用程序时，无需关心链接地址。前面提到了，当程序运行时，要求链接地址与运行地址一致，在引入了虚拟地址机制后，便无需关心这个问题。</li>
+</ul>
+<h1 id="fork-创建子进程"><a href="#fork-创建子进程" class="headerlink" title="fork()创建子进程"></a><strong>fork()创建子进程</strong></h1><p>​    一个现有的进程可以调用 fork()函数创建一个新的进程，调用 fork()函数的进程称为父进程，由 fork()函数创建出来的进程被称为子进程（child process），fork()函数原型如下所示（fork()为系统调用）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">pid_t fork(void);</span><br></pre></td></tr></table></figure>
+<p>​    在诸多的应用中，创建多个进程是任务分解时行之有效的方法，譬如，某一网络服务器进程可在监听客户端请求的同时，为处理每一个请求事件而创建一个新的子进程，与此同时，服务器进程会继续监听更多的客户端连接请求。在一个大型的应用程序任务中，创建子进程通常会简化应用程序的设计，同时提高了系统的并发性（即同时能够处理更多的任务或请求，多个进程在宏观上实现同时运行）。</p>
+<p>​    理解 fork()系统调用的关键在于，完成对其调用后将存在两个进程，一个是原进程（父进程）、另一个则是创建出来的子进程，并且每个进程都会从 fork()函数的返回处继续执行，会导致调用 fork()返回两次值，子进程返回一个值、父进程返回一个值。在程序代码中，可通过返回值来区分是子进程还是父进程。</p>
+<p>​    <strong>fork()调用成功后，将会在父进程中返回子进程的 PID，而在子进程中返回值是 0</strong>；如果调用失败，父进程返回值-1，不创建子进程，并设置 errno。 </p>
+<p>​    fork()调用成功后，子进程和父进程会继续执行 fork()调用之后的指令，子进程、父进程各自在自己的进程空间中运行。事实上，子进程是父进程的一个副本，譬如子进程拷贝了父进程的数据段、堆、栈以及继承了父进程打开的文件描述符，父进程与子进程并不共享这些存储空间，这是子进程对父进程相应部分存储空间的完全复制，执行 fork()之后，每个进程均可修改各自的栈数据以及堆段中的变量，而并不影响另一个进程。</p>
+<p>​    虽然子进程是父进程的一个副本，但是对于程序代码段（文本段）来说，两个进程执行相同的代码段，因为代码段是只读的，也就是说父子进程共享代码段，在内存中只存在一份代码段数据。</p>
+<p><strong>使用示例</strong> <strong>1</strong></p>
+<p>使用 fork()创建子进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int main(void) &#123;</span><br><span class="line"> pid_t pid;</span><br><span class="line"> pid &#x3D; fork();</span><br><span class="line"> switch (pid) &#123;</span><br><span class="line"> case -1:</span><br><span class="line"> perror(&quot;fork error&quot;);</span><br><span class="line"> exit(-1);</span><br><span class="line"> case 0:</span><br><span class="line"> printf(&quot;这是子进程打印信息&lt;pid: %d, 父进程 pid: %d&gt;\n&quot;,</span><br><span class="line"> getpid(), getppid());</span><br><span class="line"> _exit(0); &#x2F;&#x2F;子进程使用_exit()退出</span><br><span class="line"> default:</span><br><span class="line"> printf(&quot;这是父进程打印信息&lt;pid: %d, 子进程 pid: %d&gt;\n&quot;,</span><br><span class="line"> getpid(), pid);</span><br><span class="line"> exit(0);</span><br><span class="line"> &#125; &#125;</span><br></pre></td></tr></table></figure>
+<p>​    由上文可知“fork()调用成功后，将会在父进程中返回子进程的 PID，而在子进程中返回值是 0”，然后子进程和父进程运行的是同一段text（代码段），所以 会有两个返回值，这可以用程序中的两种case区分出来。</p>
+<p>​    上述示例代码中，case 0 是子进程的分支，这里使用了_exit()结束进程而没有使用 exit()。</p>
+<p>​    Tips：C 库函数 exit()建立在系统调用_exit()之上，这里我们强调，在调用了 fork()之后，父、子进程中一般只有一个会通过调用 exit()退出进程，而另一个则应使用_exit()退出！</p>
+<p>​    从打印结果可知，fork()之后的语句被执行了两次，所以 switch…case 语句被执行了两次，第一次进入到了”case 0”分支，通过上面的介绍可知，fork()返回值为 0 表示当前处于子进程；在子进程中我们通过 getpid()获取到子进程自己的 PID（46802），通过 getppid()获取到父进程的 PID（46803），将其打印出来。</p>
+<p>​    第二次进入到了 default 分支，表示当前处于父进程，此时 fork()函数的返回值便是创建出来的子进程对应的 PID。 </p>
+<p>​    fork()函数调用完成之后，父进程、子进程会各自继续执行 fork()之后的指令，最终父进程会执行到 exit()结束进程，而子进程则会通过_exit()结束进程。</p>
+<p><strong>关于子进程</strong></p>
+<p>​    子进程被创建出来之后，便是一个独立的进程，拥有自己独立的进程空间，系统内唯一的进程号，拥有自己独立的 PCB（进程控制块），子进程会被内核同等调度执行，参与到系统的进程调度中。</p>
+<p>​    子进程与父进程之间的这种关系被称为父子进程关系</p>
+<p>Tips：系统调度。Linux 系统是一个多任务、多进程、多线程的操作系统，一般来说系统启动之后会运行成百甚至上千个不同的进程，那么对于单核 CPU 计算机来说，在某一个时间它只能运行某一个进程的代码指令，那其它进程怎么办呢（多核处理器也是如此，同一时间每个核它只能运行某一个进程的代码）？这里就出现了调度的问题，系统是这样做的，每一个进程（或线程）执行一段固定的时间，时间到了之后切换执行下一个进程或线程，依次轮流执行，这就称为调度，由操作系统负责这件事情，当然系统调度的实现本身是一件非常复杂的事情，需要考虑的因素很多，这里只是让大家有个简单地认识，系统调度的基本单元是线程。</p>
+<h1 id="父、子进程间的文件共享"><a href="#父、子进程间的文件共享" class="headerlink" title="父、子进程间的文件共享"></a><strong>父、子进程间的文件共享</strong></h1><p>​    调用 fork()函数之后，子进程会获得父进程所有文件描述符的副本，这些副本的创建方式类似于 dup()，这也意味着父、子进程对应的文件描述符均指向相同的文件表</p>
+<p>​    比如父进程PCB的文件描述表有fd0、fd1、fd2，其中fd0指向文件表1，文件表1包含文件状态标志、当前文件偏移量和i-node指针，i-node指针又指向inode（），子进程PCB的文件描述表也有fd0、fd1、fd2，其中fd0也指向文件表1，另外父进程和子进程的fd1都指向文件表2，fd2都指向文件表3。</p>
+<p>​    可知，子进程拷贝了父进程的文件描述符表，使得父、子进程中对应的文件描述符指向了相同的文件表，也意味着父、子进程中对应的文件描述符指向了磁盘中相同的文件，因而这些文件在父、子进程间实现了共享，譬如，如果子进程更新了文件偏移量，那么这个改变也会影响到父进程中相应文件描述符的位置偏移量。</p>
+<p>​    父进程打开文件之后，然后 fork()创建子进程，此时子进程继承了父进程打开的文件描述符（父进程文件描述符的副本），然后父、子进程同时对文件进行写入操作父、子进程分别对同一个文件进行写入操作，结果是接续写，不管是父进程，还是子进程，在每次写入时都是从文件的末尾写入，很像使用了 O_APPEND 标志的效果。子进程继承了父进程的文件描述符，两个文件描述符都指向了一个相同的文件表，意味着它们的文件偏移量是同一个、绑定在了一起，相互影响，子进程改变了文件的位置偏移量就会作用到父进程，同理，父进程改变了文件的位置偏移量就会作用到子进程。</p>
+<p>​    父进程在调用 fork()之后，此时父进程和子进程都去打开同一个文件，然后再对文件进行写入操作，这种文件共享方式实现的是一种两个进程分别各自对文件进行写入操作，因为父、子进程的这两个文件描述符分别指向的是不同的文件表，意味着它们有各自的文件偏移量，一个进程修改了文件偏移量并不会影响另一个进程的文件偏移量，所以写入的数据会出现覆盖的情况。</p>
+<p><strong>fork()函数使用场景</strong></p>
+<p>fork()函数有以下两种用法：</p>
+<ul>
+<li>父进程希望子进程复制自己，使父进程和子进程同时执行不同的代码段。这在网络服务进程中是常见的，父进程等待客户端的服务请求，当接收到客户端发送的请求事件后，调用 fork()创建一个子进程，使子进程去处理此请求、而父进程可以继续等待下一个服务请求。</li>
+<li>一个进程要执行不同的程序。譬如在程序 app1 中调用 fork()函数创建了子进程，此时子进程是要去执行另一个程序 app2，也就是子进程需要执行的代码是 app2 程序对应的代码，子进程将从 app2程序的 main 函数开始运行。这种情况，通常在子进程从 fork()函数返回之后立即调用 exec 族函数来实现。</li>
+</ul>
+<h1 id="系统调用-vfork"><a href="#系统调用-vfork" class="headerlink" title="系统调用 vfork()"></a><strong>系统调用</strong> <strong>vfork()</strong></h1><p>​    除了 fork()系统调用之外，Linux 系统还提供了 vfork()系统调用用于创建子进程，vfork()与 fork()函数在功能上是相同的，并且返回值也相同，在一些细节上存在区别</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">pid_t vfork(void);</span><br></pre></td></tr></table></figure>
+<p>​    可以将 fork()认作对父进程的数据段、堆段、栈段以及其它一些数据结构创建拷贝，由此可以看出，使用 fork()系统调用的代价是很大的，它复制了父进程中的数据段和堆栈段中的绝大部分内容，这将会消耗比较多的时间，效率会有所降低，而且太浪费，原因有很多，其中之一在于，fork()函数之后子进程通常会调用 exec 函数，也就是 fork()第二种使用场景下，这使得子进程不再执行父程序中的代码段，而是执行新程序的代码段，从新程序的 main 函数开始执行、并为新程序重新初始化其数据段、堆段、栈段等；那么在这种情况下，子进程并不需要用到父进程的数据段、堆段、栈段（譬如父程序中定义的局部变量、全局变量等）中的数据，此时就会导致浪费时间、效率降低。</p>
+<p>​    事实上，现代 Linux 系统采用了一些技术来避免这种浪费，其中很重要的一点就是内核采用了写时复制（<strong>copy-on-write</strong>）技术</p>
+<p>​    出于这一原因，引入了 vfork()系统调用，虽然在一些细节上有所不同，但其效率要高于 fork()函数。类似于 fork()，vfork()可以为调用该函数的进程创建一个新的子进程，然而，vfork()是为子进程立即执行 exec()新的程序而专门设计的，也就是 fork()函数的第二个使用场景。</p>
+<p>​    vfork()与 fork()函数主要有以下两个区别：</p>
+<ul>
+<li>vfork()与 fork()一样都创建了子进程，但 vfork()函数并不会将父进程的地址空间完全复制到子进程中，因为子进程会立即调用 exec（或_ exit），于是也就不会引用该地址空间的数据。不过在子进程 调用 exec 或_ exit 之前，它在父进程的空间中运行、子进程共享父进程的内存。这种优化工作方式的实现提高的效率；但如果子进程修改了父进程的数据（除了 vfork 返回值的变量）、进行了函数调用、或者没有调用 exec 或_exit 就返回将可能带来未知的结果。</li>
+<li>另一个区别在于，vfork()保证子进程先运行，子进程调用 exec 之后父进程才可能被调度运行。</li>
+</ul>
+<p>​    虽然 vfork()系统调用在效率上要优于 fork()，但是 vfork()可能会导致一些难以察觉的程序 bug，所以尽量避免使用 vfork()来创建子进程，虽然 fork()在效率上并没有 vfork()高，但是现代的 Linux 系统内核已经采用了写时复制技术来实现 fork()，其效率较之于早期的 fork()实现要高出许多，除非速度绝对重要的场合，我们的程序当中应舍弃 vfork()而使用 fork()。</p>
+<p>​    在正式的使用场合下，一般应在子进程中立即调用 exec，如果 exec 调用失败，子进程则应调用_exit()退出（vfork 产生的子进程不应调用 exit 退出，因为这会导致对父进程 stdio 缓冲区的刷新和关闭）。</p>
+<h1 id="fork-之后的竞争条件"><a href="#fork-之后的竞争条件" class="headerlink" title="fork()之后的竞争条件"></a><strong>fork()之后的竞争条件</strong></h1><p>​    调用 fork()之后，子进程成为了一个独立的进程，可被系统调度运行，而父进程也继续被系统调度运行，这里出现了一个问题，调用 fork 之后，无法确定父、子两个进程谁将率先访问 CPU，也就是说无法确认谁先被系统调用运行（在多核处理器中，它们可能会同时各自访问一个 CPU），这将导致谁先运行、谁后运行这个顺序是不确定的</p>
+<p>​    那如何明确保证某一特性执行顺序呢？这个时候可以通过采用采用某种同步技术来实现，譬如前面给大家介绍的信号，如果要让子进程先运行，则可使父进程被阻塞，等到子进程来唤醒它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">示例代码 利用信号来调整进程间动作</span><br><span class="line"></span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line"></span><br><span class="line">static void sig_handler(int sig) </span><br><span class="line">&#123;</span><br><span class="line">	printf(&quot;接收到信号\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(void) </span><br><span class="line">&#123;</span><br><span class="line"> 	struct sigaction sig &#x3D; &#123;0&#125;;</span><br><span class="line"> 	sigset_t wait_mask;</span><br><span class="line">	 </span><br><span class="line">	&#x2F;* 初始化信号集 *&#x2F;</span><br><span class="line"> 	sigemptyset(&amp;wait_mask);</span><br><span class="line"> </span><br><span class="line"> 	&#x2F;* 设置信号处理方式 *&#x2F;</span><br><span class="line"> 	sig.sa_handler &#x3D; sig_handler;</span><br><span class="line"> 	sig.sa_flags &#x3D; 0;</span><br><span class="line"> 	if (-1 &#x3D;&#x3D; sigaction(SIGUSR1, &amp;sig, NULL)) &#123;</span><br><span class="line"> 		perror(&quot;sigaction error&quot;);</span><br><span class="line"> 		exit(-1);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> switch (fork()) &#123;</span><br><span class="line"> case -1:</span><br><span class="line"> 	perror(&quot;fork error&quot;);</span><br><span class="line"> 	exit(-1);</span><br><span class="line"> </span><br><span class="line"> case 0:</span><br><span class="line"> 	&#x2F;* 子进程 *&#x2F;</span><br><span class="line"> 	printf(&quot;子进程开始执行\n&quot;);</span><br><span class="line"> 	printf(&quot;子进程打印信息\n&quot;);</span><br><span class="line"> 	printf(&quot;~~~~~~~~~~~~~~~\n&quot;);</span><br><span class="line"> 	sleep(2);</span><br><span class="line"> 	kill(getppid(), SIGUSR1); &#x2F;&#x2F;发送信号给父进程、唤醒它</span><br><span class="line"> 	_exit(0);</span><br><span class="line"> </span><br><span class="line"> default:</span><br><span class="line"> 	&#x2F;* 父进程 *&#x2F;</span><br><span class="line"> 	if (-1 !&#x3D; sigsuspend(&amp;wait_mask))&#x2F;&#x2F;挂起、阻塞</span><br><span class="line"> 	exit(-1);</span><br><span class="line"> </span><br><span class="line"> 	printf(&quot;父进程开始执行\n&quot;);</span><br><span class="line"> 	printf(&quot;父进程打印信息\n&quot;);</span><br><span class="line"> 	exit(0);</span><br><span class="line"> 	&#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>​    这里我们希望子进程先运行打印相应信息，之后再执行父进程打印信息，在父进程分支中，直接调用了 sigsuspend()使父进程进入挂起状态，由子进程通过 kill 命令发送信号唤醒</p>
+<h1 id="进程的诞生与终止"><a href="#进程的诞生与终止" class="headerlink" title="进程的诞生与终止"></a><strong>进程的诞生与终止</strong></h1><h2 id="进程的诞生"><a href="#进程的诞生" class="headerlink" title="进程的诞生"></a><strong>进程的诞生</strong></h2><p>​    一个进程可以通过 fork()或 vfork()等系统调用创建一个子进程，一个新的进程就此诞生！事实上，Linux系统下的所有进程都是由其父进程创建而来，譬如在 shell 终端通过命令的方式执行一个程序./app，那么 app进程就是由 shell 终端进程创建出来的，shell 终端就是该进程的父进程。</p>
+<p>​    在 Ubuntu 系统下使用”ps -aux”命令可以查看到系统下所有进程信息</p>
+<p>​    图中进程号为 1 的进程便是所有进程的父进程，通常称为 init 进程，它是 Linux 系统启动之后运行的第一个进程，它管理着系统上所有其它进程，init 进程是由内核启动，因此理论上说它没有父进程。</p>
+<p>​    init 进程的 PID 总是为 1，它是所有子进程的父进程，一切从 1 开始、一切从 init 进程开始！</p>
+<p>​    <u>一个进程的生命周期便是从创建开始直至其终止。</u></p>
+<h2 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止"></a><strong>进程的终止</strong></h2><p>​    _exit()函数和 exit()函数的 status 参数定义了进程的终止状态（termination status），父进程可以调用 wait()函数以获取该状态。虽然参数 status 定义为 int 类型，但仅有低 8 位表示它的终止状态，一般来说，终止状态为 0 表示进程成功终止，而非 0 值则表示进程在执行过程中出现了一些错误而终止，譬如文件打开失败、读写失败等等，对非 0 返回值的解析并无定例。</p>
+<p>​    在我们的程序当中，一般使用 exit()库函数而非_ exit()系统调用，原因在于 exit()最终也会通过_exit()终止进程，但在此之前，它将会完成一些其它的工作，exit()函数会执行的动作如下：</p>
+<ul>
+<li>如果程序中注册了进程终止处理函数，那么会调用终止处理函数。</li>
+<li>刷新 stdio 流缓冲区。</li>
+<li>执行_exit()系统调用。</li>
+</ul>
+<p>​    exit()函数会比_exit()会多做一些事情，包括执行终止处理函数、刷新 stdio 流缓冲以及调用<em>exit()，在前面曾提到过，在我们的程序当中，父、子进程不应都使用 exit()终止，只能有一个进程使用 exit()、而另一个则使用</em> exit()退出，当然一般推荐的是<strong>子进程使用_exit()退出、而父进程则使用 exit()退出</strong>。其原因就在于调用 exit()函数终止进程时会刷新进程的 stdio 缓冲区。</p>
+<p>​    进程的用户空间内存中维护了 stdio 缓冲区，通过 fork()创建子进程时会复制这些缓冲区，标准输出设备默认使用的是行缓冲，当检测到换行符\n 时会立即显示函数 printf()输出的字符串，读走缓冲区中的数据并显示，读走之后此时缓冲区就空了。</p>
+<ul>
+<li>对于行缓冲设备，可以加上对应换行符，譬如 printf 打印输出字符串时在字符串后面添加\n 换行符，对于 puts()函数来说，本身会自动添加换行符；</li>
+<li>在调用 fork()之前，使用函数 fflush()来刷新 stdio 缓冲区，当然，作为另一种选择，也可以使用setvbuf()和 setbuf()来关闭 stdio 流的缓冲功能；</li>
+<li>子进程调用_ exit()退出进程、而非使用 exit()，调用_exit()在退出时便不会刷新 stdio 缓冲区。</li>
+</ul>
+<h1 id="监视子进程"><a href="#监视子进程" class="headerlink" title="监视子进程"></a><strong>监视子进程</strong></h1><p>​    在很多应用程序的设计中，父进程需要知道子进程于何时被终止，并且需要知道子进程的终止状态信 息，是正常终止、还是异常终止亦或者被信号终止等，意味着父进程会对子进程进行监视。</p>
+<h2 id="wait-函数"><a href="#wait-函数" class="headerlink" title="wait()函数"></a><strong>wait()函数</strong></h2><p>​    对于许多需要创建子进程的进程来说，有时设计需要监视子进程的终止时间以及终止时的一些状态信 息，在某些设计需求下这是很有必要的。系统调用 wait()可以等待进程的任一子进程终止，同时获取子进程的终止状态信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line">#include &lt;sys&#x2F;wait.h&gt;</span><br><span class="line">pid_t wait(int *status);</span><br></pre></td></tr></table></figure>
+<p>​    <strong>status</strong>：参数 status 用于存放子进程终止时的状态信息，参数 status 可以为 NULL，表示不接收子进程终止时的状态信息。<strong>返回值：</strong>若成功则返回终止的子进程对应的进程号；失败则返回-1。</p>
+<p>​    系统调用 wait()将执行如下动作：</p>
+<ul>
+<li>调用 wait()函数，如果其所有子进程都还在运行，则 wait()会一直阻塞等待，直到某一个子进程终止；</li>
+<li>如果进程调用 wait()，但是该进程并没有子进程，也就意味着该进程并没有需要等待的子进程，那 么 wait()将返回错误，也就是返回-1、并且会将 errno 设置为 ECHILD。</li>
+<li>如果进程调用 wait()之前，它的子进程当中已经有一个或多个子进程已经终止了，那么调用 wait()也不会阻塞。wait()函数的作用除了获取子进程的终止状态信息之外，更重要的一点，就是回收子进程的一些资源，俗称为子进程“收尸”，所以在调用 wait()函数之前，已经有子进程终止了，意味着正等待着父进程为其“收尸”，所以调用 wait()将不会阻塞，而是会立即替该子进程“收尸”、处理它的“后事”，然后返回到正常的程序流程中，一次 wait()调用只能处理一次。</li>
+</ul>
+<p>​    参数 status 不为 NULL 的情况下，则 wait()会将子进程的终止时的状态信息存储在它指向的 int 变量中，可以通过以下宏来检查 status 参数：</p>
+<ul>
+<li><strong>WIFEXITED(status)：</strong>如果子进程正常终止，则返回 true； </li>
+<li><strong>WEXITSTATUS(status)：</strong>返回子进程退出状态，是一个数值，其实就是子进程调用_ exit()或 exit()时指定的退出状态；wait()获取得到的 status 参数并不是调用_ exit()或 exit()时指定的状态，可通过WEXITSTATUS 宏转换；</li>
+<li><strong>WIFSIGNALED(status)：</strong>如果子进程被信号终止，则返回 true； </li>
+<li><strong>WTERMSIG(status)：</strong>返回导致子进程终止的信号编号。如果子进程是被信号所终止，则可以通过此宏获取终止子进程的信号；</li>
+<li><strong>WCOREDUMP(status)：</strong>如果子进程终止时产生了核心转储文件，则返回 true；</li>
+</ul>
+<p>​    还有一些其它的宏定义，具体的请查看 man 手册。</p>
+<h2 id="waitpid-函数"><a href="#waitpid-函数" class="headerlink" title="waitpid()函数"></a><strong>waitpid()函数</strong></h2><p>​    使用 wait()系统调用存在着一些限制，这些限制包括如下：</p>
+<ul>
+<li>如果父进程创建了多个子进程，使用 wait()将无法等待某个特定的子进程的完成，只能按照顺序等待下一个子进程的终止，一个一个来、谁先终止就先处理谁； </li>
+<li>如果子进程没有终止，正在运行，那么 wait()总是保持阻塞，有时我们希望执行非阻塞等待，是否有子进程终止，通过判断即可得知；</li>
+<li>使用 wait()只能发现那些被终止的子进程，对于子进程因某个信号（譬如 SIGSTOP 信号）而停止（注意，这里停止指的暂停运行），或是已停止的子进程收到 SIGCONT 信号后恢复执行的情况就无能为力了</li>
+</ul>
+<p>​    waitpid()则可以突破这些限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line">#include &lt;sys&#x2F;wait.h&gt;</span><br><span class="line">pid_t waitpid(pid_t pid, int *status, int options);</span><br></pre></td></tr></table></figure>
+<p>​    <strong>pid：</strong>参数 pid 用于表示需要等待的某个具体子进程，关于参数 pid 的取值范围如下：</p>
+<ul>
+<li>如果 pid 大于 0，表示等待进程号为 pid 的子进程；</li>
+<li>如果 pid 等于 0，则等待与调用进程（父进程）同一个进程组的所有子进程；</li>
+<li>如果 pid 小于-1，则会等待进程组标识符与 pid 绝对值相等的所有子进程；</li>
+<li>如果 pid 等于-1，则等待任意子进程。wait(&amp;status)与 waitpid(-1, &amp;status, 0)等价。</li>
+</ul>
+<p>​    <strong>status：</strong>与 wait()函数的 status 参数意义相同。</p>
+<p>​    参数 options 是一个位掩码，可以包括 0 个或多个如下标志：</p>
+<ul>
+<li><strong>WNOHANG：</strong>如果子进程没有发生状态改变（终止、暂停），则立即返回，也就是执行非阻塞等待，可以实现轮训 poll，通过返回值可以判断是否有子进程发生状态改变，若返回值等于 0 表示没有发生改变。</li>
+<li><strong>WUNTRACED：</strong>除了返回终止的子进程的状态信息外，还返回因信号而停止（暂停运行）的子进程状态信息；</li>
+<li><strong>WCONTINUED：</strong>返回那些因收到 SIGCONT 信号而恢复运行的子进程的状态信息。</li>
+</ul>
+<h2 id="waitid-函数"><a href="#waitid-函数" class="headerlink" title="waitid()函数"></a><strong>waitid()函数</strong></h2><h2 id="僵尸进程与孤儿进程"><a href="#僵尸进程与孤儿进程" class="headerlink" title="僵尸进程与孤儿进程"></a><strong>僵尸进程与孤儿进程</strong></h2><p>​    当一个进程创建子进程之后，它们俩就成为父子进程关系，父进程与子进程的生命周期往往是不相同的，这里就会出现两个问题：</p>
+<ul>
+<li>父进程先于子进程结束。</li>
+<li>子进程先于父进程结束。</li>
+</ul>
+<p><strong>孤儿进程</strong></p>
+<p>​    父进程先于子进程结束，也就是意味着，此时子进程变成了一个“孤儿”，我们把这种进程就称为孤儿进程。在 Linux 系统当中，所有的孤儿进程都自动成为 init 进程（进程号为 1）的子进程，换言之，某一子进程的父进程结束后，该子进程调用 getppid()将返回 1，init 进程变成了孤儿进程的“养父”；这是判定某一子进程的“生父”是否还“在世”的方法之一</p>
+<p>​    事实上，/sbin/upstart 进程与 Ubuntu 系统图形化界面有关系，是图形化界面下的一个后台守护进程，可负责“收养”孤儿进程，所以图形化界面下，upstart 进程就自动成为了孤儿进程的父进程</p>
+<p>​    进入 <strong>Ubuntu 字符界面</strong>，按 Ctrl + Alt + F1 进入，按 Ctrl + Alt + F7 回到 <strong>Ubuntu 图形化界面</strong>。</p>
+<p><strong>僵尸进程</strong></p>
+<p>​    进程结束之后，通常需要其父进程为其“收尸”，回收子进程占用的一些内存资源，父进程通过调用wait()（或其变体 waitpid()、waitid()等）函数回收子进程资源，归还给系统。</p>
+<p>​    如果子进程先于父进程结束，此时父进程还未来得及给子进程“收尸”，那么此时子进程就变成了一个僵尸进程。子进程结束后其父进程并没有来得及立马给它“收尸”，子进程处于“曝尸荒野”的状态，在这么一个状态下，我们就将子进程成为僵尸进程</p>
+<p>​    当父进程调用 wait()（或其变体）为子进程“收尸”后，僵尸进程就会被内核彻底删除。另外一种情况，如果父进程并没有调用 wait()函数然后就退出了，那么此时 init 进程将会接管它的子进程并自动调用 wait()，故而从系统中移除僵尸进程。</p>
+<p>​    如果父进程创建了某一子进程，子进程已经结束，而父进程还在正常运行，但父进程并未调用 wait()回收子进程，此时子进程变成一个僵尸进程。首先来说，这样的程序设计是有问题的，如果系统中存在大量的僵尸进程，它们势必会填满内核进程表，从而阻碍新进程的创建。需要注意的是，僵尸进程是无法通过信号将其杀死的，即使是“一击必杀”信号 SIGKILL 也无法将其杀死，那么这种情况下，只能杀死僵尸进程的父进程（或等待其父进程终止），这样 init 进程将会接管这些僵尸进程，从而将它们从系统中清理掉！所以，在我们的一个程序设计中，一定要监视子进程的状态变化，如果子进程终止了，要调用 wait()将其回收，避免僵尸进程。</p>
+<p>​    子进程已经退出，但其父进程并没调用 wait()为其“收尸”，使得子进程成为一个僵尸进程，使用命令”ps -aux”可以查看到该僵尸进程，可以看到它的状态栏显示的是“Z”（zombie，僵尸），表示它是一个僵尸进程。</p>
+<h2 id="SIGCHLD-信号"><a href="#SIGCHLD-信号" class="headerlink" title="SIGCHLD 信号"></a><strong>SIGCHLD</strong> <strong>信号</strong></h2><p>​    当发生以下两种情况时，父进程会收到该信号：</p>
+<ul>
+<li>当父进程的某个子进程终止时，父进程会收到 SIGCHLD 信号；</li>
+<li>当父进程的某个子进程因收到信号而停止（暂停运行）或恢复时，内核也可能向父进程发送该信号。</li>
+</ul>
+<p>​    子进程的终止属于异步事件，父进程事先是无法预知的，如果父进程有自己需要做的事情，它不能一直wait()阻塞等待子进程终止（或轮训），这样父进程将啥事也做不了，那么有什么办法来解决这样的尴尬情况，当然有办法，那就是通过 SIGCHLD 信号。</p>
+<p>​    那既然子进程状态改变时（终止、暂停或恢复），父进程会收到 SIGCHLD 信号，SIGCHLD 信号的系统默认处理方式是将其忽略，所以我们要捕获它、绑定信号处理函数，在信号处理函数中调用 wait()收回子进程，回收完毕之后再回到父进程自己的工作流程中。</p>
+<p>​    当调用信号处理函数时，会暂时将引发调用的信号添加到进程的信号掩码中（除非 sigaction()指定了 SA_NODEFER 标志），这样一来，当 SIGCHLD 信号处理函数正在为一个终止的子进程“收尸”时，如果相继有两个子进程终止，即使产生了两次 SIGCHLD 信号，父进程也只能捕获到一次 SIGCHLD 信号，结果是，父进程的 SIGCHLD 信号处理函数每次只调用一次 wait()，那么就会导致有些僵尸进程成为“漏网之鱼”。</p>
+<p>​    解决方案就是：在 SIGCHLD 信号处理函数中循环以非阻塞方式来调用 waitpid()，直至再无其它终止的子进程需要处理为止，所以，通常 SIGCHLD 信号处理函数内部代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while (waitpid(-1, NULL, WNOHANG) &gt; 0)</span><br><span class="line">continue;</span><br></pre></td></tr></table></figure>
+<p>​    上述代码一直循环下去，直至 waitpid()返回 0，表明再无僵尸进程存在；或者返回-1，表明有错误发生。应在创建任何子进程之前，为 SIGCHLD 信号绑定处理函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">示例代码 9.10.6 异步方式监视 wait 回收子进程</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys&#x2F;types.h&gt;</span><br><span class="line">#include &lt;sys&#x2F;wait.h&gt;</span><br><span class="line">static void wait_child(int sig) &#123;</span><br><span class="line"> &#x2F;* 替子进程收尸 *&#x2F;</span><br><span class="line"> printf(&quot;父进程回收子进程\n&quot;);</span><br><span class="line"> while (waitpid(-1, NULL, WNOHANG) &gt; 0)</span><br><span class="line"> continue; &#125;</span><br><span class="line">int main(void) &#123;</span><br><span class="line"> struct sigaction sig &#x3D; &#123;0&#125;;</span><br><span class="line"> &#x2F;* 为 SIGCHLD 信号绑定处理函数 *&#x2F;</span><br><span class="line"> sigemptyset(sig.sa_mask);</span><br><span class="line"> sig.sa_handler &#x3D; wait_child;</span><br><span class="line"> sig.sa_flags &#x3D; 0;</span><br><span class="line"> if (-1 &#x3D;&#x3D; sigaction(SIGCHLD, &amp;sig, NULL)) &#123;</span><br><span class="line"> perror(&quot;sigaction error&quot;);</span><br><span class="line"> exit(-1);</span><br><span class="line"> &#125;</span><br><span class="line"> &#x2F;* 创建子进程 *&#x2F;</span><br><span class="line"> switch (fork()) &#123;</span><br><span class="line"> case -1:</span><br><span class="line"> perror(&quot;fork error&quot;);</span><br><span class="line"> exit(-1);</span><br><span class="line"> case 0:</span><br><span class="line"> &#x2F;* 子进程 *&#x2F;</span><br><span class="line"> printf(&quot;子进程&lt;%d&gt;被创建\n&quot;, getpid());</span><br><span class="line"> sleep(1);</span><br><span class="line"> printf(&quot;子进程结束\n&quot;);</span><br><span class="line"> _exit(0);</span><br><span class="line">default:</span><br><span class="line"> &#x2F;* 父进程 *&#x2F;</span><br><span class="line"> break;</span><br><span class="line"> &#125;</span><br><span class="line"> sleep(3);</span><br><span class="line"> exit(0);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="执行新程序"><a href="#执行新程序" class="headerlink" title="执行新程序"></a><strong>执行新程序</strong></h1><p>​    当子进程的工作不再是运行父进程的代码段，而是运行另一个新程序的代码，那么这个时候子进程可以通过 exec 函数来实现运行另一个新的程序，从新程序的 main()函数开始运行</p>
+<p><strong>execve()函数</strong></p>
+<p>​    系统调用 execve()可以将新程序加载到某一进程的内存空间，通过调用 execve()函数将一个外部的可执行文件加载到进程的内存空间运行，使用新的程序替换旧的程序，而进程的栈、数据、以及堆数据会被新程序的相应部件所替换，然后从新程序的 main()函数开始执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int execve(const char *filename, char *const argv[], char *const envp[]);</span><br></pre></td></tr></table></figure>
+<p>​    <strong>filename：</strong>参数 filename 指向需要载入当前进程空间的新程序的路径名，既可以是绝对路径、也可以是相对路径。</p>
+<p>​    <strong>返回值：</strong>execve 调用成功将不会返回；失败将返回-1，并设置 errno。</p>
+<p>​    对 execve()的成功调用将永不返回，而且也无需检查它的返回值，实际上，一旦该函数返回，就表明它发生了错误。</p>
+<p>​    基于系统调用 execve()，还提供了一系列以 exec 为前缀命名的库函数，虽然函数参数各异，当其功能相同，通常将这些函数（包括系统调用 execve()）称为 exec 族函数，所以 exec 函数并不是指某一个函数、而是 exec 族函数</p>
+<p>​    通常将调用这些 exec 函数加载一个外部新程序的过程称为 exec 操作。</p>
+<p>​    通常由 fork()生成的子进程对 execve()的调用最为频繁，也就是子进程执行 exec 操作</p>
+<h2 id="exec-库函数"><a href="#exec-库函数" class="headerlink" title="exec 库函数"></a><strong>exec</strong> <strong>库函数</strong></h2><p>​    exec 族函数中的库函数都是基于系统调用 execve()而实现的，虽然参数各异、但功能相同，包括：execl()、execlp()、execle()、execv()、execvp()、execvpe()</p>
+<h2 id="system-函数"><a href="#system-函数" class="headerlink" title="system()函数"></a><strong>system()函数</strong></h2><p>​    使用 system()函数可以很方便地在我们的程序当中执行任意 shell 命令</p>
+<p>​    system()函数其内部的是通过调用 fork()、execl()以及 waitpid()这三个函数来实现它的功能，首先 system()会调用 fork()创建一个子进程来运行 shell（可以把这个子进程成为 shell 进程），并通过 shell 执行参数command 所指定的命令</p>
+<h1 id="进程状态与进程关系"><a href="#进程状态与进程关系" class="headerlink" title="进程状态与进程关系"></a><strong>进程状态与进程关系</strong></h1><h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a><strong>进程状态</strong></h2><p>​    Linux 系统下进程通常存在 6 种不同的状态，分为：就绪态、运行态、僵尸态、可中断睡眠状态（浅度睡眠）、不可中断睡眠状态（深度睡眠）以及暂停态。</p>
+<ul>
+<li><strong>就绪态</strong>（Ready）：指该进程满足被 CPU 调度的所有条件但此时并没有被调度执行，只要得到 CPU就能够直接运行；意味着该进程已经准备好被 CPU 执行，当一个进程的时间片到达，操作系统调度程序会从就绪态链表中调度一个进程；</li>
+<li><strong>运行态</strong>：指该进程当前正在被 CPU 调度运行，处于就绪态的进程得到 CPU 调度就会进入运行态；</li>
+<li>僵尸态：僵尸态进程其实指的就是僵尸进程，指该进程已经结束、但其父进程还未给它“收尸”；</li>
+<li>可中断睡眠状态：可中断睡眠也称为浅度睡眠，表示睡的不够“死”，还可以被唤醒，一般来说可以通过信号来唤醒；</li>
+<li>不可中断睡眠状态：不可中断睡眠称为深度睡眠，深度睡眠无法被信号唤醒，只能等待相应的条件成立才能结束睡眠状态。把浅度睡眠和深度睡眠统称为等待态（或者叫<strong>阻塞态</strong>），表示进程处于一种等待状态，等待某种条件成立之后便会进入到就绪态；所以，处于等待态的进程是无法参与进程系统调度的。</li>
+<li>暂停态：暂停并不是进程的终止，表示进程暂停运行，一般可通过信号将进程暂停，譬如 SIGSTOP信号；处于暂停态的进程是可以恢复进入到就绪态的，譬如收到 SIGCONT 信号。</li>
+</ul>
+<p>​    一个新创建的进程会处于就绪态，只要得到 CPU 就能被执行。</p>
+<p>​    <u>就绪态被调度就会进入运行态，当运行态时间片耗尽就会进入就绪态；运行态如果等待资源到位就会进入等待态，当等待态资源到位之后就会进入就绪态；当运行态进程结束但未被回收时就会进入僵尸态；运行态得到SIGSTOP信号就会进入暂停态，暂停态收到SIGCONT信号后就会进入就绪态。</u></p>
+<h2 id="进程关系"><a href="#进程关系" class="headerlink" title="进程关系"></a><strong>进程关系</strong></h2><p>​    在 Linux 系统下，每个进程都有自己唯一的标识：进程号（进程 ID、PID），也有自己的生命周期，进程都有自己的父进程、而父进程也有父进程，这就形成了一个以 init 进程为根的进程家族树；当子进程终止时，父进程会得到通知并能取得子进程的退出状态。</p>
+<p>​    除此之外，进程间还存在着其它一些层次关系，譬如进程组和会话</p>
+<p><strong>1、无关系</strong></p>
+<p>​    两个进程间没有任何关系，相互独立。 </p>
+<p><strong>2、父子进程关系</strong></p>
+<p>​    两个进程间构成父子进程关系，譬如一个进程 fork()创建出了另一个进程，那么这两个进程间就构成了父子进程关系，调用 fork()的进程称为父进程、而被 fork()创建出来的进程称为子进程；当然，如果“生父”先与子进程结束，那么 init 进程（“养父”）就会成为子进程的父进程，它们之间同样也是父子进程关系。</p>
+<p><strong>3、进程组</strong></p>
+<p>​    每个进程除了有一个进程 ID、父进程 ID 之外，还有一个进程组 ID，用于标识该进程属于哪一个进程组，进程组是一个或多个进程的集合，这些进程并不是孤立的，它们彼此之间或者存在父子、兄弟关系，或者在功能上有联系。</p>
+<p>​    Linux 系统设计进程组实质上是为了方便对进程进行管理。假设为了完成一个任务，需要并发运行 100个进程，但当处于某种场景时需要终止这 100 个进程，若没有进程组就需要一个一个去终止，这样非常麻烦且容易出现一些问题；有了进程组的概念之后，就可以将这 100 个进程设置为一个进程组，这些进程共享一个进程组 ID，这样一来，终止这 100 个进程只需要终止该进程组即可。</p>
+<p>关于进程组需要注意以下以下内容：</p>
+<ul>
+<li>每个进程必定属于某一个进程组、且只能属于一个进程组；</li>
+<li>每一个进程组有一个组长进程，组长进程的 ID 就等于进程组 ID； </li>
+<li>在组长进程的 ID 前面加上一个负号即是操作进程组；</li>
+<li>组长进程不能再创建新的进程组；</li>
+<li>只要进程组中还存在一个进程，则该进程组就存在，这与其组长进程是否终止无关；</li>
+<li>一个进程组可以包含一个或多个进程，进程组的生命周期从被创建开始，到其内所有进程终止或离开该进程组； </li>
+<li>默认情况下，新创建的进程会继承父进程的进程组 ID。</li>
+</ul>
+<p>​    通过系统调用 getpgrp()或 getpgid()可以获取进程对应的进程组 ID</p>
+<p>​    这两个函数都用于获取进程组 ID，getpgrp()没有参数，返回值总是调用者进程对应的进程组 ID；而对于 getpgid()函数来说，可通过参数 pid 指定获取对应进程的进程组 ID，如果参数 pid 为 0 表示获取调用者进程的进程组 ID。 </p>
+<p>​    调用系统调用 setpgid()或 setpgrp()可以加入一个现有的进程组或创建一个新的进程组</p>
+<p>​    setpgrp()函数等价于 setpgid(0, 0)。</p>
+<p>​    一个进程只能为它自己或它的子进程设置进程组 ID，在它的子进程调用 exec 函数后，它就不能更改该子进程的进程组 ID 了。</p>
+<p><strong>会话</strong></p>
+<p>​    会话是一个或多个进程组的集合</p>
+<p>​    登录shell组成一个进程组，proc1和proc2组成进程组，pro3、proc4和proc5组成进程组，然后这三个进程组组成会话</p>
+<p>​    一个会话可包含一个或多个进程组，但只能有一个前台进程组，其它的是后台进程组；每个会话都有一个会话首领（leader），即创建会话的进程。一个会话可以有控制终端、也可没有控制终端，在有控制终端的情况下也只能连接一个控制终端，这通常是登录到其上的终端设备（在终端登录情况下）或伪终端设备（譬如通过 SSH 协议网络登录），一个会话中的进程组可被分为一个前台进程组以及一个或多个后台进程组。</p>
+<p>​    会话的首领进程连接一个终端之后，该终端就成为会话的控制终端，与控制终端建立连接的会话首领进程被称为控制进程；产生在终端上的输入和信号将发送给会话的前台进程组中的所有进程，譬如 Ctrl + C（产生 SIGINT 信号）、Ctrl + Z（产生 SIGTSTP 信号）、Ctrl + \（产生 SIGQUIT 信号）等等这些由控制终端产生的信号。</p>
+<p>​    当用户在某个终端登录时，一个新的会话就开始了；当我们在 Linux 系统下打开了多个终端窗口时，实际上就是创建了多个终端会话。</p>
+<p>​    一个进程组由组长进程的 ID 标识，而对于会话来说，会话的首领进程的进程组 ID 将作为该会话的标识，也就是会话 ID（sid），在默认情况下，新创建的进程会继承父进程的会话 ID。通过系统调用 getsid()可以获取进程的会话 ID</p>
+<p>​    如果调用者进程不是进程组的组长进程，调用 setsid()将创建一个新的会话，调用者进程是新会话的首领进程，同样也是一个新的进程组的组长进程，调用 setsid()创建的会话将没有控制终端。</p>
+<h1 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a><strong>守护进程</strong></h1><p>​    守护进程（Daemon）也称为精灵进程，是运行在后台的一种特殊进程，它独立于控制终端并且周期性地执行某种任务或等待处理某些事情的发生，主要表现为以下两个特点：</p>
+<ul>
+<li><strong>长期运行。</strong>守护进程是一种生存期很长的一种进程，它们一般在系统启动时开始运行，除非强行终止，否则直到系统关机都会保持运行。与守护进程相比，普通进程都是在用户登录或运行程序时创建，在运行结束或用户注销时终止，但守护进程不受用户登录注销的影响，它们将会一直运行着、直到系统关机。</li>
+<li><strong>与控制终端脱离。</strong>在 Linux 中，系统与用户交互的界面称为终端，每一个从终端开始运行的进程都会依附于这个终端，这是上一小节给大家介绍的控制终端，也就是会话的控制终端。当控制终端被关闭的时候，该会话就会退出，由控制终端运行的所有进程都会被终止，这使得普通进程都是和运行该进程的终端相绑定的；但守护进程能突破这种限制，它脱离终端并且在后台运行，脱离终端的目的是为了避免进程在运行的过程中的信息在终端显示并且进程也不会被任何终端所产生的信息所打断。</li>
+</ul>
+<p>​    守护进程是一种很有用的进程。Linux 中大多数服务器就是用守护进程实现的，譬如，Internet 服务器inetd、Web 服务器 httpd 等。同时，守护进程完成许多系统任务，譬如作业规划进程 crond 等。</p>
+<p>​    守护进程 Daemon，通常简称为 d，一般进程名后面带有 d 就表示它是一个守护进程。守护进程与终端无任何关联，用户的登录与注销与守护进程无关、不受其影响，守护进程自成进程组、自成会话，即pid=gid=sid。通过命令”ps -ajx”查看系统所有的进程</p>
+<p>​    TTY 一栏是问号？表示该进程没有控制终端，也就是守护进程，其中 COMMAND 一栏使用中括号[]括起来的表示内核线程，这些线程是在内核里创建，没有用户空间代码，因此没有程序文件名和命令行，通常采用 k 开头的名字，表示 Kernel。</p>
+<h2 id="编写守护进程程序"><a href="#编写守护进程程序" class="headerlink" title="编写守护进程程序"></a><strong>编写守护进程程序</strong></h2><p><strong>1)</strong> <strong>创建子进程、终止父进程</strong></p>
+<p>​    父进程调用 fork()创建子进程，然后父进程使用 exit()退出，这样做实现了下面几点。第一，如果该守护进程是作为一条简单地 shell 命令启动，那么父进程终止会让 shell 认为这条命令已经执行完毕。第二，虽然子进程继承了父进程的进程组ID，但它有自己独立的进程ID，这保证了子进程不是一个进程组的组长进程，这是下面将要调用 setsid 函数的先决条件！</p>
+<p><strong>2)</strong> <strong>子进程调用</strong> <strong>setsid</strong> <strong>创建会话</strong></p>
+<p>​    这步是关键，在子进程中调用 setsid()函数创建新的会话，由于之前子进程并不是进程组的组长进程，所以调用 setsid()会使得子进程创建一个新的会话，子进程成为新会话的首领进程，同样也创建了新的进程组、子进程成为组长进程，此时创建的会话将没有控制终端。所以这里调用 setsid 有三个作用：让子进程摆脱原会话的控制、让子进程摆脱原进程组的控制和让子进程摆脱原控制终端的控制。在调用 fork 函数时，子进程继承了父进程的会话、进程组、控制终端等，虽然父进程退出了，但原先的会话期、进程组、控制终端等并没有改变，因此，那还不是真正意义上使两者独立开来。setsid 函数能够使子进程完全独立出来，从而脱离所有其他进程的控制。</p>
+<p><strong>3)</strong> <strong>将工作目录更改为根目录</strong></p>
+<p>​    子进程是继承了父进程的当前工作目录，由于在进程运行中，当前目录所在的文件系统是不能卸载的，这对以后使用会造成很多的麻烦。因此通常的做法是让“/”作为守护进程的当前目录，当然也可以指定其 它目录来作为守护进程的工作目录。</p>
+<p><strong>4)</strong> <strong>重设文件权限掩码</strong> <strong>umask</strong></p>
+<p>​    文件权限掩码 umask 用于对新建文件的权限位进行屏蔽，在 5.5.5 小节中有介绍。由于使用 fork 函数新建的子进程继承了父进程的文件权限掩码，这就给子进程使用文件带来了诸多的麻烦。因此，把文件权限掩 码设置为 0，确保子进程有最大操作权限、这样可以大大增强该守护进程的灵活性。设置文件权限掩码的函数是 umask，通常的使用方法为 umask(0)。</p>
+<ol start="5">
+<li><strong>关闭不再需要的文件描述符</strong></li>
+</ol>
+<p>​    子进程继承了父进程的所有文件描述符，这些被打开的文件可能永远不会被守护进程（此时守护进程指的就是子进程，父进程退出、子进程成为守护进程）读或写，但它们一样消耗系统资源，可能导致所在的文件系统无法卸载，所以必须关闭这些文件，这使得守护进程不再持有从其父进程继承过来的任何文件描述符。</p>
+<p><strong>6)</strong> <strong>将文件描述符号为</strong> <strong>0**</strong>、**<strong>1**</strong>、**<strong>2</strong> <strong>定位到**</strong>/dev/null**</p>
+<p>​    将守护进程的标准输入、标准输出以及标准错误重定向到/dev/null，这使得守护进程的输出无处显示、也无处从交互式用户那里接收输入。</p>
+<p><strong>7)</strong> <strong>其它：忽略</strong> <strong>SIGCHLD</strong> <strong>信号</strong></p>
+<p>​    处理 SIGCHLD 信号不是必须的，但对于某些进程，特别是并发服务器进程往往是特别重要的，服务器进程在接收到客户端请求时会创建子进程去处理该请求，如果子进程结束之后，父进程没有去 wait 回收子进程，则子进程将成为僵尸进程；如果父进程 wait 等待子进程退出，将又会增加父进程的负担、也就是增加服务器的负担，影响服务器进程的并发性能，在 Linux 下，可以将 SIGCHLD 信号的处理方式设置为SIG_IGN，也就是忽略该信号，可让内核将僵尸进程转交给 init 进程去处理，这样既不会产生僵尸进程、又省去了服务器进程回收子进程所占用的时间。</p>
+<p>​    守护进程一般以单例模式运行</p>
+<p>​    守护进程可以通过终端命令行启动，但通常它们是由系统初始化脚本进行启动，譬如/etc/rc*或 /etc/init.d/*等。</p>
+<h2 id="SIGHUP-信号"><a href="#SIGHUP-信号" class="headerlink" title="SIGHUP 信号"></a><strong>SIGHUP</strong> <strong>信号</strong></h2><p>​    当用户准备退出会话时，系统向该会话发出 SIGHUP 信号，会话将 SIGHUP 信号发送给所有子进程，子进程接收到 SIGHUP 信号后，便会自动终止，当所有会话中的所有进程都退出时，会话也就终止了；因为程序当中一般不会对 SIGHUP 信号进行处理，所以对应的处理方式为系统默认方式，SIGHUP 信号的系统默认处理方式便是终止进程。</p>
+<p>​    调用 signal()函数将 SIGHUP 信号的处理方式设置为忽略</p>
+<p>​    当程序当中忽略 SIGHUP 信号之后，进程不会随着终端退出而退出，事实上，控制终端只是会话中的一个进程，只有会话中的所有进程退出后，会话才会结束；很显然当程序中忽略了 SIGHUP 信号，导致该进程不会终止，所以会话也依然会存在</p>
+<h1 id="单例模式运行"><a href="#单例模式运行" class="headerlink" title="单例模式运行"></a><strong>单例模式运行</strong></h1><p>​    通常情况下，一个程序可以被多次执行，即程序在还没有结束的情况下，又再次执行该程序，也就是系统中同时存在多个该程序的实例化对象（进程），譬如大家所熟悉的聊天软件 QQ，我们可以在电脑上同时登陆多个 QQ 账号</p>
+<p>​    但对于有些程序设计来说，不允许出现这种情况，程序只能被执行一次，只要该程序没有结束，就无法再次运行，我们把这种情况称为单例模式运行。譬如系统中守护进程，这些守护进程一般都是服务器进程，服务器程序只需要运行一次即可，能够在系统整个的运行过程中提供相应的服务支持，多次同时运行并没有意义、甚至还会带来错误！</p>
+<p>​    如果希望我们的程序具有单例模式运行的功能，应该如何去实现呢？</p>
+<h2 id="通过文件存在与否进行判断"><a href="#通过文件存在与否进行判断" class="headerlink" title="通过文件存在与否进行判断"></a><strong>通过文件存在与否进行判断</strong></h2><p>​    用一个文件的存在与否来做标志，在程序运行正式代码之前，先判断一个特定的文件是否存在，如果存在则表明进程已经运行，此时应该立马退出；如果不存在则表明进程没有运行，然后创建该文件，当程序结束时再删除该文件即可！</p>
+<p>​    有很大的问题，主要包括如下三个方面：</p>
+<ul>
+<li>程序中使用_exit()退出，那么将无法执行 delete_file()函数，意味着无法删除这个特定的文件；</li>
+<li>程序异常退出。程序异常同样无法执行到进程终止处理函数 delete_file()，同样将导致无法删除这个特定的文件；</li>
+<li>计算机掉电关机。这种情况就更加直接了，计算机可能在程序运行到任意位置时发生掉电关机的情况，这是无法预料的；如果文件没有删除就发生了这种情况，计算机重启之后文件依然存在，导致程序无法执行。</li>
+</ul>
+<p>​    针对第一种情况，我们使用 exit()代替_exit()可以很好的解决这种问题；但是对于第二种情况来说，异常退出，譬如进程接收到信号导致异常终止，有一种解决办法便是设置信号处理方式为忽略信号，这样当进程接收到信号时就会被忽略，或者是针对某些信号注册信号处理函数，譬如 SIGTERM、SIGINT 等，在信号处理函数中删除文件然后再退出进程；但依然有个问题，并不是所有信号都可被忽略或捕获的，譬如SIGKILL 和 SIGSTOP，这两个信号是无法被忽略和捕获的，故而这种也不靠谱。针对第三种情况的解决办法便是，使得该特定文件会随着系统的重启而销毁，这个怎么做呢？其实这个非常简单，将文件放置到系统/tmp 目录下，/tmp 是一个临时文件系统，当系统重启之后/tmp 目录下的文件就会被销毁，所以该目录下的文件的生命周期便是系统运行周期。由此可知，虽然针对第一种情况和第三种情况都有相应的解决办法，但对于第二种情况来说，其解决办法并不靠谱，所以使用这种方法实现单例模式运行并不靠谱。</p>
+<h2 id="使用文件锁"><a href="#使用文件锁" class="headerlink" title="使用文件锁"></a><strong>使用文件锁</strong></h2><p>​    是实现单例模式运行靠谱的方法</p>
+<p>​    同样也需要通过一个特定的文件来实现，当程序启动之后，首先打开该文件，调用 open 时一般使用O_WRONLY | O_CREAT 标志，当文件不存在则创建该文件，然后尝试去获取文件锁，若是成功，则将程序的进程号（PID）写入到该文件中，写入后不要关闭文件或解锁（释放文件锁），保证进程一直持有该文件锁；若是程序获取锁失败，代表程序已经被运行、则退出本次启动。</p>
+<p>​    Tips：当程序退出或文件关闭之后，文件锁会自动解锁！</p>
+<p>​    通过系统调用flock()、fcntl()或库函数 lockf()均可实现对文件进行上锁，以系统调用flock()为例，系统调用 flock()产生的是咨询锁（建议性锁）、并不能产生强制性锁。</p>
+<p>​    这种机制在一些程序尤其是服务器程序中很常见，服务器程序使用这种方法来保证程序的单例模式运行；在 Linux 系统中/var/run/目录下有很多以.pid 为后缀结尾的文件，这个实际上是为了保证程序以单例模式运行而设计的，作为程序实现单例模式运行所需的特定文件</p>
+<p>​    这些以.pid 为后缀的文件，命名方式通常是程序名+.pid，譬如 acpid.pid 对应的程序便是 acpid、lightdm.pid对应的程序便是 lightdm 等等。如果我们要去实现一个以单例模式运行的程序，譬如一个守护进程，那么也应该将这个特定文件放置于 Linux 系统/var/run/目录下，并且文件的命名方式为 name.pid（name 表示进程名）。</p>
+<p>​    <del>后面一些知识实在看得有点爆炸，这里知识点有点多，这里写一个注脚，后面遇到相关问题再回来在看一遍（逃）。。。</del></p>
+<hr>
+<p>参考资料：正点原子嵌入式 Linux C 应用编程指南第九章进程</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/">https://www.chenzhan.club/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/LinuxC/">LinuxC</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note59.9-Qt控件-Button</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/05/30/note41-6-内存管理进程映射(暂空)/" title="note41.6-内存管理进程映射(暂空)"><img class="cover" src="/Chenzhan666.github.io/img/back.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-30</div><div class="title">note41.6-内存管理进程映射(暂空)</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/05/07/note40-6-UnixC一些基础/" title="note40.6-LinuxC一些基础"><img class="cover" src="https://i0.hdslb.com/bfs/article/cd30b9adb5a7b9e0063e79b88c251e2f45854729.png@942w_530h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-07</div><div class="title">note40.6-LinuxC一些基础</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note48-6-文件IO/" title="note48.6-文件IO"><img class="cover" src="https://i0.hdslb.com/bfs/article/1057a8324c02b7cc61fdc333bd5995b32b5f7425.jpg@942w_539h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note48.6-文件IO</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/13/note49-6-深入探究文件I-O/" title="note49.6-深入探究文件I/O"><img class="cover" src="https://i0.hdslb.com/bfs/article/01fdecee75c10eced27b726569894167ff673b73.png@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">note49.6-深入探究文件I/O</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/15/note51-6-标准IO库/" title="note51.6-标准IO库"><img class="cover" src="https://i0.hdslb.com/bfs/album/a6e5099029d806acc0a0e291fb4ca68d25b6b134.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-15</div><div class="title">note51.6-标准IO库</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/16/note53-6-字符串处理/" title="note53.6-字符串处理"><img class="cover" src="https://i0.hdslb.com/bfs/album/3a4ab42fee5c28878d1d9392da46fde3758723a6.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-16</div><div class="title">note53.6-字符串处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">进程与程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#main-%E5%87%BD%E6%95%B0%E7%94%B1%E8%B0%81%E8%B0%83%E7%94%A8%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">main()函数由谁调用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E5%A6%82%E4%BD%95%E7%BB%93%E6%9D%9F%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">程序如何结束？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E8%BF%9B%E7%A8%8B%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">何为进程？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%8F%B7"><span class="toc-number">1.4.</span> <span class="toc-text">进程号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.</span> <span class="toc-text">进程的环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.</span> <span class="toc-text">应用程序中获取环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-%E5%88%A0%E9%99%A4-%E4%BF%AE%E6%94%B9%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">添加&#x2F;删除&#x2F;修改环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.3.</span> <span class="toc-text">清空环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">环境变量的作用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">3.</span> <span class="toc-text">进程的内存布局</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">进程的虚拟地址空间</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#fork-%E5%88%9B%E5%BB%BA%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text">fork()创建子进程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%B6%E3%80%81%E5%AD%90%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E6%96%87%E4%BB%B6%E5%85%B1%E4%BA%AB"><span class="toc-number">6.</span> <span class="toc-text">父、子进程间的文件共享</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8-vfork"><span class="toc-number">7.</span> <span class="toc-text">系统调用 vfork()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#fork-%E4%B9%8B%E5%90%8E%E7%9A%84%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">fork()之后的竞争条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%AF%9E%E7%94%9F%E4%B8%8E%E7%BB%88%E6%AD%A2"><span class="toc-number">9.</span> <span class="toc-text">进程的诞生与终止</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="toc-number">9.1.</span> <span class="toc-text">进程的诞生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%BB%88%E6%AD%A2"><span class="toc-number">9.2.</span> <span class="toc-text">进程的终止</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%91%E8%A7%86%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-number">10.</span> <span class="toc-text">监视子进程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#wait-%E5%87%BD%E6%95%B0"><span class="toc-number">10.1.</span> <span class="toc-text">wait()函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#waitpid-%E5%87%BD%E6%95%B0"><span class="toc-number">10.2.</span> <span class="toc-text">waitpid()函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#waitid-%E5%87%BD%E6%95%B0"><span class="toc-number">10.3.</span> <span class="toc-text">waitid()函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B%E4%B8%8E%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B"><span class="toc-number">10.4.</span> <span class="toc-text">僵尸进程与孤儿进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SIGCHLD-%E4%BF%A1%E5%8F%B7"><span class="toc-number">10.5.</span> <span class="toc-text">SIGCHLD 信号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%96%B0%E7%A8%8B%E5%BA%8F"><span class="toc-number">11.</span> <span class="toc-text">执行新程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exec-%E5%BA%93%E5%87%BD%E6%95%B0"><span class="toc-number">11.1.</span> <span class="toc-text">exec 库函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#system-%E5%87%BD%E6%95%B0"><span class="toc-number">11.2.</span> <span class="toc-text">system()函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E4%B8%8E%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB"><span class="toc-number">12.</span> <span class="toc-text">进程状态与进程关系</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">12.1.</span> <span class="toc-text">进程状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB"><span class="toc-number">12.2.</span> <span class="toc-text">进程关系</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="toc-number">13.</span> <span class="toc-text">守护进程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%A8%8B%E5%BA%8F"><span class="toc-number">13.1.</span> <span class="toc-text">编写守护进程程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SIGHUP-%E4%BF%A1%E5%8F%B7"><span class="toc-number">13.2.</span> <span class="toc-text">SIGHUP 信号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E8%BF%90%E8%A1%8C"><span class="toc-number">14.</span> <span class="toc-text">单例模式运行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%96%87%E4%BB%B6%E5%AD%98%E5%9C%A8%E4%B8%8E%E5%90%A6%E8%BF%9B%E8%A1%8C%E5%88%A4%E6%96%AD"><span class="toc-number">14.1.</span> <span class="toc-text">通过文件存在与否进行判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E9%94%81"><span class="toc-number">14.2.</span> <span class="toc-text">使用文件锁</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note60.6-进程"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程">note60.6-进程</a><time datetime="2021-07-22T07:36:50.000Z" title="发表于 2021-07-22 15:36:50">2021-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button"><img src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note59.9-Qt控件-Button"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button">note59.9-Qt控件-Button</a><time datetime="2021-07-20T08:55:58.000Z" title="发表于 2021-07-20 16:55:58">2021-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="note58.9-Qt_Creator使用技巧"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note58.9-Qt_Creator使用技巧"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="note58.9-Qt_Creator使用技巧">note58.9-Qt_Creator使用技巧</a><time datetime="2021-07-20T08:34:58.000Z" title="发表于 2021-07-20 16:34:58">2021-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note57-6-%E4%BF%A1%E5%8F%B7-%E5%9F%BA%E7%A1%80/" title="note57.6-信号:基础"><img src="https://i0.hdslb.com/bfs/album/32eb1691d11e7d50744075ee14f91992551ccec2.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note57.6-信号:基础"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note57-6-%E4%BF%A1%E5%8F%B7-%E5%9F%BA%E7%A1%80/" title="note57.6-信号:基础">note57.6-信号:基础</a><time datetime="2021-07-19T08:46:22.000Z" title="发表于 2021-07-19 16:46:22">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note58.9-Qt_Creator使用技巧 | CHENZHAN</title><meta name="keywords" content="Qt"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="运行快捷键：Ctrl + R Ctrl + C 和 Ctrl + V 复制粘贴 常用快捷键： 一般快捷键：    新建文件或项目(N) Ctrl + N    关闭当前窗口&#x2F;关闭当前文件 Ctrl + W   关闭所有文件 Ctrl + Shfit + W   关闭当前文件（windows） Ctrl + F4   运行 Ctrl + R   返回上一级（返回），常用于跳转代码 Alt + ←">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note58.9-Qt_Creator使用技巧">
+<meta property="og:url" content="https://www.chenzhan.club/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="运行快捷键：Ctrl + R Ctrl + C 和 Ctrl + V 复制粘贴 常用快捷键： 一般快捷键：    新建文件或项目(N) Ctrl + N    关闭当前窗口&#x2F;关闭当前文件 Ctrl + W   关闭所有文件 Ctrl + Shfit + W   关闭当前文件（windows） Ctrl + F4   运行 Ctrl + R   返回上一级（返回），常用于跳转代码 Alt + ←">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp">
+<meta property="article:published_time" content="2021-07-20T08:34:58.000Z">
+<meta property="article:modified_time" content="2021-07-22T06:04:52.511Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-07-22 14:04:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note58.9-Qt_Creator使用技巧</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-20T08:34:58.000Z" title="发表于 2021-07-20 16:34:58">2021-07-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-22T06:04:52.511Z" title="更新于 2021-07-22 14:04:52">2021-07-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note58.9-Qt_Creator使用技巧"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p>运行快捷键：Ctrl + R</p>
+<p>Ctrl + C 和 Ctrl + V 复制粘贴</p>
+<p>常用快捷键：</p>
+<p>一般快捷键：</p>
+<table>
+<thead>
+<tr>
+<th>新建文件或项目(N)</th>
+<th>Ctrl + N</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关闭当前窗口/关闭当前文件</td>
+<td>Ctrl + W</td>
+</tr>
+<tr>
+<td>关闭所有文件</td>
+<td>Ctrl + Shfit + W</td>
+</tr>
+<tr>
+<td>关闭当前文件（windows）</td>
+<td>Ctrl + F4</td>
+</tr>
+<tr>
+<td>运行</td>
+<td>Ctrl + R</td>
+</tr>
+<tr>
+<td>返回上一级（返回），常用于跳转代码</td>
+<td>Alt + ←（方向左键）</td>
+</tr>
+<tr>
+<td>进入下一级（前进），常用于跳转代码</td>
+<td>Alt + →（方向右键）</td>
+</tr>
+</tbody></table>
+<p>常用编辑快捷键：</p>
+<table>
+<thead>
+<tr>
+<th>Qt 会自动排版对齐代码</th>
+<th>Ctrl + I</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>减小字体大小</td>
+<td>Ctrl+- (Ctrl+鼠标滚轮向下)</td>
+</tr>
+<tr>
+<td>增加字体大小</td>
+<td>Ctrl++ (Ctrl+鼠标滚轮向上)</td>
+</tr>
+<tr>
+<td>重置字体大小</td>
+<td>Ctrl+0</td>
+</tr>
+<tr>
+<td>折叠</td>
+<td>Ctrl+&lt;</td>
+</tr>
+<tr>
+<td>展开</td>
+<td>Ctrl+&gt;</td>
+</tr>
+<tr>
+<td>复制行</td>
+<td>Ctrl+Ins</td>
+</tr>
+<tr>
+<td>复制到行下</td>
+<td>Ctrl+Alt+Down</td>
+</tr>
+<tr>
+<td>复制到行上</td>
+<td>Ctrl+Alt+Up</td>
+</tr>
+<tr>
+<td>在当前行上方插入新行</td>
+<td>Ctrl+Shift+Enter</td>
+</tr>
+<tr>
+<td>在当前行下方插入新行</td>
+<td>Ctrl+Enter</td>
+</tr>
+<tr>
+<td>查看剪切板历史</td>
+<td>Ctrl+Shift+V</td>
+</tr>
+<tr>
+<td>剪切行</td>
+<td>Shift+Del</td>
+</tr>
+<tr>
+<td>追加行</td>
+<td>Ctrl+J</td>
+</tr>
+<tr>
+<td>向下移动当前行</td>
+<td>Ctrl+Shift+Down</td>
+</tr>
+<tr>
+<td>向上移动当前行</td>
+<td>Ctrl+Shift+Up</td>
+</tr>
+<tr>
+<td>切换函数声明/定义</td>
+<td>Ctrl + 鼠标左键/Shift + F2</td>
+</tr>
+<tr>
+<td>编辑信号和槽</td>
+<td>F4</td>
+</tr>
+<tr>
+<td>跳转至以}结尾的块</td>
+<td>Ctrl+}</td>
+</tr>
+<tr>
+<td>跳转至以{开始的块</td>
+<td>Ctrl+{</td>
+</tr>
+<tr>
+<td>打开类型层次窗口</td>
+<td>Ctrl+Shift+T</td>
+</tr>
+</tbody></table>
+<p> Qt Creator 里自定义快捷键或者修改原有的快捷键</p>
+<p>在“环境”项下找到键盘，切换书签的快捷键，“Ctrl + M”显示红色，说明是与系统的快捷键冲突了按“Record”重新记录切换书签的快捷键。再点击“Apply”和“OK”即可。</p>
+<p>安装 Qt 时，帮助文档已经安装在我们的“安装目录/Qt5.12.9/Docs/”下，使用的是 html 文本的方式，我们可以使用浏览器打开这种 html 文本。</p>
+<hr>
+<p>参考资料：正点原子嵌入式 Qt 开发指南</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">https://www.chenzhan.club/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/Qt/">Qt</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note59.9-Qt控件-Button</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/19/note57-6-%E4%BF%A1%E5%8F%B7-%E5%9F%BA%E7%A1%80/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/32eb1691d11e7d50744075ee14f91992551ccec2.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note57.6-信号:基础</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/07/17/note55-9-Qt-Designer/" title="note55.9-Qt_Designer"><img class="cover" src="https://i0.hdslb.com/bfs/album/a8f29e862eb5afff091bb45d016ace6eb2603bae.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-17</div><div class="title">note55.9-Qt_Designer</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt信号与槽/" title="note56.9-Qt_Qt信号与槽"><img class="cover" src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-19</div><div class="title">note56.9-Qt_Qt信号与槽</div></div></a></div><div><a href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt控件-Button/" title="note59.9-Qt控件-Button"><img class="cover" src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-20</div><div class="title">note59.9-Qt控件-Button</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note60.6-进程"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程">note60.6-进程</a><time datetime="2021-07-22T07:36:50.000Z" title="发表于 2021-07-22 15:36:50">2021-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button"><img src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note59.9-Qt控件-Button"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button">note59.9-Qt控件-Button</a><time datetime="2021-07-20T08:55:58.000Z" title="发表于 2021-07-20 16:55:58">2021-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="note58.9-Qt_Creator使用技巧"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note58.9-Qt_Creator使用技巧"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note58-9-Qt-Creator%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="note58.9-Qt_Creator使用技巧">note58.9-Qt_Creator使用技巧</a><time datetime="2021-07-20T08:34:58.000Z" title="发表于 2021-07-20 16:34:58">2021-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note57-6-%E4%BF%A1%E5%8F%B7-%E5%9F%BA%E7%A1%80/" title="note57.6-信号:基础"><img src="https://i0.hdslb.com/bfs/album/32eb1691d11e7d50744075ee14f91992551ccec2.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note57.6-信号:基础"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note57-6-%E4%BF%A1%E5%8F%B7-%E5%9F%BA%E7%A1%80/" title="note57.6-信号:基础">note57.6-信号:基础</a><time datetime="2021-07-19T08:46:22.000Z" title="发表于 2021-07-19 16:46:22">2021-07-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽"><img src="https://i0.hdslb.com/bfs/album/f4c38a0df94ff9fe305326ca86270048f066e19e.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note56.9-Qt_Qt信号与槽"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/19/note56-9-Qt-Qt%E4%BF%A1%E5%8F%B7%E4%B8%8E%E6%A7%BD/" title="note56.9-Qt_Qt信号与槽">note56.9-Qt_Qt信号与槽</a><time datetime="2021-07-19T06:10:04.000Z" title="发表于 2021-07-19 14:10:04">2021-07-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
