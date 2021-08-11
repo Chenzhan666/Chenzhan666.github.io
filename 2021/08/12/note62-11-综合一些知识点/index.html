@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note62.11-综合一些知识点 | CHENZHAN</title><meta name="keywords" content="其他"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C++ 的 SCL 中的 vector ,每次扩充容量时，新的容量都是上一次的两倍。  当声明一个数组时，数组名也像一个指针，该指针指向数组的第一个元素。  在32位系统上，对任意指针求 sizeof 结果都是4。  在 C&#x2F;C++ 中，当数组作为函数的参数进行传递时，数组就自动退化为同类型的指针。  宏定义本质为字符的简单替换。宏替换，先替换再按优先级计算，不要自作主张加括号之类。  虚函数不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note62.11-综合一些知识点">
+<meta property="og:url" content="https://www.chenzhan.club/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="C++ 的 SCL 中的 vector ,每次扩充容量时，新的容量都是上一次的两倍。  当声明一个数组时，数组名也像一个指针，该指针指向数组的第一个元素。  在32位系统上，对任意指针求 sizeof 结果都是4。  在 C&#x2F;C++ 中，当数组作为函数的参数进行传递时，数组就自动退化为同类型的指针。  宏定义本质为字符的简单替换。宏替换，先替换再按优先级计算，不要自作主张加括号之类。  虚函数不">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp">
+<meta property="article:published_time" content="2021-08-11T17:07:20.000Z">
+<meta property="article:modified_time" content="2021-08-11T17:08:25.660Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="其他">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-08-12 01:08:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note62.11-综合一些知识点</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-11T17:07:20.000Z" title="发表于 2021-08-12 01:07:20">2021-08-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-11T17:08:25.660Z" title="更新于 2021-08-12 01:08:25">2021-08-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note62.11-综合一些知识点"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ol>
+<li><p>C++ 的 SCL 中的 vector ,每次扩充容量时，新的容量都是上一次的两倍。</p>
+</li>
+<li><p>当声明一个数组时，数组名也像一个指针，该指针指向数组的第一个元素。</p>
+</li>
+<li><p>在32位系统上，对任意指针求 sizeof 结果都是4。</p>
+</li>
+<li><p>在 C/C++ 中，当数组作为函数的参数进行传递时，数组就自动退化为同类型的指针。</p>
+</li>
+<li><p>宏定义本质为字符的简单替换。宏替换，先替换再按优先级计算，不要自作主张加括号之类。</p>
+</li>
+<li><p>虚函数不可以内联，因为虚函数是在运行期的时候确定具体调用的函数，内联是在编译期的时候进行代码展开，两者冲突。</p>
+</li>
+<li><p>effective C++中作者说尽量以 const enum inline 替换 define 条款，宏定义由预编译器来预处理，而不是编译器。</p>
+</li>
+<li><pre><code>struct Node
+&#123;
+   int size;
+   char data[0];
+&#125;;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   柔性数组(Flexible Array)也叫伸缩性数组、变长数组，编译器认为这是一个长度为0的数组, 支持对于数组data的越界访问，它只能放在结构体末尾, 声明一个长度为0的数组，使得结构体可变长。对于编译器来说，长度为0的数组不占用空间，因为数组名本身不占空间，只是一个偏移量， 数组名这个符号本身代表了一个不可修改的地址常量 （注意：数组名不是指针 ）。0长数组的这个特点，很容易构造出缓冲区，数据包等等结构体。构造缓冲区方便管理内存缓冲区,减少内存碎片化,它的作用不是标志结构体结束,而是扩展柔性数组是C99的扩展，就是一个在struct结构里的标识占位符（不占结构struct的空间）</span><br><span class="line"></span><br><span class="line">9. 静态函数属于类本身，不与类绑定，因此不能用this指针。</span><br><span class="line"></span><br><span class="line">   在类定义时，无法使用构造函数，因而无法完成对象的初始化</span><br><span class="line"></span><br><span class="line">   一般成员变量需要在类内进行初始化</span><br><span class="line"></span><br><span class="line">   静态成员变量必须在类外初始化，静态成员常量在类中初始化。</span><br><span class="line"></span><br><span class="line">10. **bss**段 通常是指用来存放程序中未初始化的全局变量的一块内存区域，在程序载入时由内核清0。BSS段属于静态内存分配。初始值由用户自己定义的连接定位文件所确定，用户应该将它定义在可读写的RAM区内，源程序中使用malloc分配的内存就是这一块，它不是根据data大小确定，主要由程序中同时分配内存最大值所确定，如果超出了范围，也就是分配失败，可以等空间释放之后再分配。</span><br><span class="line"></span><br><span class="line">    **text**段 是程序代码段，在AT91库中是表示程序段的大小，由编译器在编译连接时自动计算的，当你在链接定位文件中将该符号放置在代码段后，那么该符号表示的值就是代码段大小，编译连接时，该符号所代表的值会自动代入到源程序中。</span><br><span class="line"></span><br><span class="line">    **data**段 包含静态初始化的数据，所以有初值的全局变量和static变量在data区。段的起始位置也是由连接定位文件所确定，大小在编译连接时自动分配，它和程序大小没有关系，但和程序使用到的全局变量，常量数量相关。</span><br><span class="line"></span><br><span class="line">11. 运算符优先级由高到低：！，&lt;&#x3D;，&amp;&amp;</span><br><span class="line"></span><br><span class="line">    有：!x&amp;&amp;i&lt;&#x3D;5相当于(!x)&amp;&amp;(i&lt;&#x3D;5)</span><br><span class="line"></span><br><span class="line">    !x不会改变x本身的值，！x始终为真。</span><br><span class="line"></span><br><span class="line">12. &amp; amp; f1;&#x3D;&#x3D;&amp;f1。</span><br><span class="line"></span><br><span class="line">13. int (*pf)(float )表示定义了一个返回值为int，参数为float型的函数指针，要想调用他就必须满足返回值和参数类型匹配。</span><br><span class="line"></span><br><span class="line">14. C++中函数可以嵌套调用，但是不可以嵌套定义。</span><br><span class="line"></span><br><span class="line">15. int a[][4]&#x3D;&#123;0,0&#125;;&#x3D;a[1] [4]&#x3D;&#123;0，0，0，0&#125;；</span><br><span class="line"></span><br><span class="line">16. std::auto_ptr是C++标准库里面的模版类， 属于智能指针。</span><br><span class="line"></span><br><span class="line">17. 1，代表文件类型，一般有三类，- 代表普通的二进制文件，l 代表符号链接文件（软链接），d 代表目录文件；</span><br><span class="line"></span><br><span class="line">    2-4，代表文件所有者的权限表示情况，分别对应 可读(r) 可写(w) 可执行(w)，- 代表没有该项权限；</span><br><span class="line"></span><br><span class="line">    5-7，代表文件所有这所属组的权限表示情况。分别对应 可读(r) 可写(w) 可执行(w)，- 代表没有该项权限；</span><br><span class="line"></span><br><span class="line">    8-10,代表除文件所有者和所属组的其他人所拥有的权限表示情况。分别对应 可读(r) 可写(w) 可执行(w)，- 代表没有该项权限。</span><br><span class="line"></span><br><span class="line">18. r0-r7是未备份寄存器。对于未备份寄存器，在所有的工作模式下，寄存器Ri均指向同一个物理寄存器。该类寄存器没有被系统用于特殊用途。在所有工作模式下，（R0-R7  ）都指向同一个物理寄存器，即各模式共享。</span><br><span class="line"></span><br><span class="line">19. tar是操作.tar的命令</span><br><span class="line">    gzip是压缩.gz压缩包的命令</span><br><span class="line">    compress：压缩.Z文件</span><br><span class="line">    uncompress：解压缩.Z文件</span><br><span class="line"></span><br><span class="line">20. Linux系统大致启动流程是：uEFI-&gt; MBR -&gt; grub -&gt; initrd</span><br><span class="line"></span><br><span class="line">21. 要为所有的用户配置一个自定义注册项，你怎样用最简捷的操作，才能将这个自定义注册项添加到一个组策略对象（GPO）中？配置一个ADM模板并把这个模板添加到GPO</span><br><span class="line"></span><br><span class="line">22. 产生死锁的四个必要条件：（1） 互斥条件：一个资源每次只能被一个进程使用。（2） 请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放。（3） 不剥夺条件:进程已获得的资源，在使用完之前，不能强行剥夺。（4） 循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系。</span><br><span class="line"></span><br><span class="line">23. 通过管道统计prog.c函数中for语句通过的次数，需要使用的指令分别是grep、wc。</span><br><span class="line"></span><br><span class="line">24. &#96;&#96;&#96;</span><br><span class="line">    #include &lt;stdio.h&gt;&#x2F;&#x2F;#包含&lt;stdio.h&gt;</span><br><span class="line">     </span><br><span class="line">    int main(int argc,char* argv[])    &#x2F;&#x2F;整数类型主函数(整数类型统计参数个数,字符类型指针数组指向字符串参数)</span><br><span class="line">    &#123;</span><br><span class="line">        printf(&quot;%d\n&quot;,argc);           &#x2F;&#x2F;格式化输出</span><br><span class="line">        while(argc)                    &#x2F;&#x2F;当(统计参数个数)</span><br><span class="line">            printf(&quot;%s\n&quot;,argv[--argc]);   &#x2F;&#x2F;格式化输出</span><br><span class="line">        return 0;                      &#x2F;&#x2F;返回0;正常退出</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+ 假设将其编译为 test.exe
+
+ 在命令行下
+
+ \&gt; test.exe test hello
+
+ 得到的输出结果为
+
+ 3
+
+ hello
+
+ test
+
+ test.exe
+
+ main(int argc, char* argv[ ])，其中argc是指变量的个数，本例中即指test和hello这两个变量和程序运行的全路径名或程序的名字，argc即为3。
+
+ argv是一个char *的数组，其中存放指向参数变量的指针，此处argv[0]指向test.exe的全路径名或test.exe，argv[1]指向test，argv[2]指向hello。</code></pre>
+</li>
+<li><pre><code>enum string&#123;    
+    x1,    
+    x2,    
+    x3=10,    
+    x4,    
+    x5,    
+&#125; x;</code></pre>
+<p>0，1，10，11，12</p>
+</li>
+<li><p>C++中volatile关键字在使用的时候，使用volatile修饰的变量，不会被编译器优化，每一次都是重新从内存中取值，而不是从寄存器中，volatile变量间的操作，是不会被编译器交换顺序的，但是只限制用该关键字修饰的变量的操作顺序</p>
+</li>
+<li><p>重写时方法的访问权限只能相等或更大，而抛出的异常只能相等或更小；</p>
+<p>方法重写时，返回值类型需要相同；</p>
+<p>非static方法，重写时子类中也要是非static的。。而static方法重写时，子类中也要是static的。</p>
+</li>
+<li><p>进程是操作系统进行任务调度的基本单位。 一个进程可以包含多个线程，同一个进程下的线程共享运算资源等。</p>
+</li>
+<li><p>死锁是两个或以上的进程竞争资源产生的，只有一个进程是不会产生死锁的</p>
+</li>
+<li><p>cat -n file1file2 命令的意思是？</p>
+<p>将几个文件合并为一个文件： $cat file1 file2 </p>
+<p>-n 或 –number 由 1 开始对所有输出的行数编号</p>
+<p>上述命令即将file1和file2的文件内容连在一起然后输出到屏幕，并打印行号，file1和file2文件内容不变 </p>
+</li>
+<li><p>页式管理就是把各进程的虚拟空间划分为若干长度相等的页面，把指令按页面大小划分后存放在内存中执行。或者只在内存中存放那些经常被执行和即将被执行的页面，而那些不被经常执行以及在近期内不可能被执行的页面则存放于外存中，按一定规则调入的一种内存管理方式。</p>
+<p>静态页式管理不能实现虚存，这是因为静态页式管理要求进程或作业在执行前全部被装入内存，作业或进程的大小仍受内存可用页面数的限制。静态页式管理是一次性为要求内存的进程分配足够多的页面，无法将外存的空间利用起来实现虚存</p>
+</li>
+<li><p>用户交给计算机的工作称为作业，作业由<strong>程序、数据、作业说明</strong>3部分组成。</p>
+<p>作业和进程的区别：</p>
+<ul>
+<li>一个进程是一个程序对某个数据集的执行过程，是分配资源的基本单位。</li>
+<li>作业是用户需要计算机完成的某项任务，是要求计算机所做工作的集合。</li>
+<li>一个作业的完成要经过作业提交、作业收容、作业执行和作业完成4个阶段。</li>
+<li>进程是对已提交完毕的程序所执行过程的描述，是资源分配的基本单位。</li>
+</ul>
+</li>
+<li><p>文件的 <strong>逻辑结构</strong> 主要有：</p>
+<p>(1)连续结构 (2)多重结构 (3)转置结构 (4)顺序结构</p>
+<p>文件的 <strong>物理存储</strong> 主要有：</p>
+<p>(1)顺序结构 (2)链接结构 (3)索引结构</p>
+<p>文件的 <strong>目录结构</strong> 主要有：</p>
+<p>(1)一级目录结构 (2)二级目录结构 (3)树形结构 (4)无环图</p>
+</li>
+<li><p>死锁的处理都有哪些方法？</p>
+<p>鸵鸟策略<br>预防策略<br>避免策略<br>检测与解除死锁</p>
+</li>
+<li><p>Strlen（text）字符串的字符数</p>
+<p>Sizeof（text[0]）每个字符的字节数</p>
+<p>两者相乘得到字符串的总字节数</p>
+</li>
+</ol>
+<hr>
+<p>参考资料：牛客网</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/">https://www.chenzhan.club/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/%E5%85%B6%E4%BB%96/">其他</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Chenzhan666.github.io/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/"><img class="prev-cover" src="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">note63.10-TCP客户端服务器</div></div></a></div><div class="next-post pull-right"><a href="/Chenzhan666.github.io/2021/07/26/note61-9-Qt%E6%8E%A7%E4%BB%B6-%E9%83%A8%E4%BB%B6%E7%AE%80%E7%95%A5/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/ff14dc16ccbe1b2a1895cbc1f5783279e2ae077e.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note61.9-Qt控件-部件简略</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/07/05/note42-7-OpenOCD、JTAG/" title="note42.7-OpenOCD、JTAG"><img class="cover" src="https://i0.hdslb.com/bfs/article/bbc24082b8dc118a6c047b59587df15bf08ff04b.png@942w_632h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-05</div><div class="title">note42.7-OpenOCD、JTAG</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="note63.10-TCP客户端服务器"><img src="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note63.10-TCP客户端服务器"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="note63.10-TCP客户端服务器">note63.10-TCP客户端服务器</a><time datetime="2021-08-11T17:09:32.000Z" title="发表于 2021-08-12 01:09:32">2021-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" title="note62.11-综合一些知识点"><img src="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note62.11-综合一些知识点"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" title="note62.11-综合一些知识点">note62.11-综合一些知识点</a><time datetime="2021-08-11T17:07:20.000Z" title="发表于 2021-08-12 01:07:20">2021-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/26/note61-9-Qt%E6%8E%A7%E4%BB%B6-%E9%83%A8%E4%BB%B6%E7%AE%80%E7%95%A5/" title="note61.9-Qt控件-部件简略"><img src="https://i0.hdslb.com/bfs/album/ff14dc16ccbe1b2a1895cbc1f5783279e2ae077e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note61.9-Qt控件-部件简略"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/26/note61-9-Qt%E6%8E%A7%E4%BB%B6-%E9%83%A8%E4%BB%B6%E7%AE%80%E7%95%A5/" title="note61.9-Qt控件-部件简略">note61.9-Qt控件-部件简略</a><time datetime="2021-07-26T15:49:33.000Z" title="发表于 2021-07-26 23:49:33">2021-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note60.6-进程"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程">note60.6-进程</a><time datetime="2021-07-22T07:36:50.000Z" title="发表于 2021-07-22 15:36:50">2021-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button"><img src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note59.9-Qt控件-Button"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button">note59.9-Qt控件-Button</a><time datetime="2021-07-20T08:55:58.000Z" title="发表于 2021-07-20 16:55:58">2021-07-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>

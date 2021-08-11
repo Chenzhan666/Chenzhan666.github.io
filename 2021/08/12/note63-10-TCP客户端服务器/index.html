@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>note63.10-TCP客户端服务器 | CHENZHAN</title><meta name="keywords" content="网络编程"><meta name="author" content="Chenzhan666"><meta name="copyright" content="Chenzhan666"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="网络通信1.网络和网络协议1)什么是计算机网络？计算机网络是指将地理位置不同的具有独立功能的多台计算机及其外部设备，通过有形或无形的通信线路连接起来，在网络操作系统、网络管理软件及网络通信协议的管理和协调下，实现资源共享和信息传递的计算机系统。2)什么是网络协议？网络协议是一种特殊的软件，是计算机网络实现其功能的最基本的机制。网路协议的本质就是规则，即各种硬件和软件必须遵循的共同守则。网络协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="note63.10-TCP客户端服务器">
+<meta property="og:url" content="https://www.chenzhan.club/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="CHENZHAN">
+<meta property="og:description" content="网络通信1.网络和网络协议1)什么是计算机网络？计算机网络是指将地理位置不同的具有独立功能的多台计算机及其外部设备，通过有形或无形的通信线路连接起来，在网络操作系统、网络管理软件及网络通信协议的管理和协调下，实现资源共享和信息传递的计算机系统。2)什么是网络协议？网络协议是一种特殊的软件，是计算机网络实现其功能的最基本的机制。网路协议的本质就是规则，即各种硬件和软件必须遵循的共同守则。网络协议">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp">
+<meta property="article:published_time" content="2021-08-11T17:09:32.000Z">
+<meta property="article:modified_time" content="2021-08-11T17:10:43.294Z">
+<meta property="article:author" content="Chenzhan666">
+<meta property="article:tag" content="网络编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp"><link rel="shortcut icon" href="/Chenzhan666.github.io/img/favicon.png"><link rel="canonical" href="https://www.chenzhan.club/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Chenzhan666.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/Chenzhan666.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-08-12 01:10:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/Chenzhan666.github.io/atom.xml" title="CHENZHAN" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/Chenzhan666.github.io/">CHENZHAN</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">note63.10-TCP客户端服务器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-11T17:09:32.000Z" title="发表于 2021-08-12 01:09:32">2021-08-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-11T17:10:43.294Z" title="更新于 2021-08-12 01:10:43">2021-08-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="note63.10-TCP客户端服务器"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer">
+
+<p>网络通信<br>1.网络和网络协议<br>1)什么是计算机网络？<br>计算机网络是指将地理位置不同的具有独立功能的多台计算机及其外部设备，通过有形或无形的通信线路连接起来，在网络操作系统、网络管理软件及网络通信协议的管理和协调下，实现资源共享和信息传递的计算机系统。<br>2)什么是网络协议？<br>网络协议是一种特殊的软件，是计算机网络实现其功能的最基本的机制。网路协议的本质就是规则，即各种硬件和软件必须遵循的共同守则。网络协议并不是一套单独的软件，它融合于所有涉及网络通信的软件甚至硬件之中，因此可以说协议于网络中无处不在。<br>3)什么是协议栈？<br>为了减少网络设计的复杂性，绝大多数网络采用分层设计的方法。所谓分层设计，就是按照信息流动的过程将网络的整体功能分解为一个个的功能层，不同机器上的同等功能层之间采用相同的协议，同一机器上相邻功能层之间通过接口进行信息传递。各层的协议和接口统称为协议栈。<br>ISO(国际标准化组织)/OSI(Open System Interconnection, 开放系统互联)网络协议模型：<br>应用层：业务逻辑                             <br>表示层：数据的表现形式                   | -&gt; 应用层</p>
+<p>会话层：建立、管理和终止通信过程 /</p>
+<p>传输层：源到目的地的点对点传输<br>网络层：路径选择、路由、寻址等网络结构拓扑<br>数据链路层：物理寻址、数据通道、错误检测等通信路径<br>物理层：在数据和电平信号之间进行转换<br>比喻：<br>买点心（应用层：业务需求）<br>选择包装（表示层：数据形式）<br>选择快递公司（会话层：通信过程）<br>填写收寄单（传输层：点对点）<br>选择路径（网络层：通路）<br>中途周转（数据链路层：多点连线）<br>送货过程（物理层：实际通信）<br>4)TCP/IP协议栈<br>传输层：TCP、UDP<br>网络层：IP、ICMP、IGMP<br>链路层：ARP、RARP<br>5)消息包和数据流<br>应用层：HTTP请求=用户数据包<br>传输层：TCP头+用户数据包=TCP包<br>网络层：IP头+TCP包=IP包<br>链路层：以太网头+IP包+以太网尾=以太网帧<br>物理层：以太网帧-&gt;电平信号<br>                                    |   ^<br>                                   v    |<br>                                传输线路<br>发送数据流：消息自协议栈顶层向底层流动，逐层打包。<br>接收数据流：消息自协议栈底层向顶层流程，逐层解析。<br>6)IP地址<br>IP地址(Internet Protocol Address，互联网协议地址)是一种地址格式，为互联网上的每个网络和主机分配一个逻辑地址，其目的是消除物理地址的差异性。<br>IP地址的计算机内部用一个网络字节序的32位(4个字节)无符号整数表示。通常习惯将其表示为点分十进制整数字符串的形式。例如：<br>点分十进制整数字符串：1.2.3.4<br>32位(4个字节)无符号整数：0x01020304<br>内存布局：| 0x01 | 0x02 | 0x03 | 0x04 |<br>                   低地址—————&gt;高地址<br>网络字节序就是大端字节序，高位在低地址，低位在高地址。<br>中国北京市东城区珠市口大街珍贝大厦三层第一教室<br>一台计算机的IP地址=网络地址+主机地址<br>A级地址：以0为首8位网络地址+24位主机地址<br>B级地址：以10为首16位网络地址+16位主机地址<br>C级地址：以110为首24位网络地址+8位主机地址<br>D级地址：以1110为首的32为多(组)播地址<br>例如：某台计算机的IP地址为192.168.182.48，其网络地址和主机地址分别为何？<br>           192            168            182              48<br>11000000 10101000 10110110 00110000<br>以110为首，C级地址，网络地址是192.168.182.0，主机地址是48。<br>主机IP地址 &amp; 子网掩码 = 网络地址<br>主机IP地址 &amp; ~子网掩码 = 主机地址<br>例如：主机IP地址192.168.182.48，子网掩码255.255.255.0，其网络地址和主机地址分别为何？<br>192.168.182.48 &amp; 255.255.255.0 = 192.168.182.0<br>192.168.182.48 &amp; 0.0.0.255 = 0.0.0.48<br>2.套接字<br>1)什么是套接字？<br>Socket，电源插座-&gt;套接字<br>一个由系统内核负责维护，通过文件描述符访问的对象， 可用于在同一台机器或不同机器中的进程之间实现通信。<br>进程表项<br>    文件描述符表<br>    0: 文件描述符标志 | * -&gt; 标准输入文件表项 -&gt; 键盘<br>    1: 文件描述符标志 | * -&gt; 标准输出文件表项 -&gt; 显示器<br>    2: 文件描述符标志 | * -&gt; 标准错误文件表项 -&gt; 显示器<br>    3: 文件描述符标志 | * -&gt; 套接字对象 -&gt; 网卡<br>           应用程序                       应用程序<br>                 v                                   v<br>磁盘文件的文件描述符 表示网络的文件描述符<br>                 v                                   v<br>           文件对象                      套接字对象<br>                 v                                   v<br>           文件系统                      网络协议栈<br>                 v                                   v<br>           磁盘设备                       网络设备<br>套接字也可以被视为是围绕表示网络的文件描述符的一套函数库。调用其中的函数就可以访问网络上的数据，实现不同主机间的通信功能。<br>2)绑定和连接<br>   套接字就是系统内核内存中的一块数据——逻辑对象<br>                                                                            | 绑定(bind)<br>包含了IP地址和端口号等参数的网络设备——物理对象<br>互联网<br>     | &lt;-网络地址：192.168.182.0<br>子网络<br>     | &lt;-主机地址：0.0.0.48<br>计算机<br>     | &lt;-端口号：80<br>  应用<br>通过IP地址(网络地址+主机地址)端口号就可以唯一定位互联网上的一个通信引用。<br>主机A<br>应用程序<br>      |<br>逻辑对象(套接字)<br>      | 绑定(bind)                  连接(connection)<br>物理对象(IP地址和端口号)———物理对象(IP地址和端口号)<br>                                                             | 绑定(bind)<br>                                                       逻辑对象(套接字)<br>                                                             |<br>                                                       应用程序<br>                                                       主机B<br>3)常用函数<br>创建套接字<br>#include &lt;sys/socket.h&gt;<br>int socket(int domain, int type, int protocol);<br>成功返回套接字描述符，失败返回-1。<br>domain - 通信域，即协议族，可取以下值：<br>PF_LOCAL/PF_UNIX: 本地通信，进程间通信<br>PF_INET: 互联网通信<br>PF_PACKET: 底层包通信（嗅探器、端口扫描）<br>type - 套接字类型，可取以下值：<br>SOCK_STREAM: 流式套接字，使用TCP协议<br>SOCK_DGRAM: 数据报式套接字，使用UDP协议<br>SOCK_RAW: 原始套接字，使用自定义协议<br>protocol - 特殊协议<br>                  对于流式套接字和数据报式套接字，取0<br>套接字描述符与文件描述符在逻辑层面是一致的，所有关于文件描述符的规则对于套接字描述符也同样成立。同样也通过close函数关闭套接字，即释放内核中的有关资源。<br>基本地址结构：<br>struct sockaddr {<br>    sa_family_t sa_family; // 地址族<br>    char sa_data[14]; // 地址值<br>};<br>基本地址结构仅用于给函数传参时做强制类型转换。<br>本地地址结构：<br>#include &lt;sys/un.h&gt;<br>struct sockaddr_un {<br>    sa_family_t sun_family; // 地址族<br>                                             // (AF_LOCAL/AF_UNIX)<br>    char sun_path[]; // 套接字文件路径<br>};<br>网络地址结构：<br>#include &lt;sys/in.h&gt;<br>struct sockaddr_in {<br>    sa_family_t sin_family; // 地址族(AF_INET)<br>    in_port_t sin_port; // 端口号(网络字节序)<br>    struct in_addr sin_addr; // IP地址<br>};<br>struct in_addr {<br>    in_addr_t s_addr; // 网络字节序32位无符号整数形式的<br>                                   // IP地址<br>};<br>typedef uint32_t in_addr_t;<br>typedef uint16_t in_port_t;<br>小端字节序的主机A              大端字节序的主机B<br>short a = 0x1234;<br>| 0x34 | 0x12 |                    | 0x34 | 0x12 |<br>    低         高                             低         高<br>                                             a: 0x3412<br>发送：主机字节序-&gt;网络(大端)字节序<br>接收：网络(大端)字节序-&gt;主机字节序<br>小端字节序的主机A             大端字节序的主机B<br>0x1234<br>主：0x34 | 0x12<br>           L        H<br>网：0x12 | 0x34      -&gt;      网：0x12 | 0x34<br>                                                       L         H<br>                                            主：0x12 | 0x34<br>                                            0x1234<br>                                            ——————–<br>                                            小端字节序的主机C<br>                                  -&gt;      网：0x12 | 0x34<br>                                                       L         H<br>                                            主：0x34 | 0x12<br>                                            0x1234<br>将套接字对象和自己的地址结构绑定在一起<br>int bind(int sockfd, const struct sockaddr* addr,<br>    socklen_t addrlen);<br>成功返回0，失败返回-1。<br>sockfd - 套接字描述符<br>addr - 自己的地址结构<br>addrlen - 地址结构字节数<br>addr-&gt;sa_family: AF_LOCAL/AF_UNIX<br>     ((struct sockaddr_un*)addr)-&gt;sun_path: 套接字文件<br>addr-&gt;sa_family: AF_INET<br>     ((struct sockaddr_in*)addr)-&gt;sin_port/sin_addr:<br>                                                                     IP地址和端口号<br>将套接字对象所代表的物理对象和对方的地址结构连接在一起<br>int connect(int sockfd, const struct sockaddr* addr,<br>    socklen_t addrlen);<br>成功返回0，失败返回-1。<br>sockfd - 套接字描述符<br>addr - 对方的地址结构<br>addrlen - 地址结构字节数<br>通过套接字描述符接收和发送数据的过程完全与通过文件描述符读取和写入数据的过程完全一样。<br>ssize_t read(int sockfd, void* buf, size_t count);<br>ssize_t write(int sockfd, const void* buf, size_t count);<br>字节序转换<br>通过网络传输多字节整数，需要在发送前转换为网络字节序，在接收后转换为主机字节序。<br>#include &lt;arpa/inet.h&gt;<br>uint32_t htonl(uint32_t hostlong);<br>uint16_t htons(uint16_t hostshort);<br>uint32_t ntohl(uint32_t netlong);<br>uint16_t ntohs(uint16_t netshort);<br>h - host，主机(字节序)<br>to - 到，把…转换到…<br>n - network，网络(字节序)<br>l - long版本，32位无符号整数<br>s - short版本，16位无符号整数<br>IP地址转换<br>(网络字节序32位无符号)整数&lt;=&gt;(点分十进制)字符串<br>#include &lt;arpa/inet.h&gt;<br>in_addr_t inet_addr(const char* cp); // 串-&gt;数<br>int inet_aton(const char* cp, struct in_addr* inp);<br>// 串-&gt;数<br>转换成功返回0，失败返回-1。<br>char* inet_ntoa(struct in_addr in); // 数-&gt;串<br>转换成功返回字符串指针，失败返回NULL。<br>基于本地套接字的进程间通信：<br>服务器：提供业务服务的计算机程序。<br>客户机：请求业务服务的计算机程序。<br>服务器                                     客户机<br>创建套接字(socket)                创建套接字(socket)<br>准备地址结构(sockaddr_un)  准备地址结构(sockaddr_un)<br>绑定地址(bind)                       建立连接(connect)<br>接收请求(read)                       发送请求(write)<br>业务处理(…)                            等待处理(…)<br>发送响应(write)                      接收响应(read)<br>关闭套接字(close)                   关闭套接字(close)<br>代码：locsvr.c、loccli.c<br>基于网络套接字的进程间通信：<br>服务器                                     客户机<br>创建套接字(socket)                创建套接字(socket)<br>准备地址结构(sockaddr_in)   准备地址结构(sockaddr_in)<br>绑定地址(bind)                       建立连接(connect)<br>接收请求(read)                       发送请求(write)<br>业务处理(…)                            等待处理(…)<br>发送响应(write)                      接收响应(read)<br>关闭套接字(close)                   关闭套接字(close)<br>代码：netsvr.c、netcli.c<br>3.基于并发的TCP客户机/服务器模型<br>1)TCP协议的基本特征<br>A.面向连接：参与通信的双发在正式通信之前需要先建立连接，已形成一条虚拟电路，所有的后续通信都在这条虚电路上完成。类似于电话通信业务。正式通话之前要先拨号，拨通了才能讲话。拨号的过程就是一个建立连接的过程。<br>三路握手<br>    客户机                                                  服务器<br>发起连接请求 ——–SYN(n)——–&gt; 被动侦听<br>   等待应答     &lt;-ACK(n+1)+SYN(m)- 可以接受<br>   反向确认     ——ACK(m+1)——&gt; 连接成功<br>一旦三路握手完成，客户机和服务器的网络协议栈中就会保存有关连接的信息，此后的通信内容全部基于此连接实现数据传输。通信过程中任何原因导致的连接中断，都无法再继续通信，除非重新建立连接。<br>B.可靠传输：超时重传。每次发送一个数据包，对方都需要在一个给定的时间窗口内予以应答，如果超过时间没有收到对方的应答，发送方就会重发该数据包，只有重试过足够多的次数依然失败才会最终放弃。<br>C.保证顺序：发送端为每一个数据包编制序列号，接收端会根据序列号对所接收到的数据包进行重排，避免重复和乱序。<br>D.流量控制：协议栈底层在从另一端接收数据时，会不断告知对方它能够接收多少字节的数据，即所谓通告窗口。任何时候，这个窗口都反映了接收缓冲区可用空间的大小，从而确保不会因为发送方发送数据过快或过慢导致接收缓冲区出现上溢出或下溢出。<br>E.流式传输：以字节流形式传输数据，数据包在传输过程中没有记录边界。应用程序需要根据自己的规则来划分出数据包的记录边界。<br>a)定长记录<br>b)不定长记录加分隔符<br>c)定长长度加不定长记录<br>F.全双工：在给定的连接上，应用程序在任何时候都既可以发送数据也可以接收数据。因此TCP必须跟踪每个方向上数据流的状态信息，如序列号和通告窗口大小等。<br>2)TCP连接的生命周期<br>被动打开：通过侦听套接字感知其它主机发起的连接请求。<br>三路握手：TCP连接的建立过程。<br>| TCP包头 | TCP包体 |<br>&lt;20字节&gt;<br>含有6个标志位：SYN/ACK/FIN/RST/…<br>发送序列号和应答序列号<br>…<br>数据传输：超时重传、流量控制、面向字节流、全双工<br>终止连接：<br>  客户机                                            服务器<br>主动关闭 ———FIN(n)——-&gt; 被动关闭<br>等待应答 &lt;—–ACK(n+1)——   关闭应答<br>确定关闭 ———FIN(m)——&gt;  已经关闭<br>关闭应答 ——ACK(m+1)—–&gt;  等待应答<br>3)常用函数<br>在指定套接字上启动对连接请求的侦听，即将该套接字置为被动模式，因为套接字都缺省为主动模式。<br>int listen(int sockfd, int backlog);<br>成功返回0，失败返回-1。<br>sockfd - 套接字描述符<br>backlog - 未决连接请求队列的最大长度<br>在指定的侦听套接字上等待并接受连接请求<br>int accept(int sockfd, struct sockaddr* addr,<br>    size_t* addrlen);<br>成功返回连接套接字描述符用于后续通信，失败返回-1。<br>sockfd - 侦听套接字描述符<br>addr - 输出连接请求发起者的地址信息<br>addrlen - 输入输出连接请求发起者地址信息的字节数<br>该函数由TCP服务器调用，返回排在已决连接队列首部的连接套接字对象的描述符，若已决连接队列为空，该函数会阻塞。<br>                                                                      ^^^^^^^^<br>非并发的TCP服务器<br>创建套接字(socket)<br>绑定地址(bind)<br>启动侦听(listen)<br>等待连接(accept)&lt;–+<br>接收请求(read)&lt;-+   |<br>业务处理(…)          |    |<br>发送响应(write)–+–+</p>
+<p>并发的TCP服务器<br>创建套接字(socket)<br>绑定地址(bind)<br>启动侦听(listen)<br>等待连接(accept)&lt;—+<br>                                    |<br>产生客户子进程(fork)-+<br>    接收请求(read)&lt;-+<br>    业务处理(…)          |<br>    发送响应(write)–+<br>接收数据<br>ssize_t recv(int sockfd, void* buf, size_t len, int flags);<br>flags - 接收标志，取0等价于read<br>    MSG_DONTWAIT: 非阻塞接收<br>    对于阻塞模式，当接收缓冲区为空时，该函数会阻塞，直到<br>    接收缓冲区不空为止。如果使用了此标志位，当接收缓冲区<br>    为空时，该函数会返回-1，并置errno为EAGAIN或<br>    EWOULDBLOCK。<br>    MSG_OOB: 接收带外数据。<br>    MSG_PEEK: 瞄一眼数据，只讲接收缓冲区中的数据复制到<br>    buf缓冲区中，但并不将其从接收缓冲区中删除。<br>    MSG_WAITALL: 接收到所有期望接收的数据才返回，如果<br>    接收缓冲区中的数据不到len个字节，该函数会阻塞，直到可<br>    接收到len个字节为止。<br>发送数据<br>ssize_t send(int sockfd, const void* buf, size_t len,<br>    int flags);<br>flags - 接收标志，取0等价于write<br>     MSG_DONTWAIT: 非阻塞发送<br>     对于阻塞模式，当发送缓冲区的空余空间不足以容纳期望发      送的字节数时，该函数会阻塞，直到发送缓冲区的空余空间<br>     足以容纳期望发送的字节数为止。如果使用了此标志位，能<br>     发送多少字节就发送多少字节，不会阻塞，甚至可能返回0<br>     表示发送缓冲区满，无法发送数据。<br>     MSG_OOB: 发送带外数据。<br>     MSG_DONTROUT: 不查路由表，直接在本地网中寻找目<br>     的主机。<br>代码：tcpsvr.c、tcpcli.c</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Chenzhan666</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.chenzhan.club/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/">https://www.chenzhan.club/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.chenzhan.club" target="_blank">CHENZHAN</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Chenzhan666.github.io/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></div><div class="post_share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Chenzhan666.github.io/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/"><img class="next-cover" src="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp" onerror="onerror=null;src='/Chenzhan666.github.io/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">note62.11-综合一些知识点</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Chenzhan666.github.io/2021/07/14/note50-10-《UNIX网络编程卷1》第一章习题/" title="note50.10-《UNIX网络编程卷1》第一章习题"><img class="cover" src="https://i0.hdslb.com/bfs/article/2c7a67550fbe201ef634dab495fc74786db2624f.jpg@942w_531h_progressive.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-14</div><div class="title">note50.10-《UNIX网络编程卷1》第一章习题</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/Chenzhan666.github.io/null" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chenzhan666</div><div class="author-info__description">演好你的剧本( ´･ω･)ﾉ(._.`)</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div><div class="card-info-data-item is-center"><a href="/Chenzhan666.github.io/tags/"><div class="headline">标签</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="note63.10-TCP客户端服务器"><img src="https://i0.hdslb.com/bfs/album/850441ac277cd60327392e4e5314d7040675c701.jpg@.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note63.10-TCP客户端服务器"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/08/12/note63-10-TCP%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="note63.10-TCP客户端服务器">note63.10-TCP客户端服务器</a><time datetime="2021-08-11T17:09:32.000Z" title="发表于 2021-08-12 01:09:32">2021-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" title="note62.11-综合一些知识点"><img src="https://i0.hdslb.com/bfs/album/d25637f86f6d0a251eefb3542f008bd23d529169.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note62.11-综合一些知识点"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/08/12/note62-11-%E7%BB%BC%E5%90%88%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86%E7%82%B9/" title="note62.11-综合一些知识点">note62.11-综合一些知识点</a><time datetime="2021-08-11T17:07:20.000Z" title="发表于 2021-08-12 01:07:20">2021-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/26/note61-9-Qt%E6%8E%A7%E4%BB%B6-%E9%83%A8%E4%BB%B6%E7%AE%80%E7%95%A5/" title="note61.9-Qt控件-部件简略"><img src="https://i0.hdslb.com/bfs/album/ff14dc16ccbe1b2a1895cbc1f5783279e2ae077e.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note61.9-Qt控件-部件简略"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/26/note61-9-Qt%E6%8E%A7%E4%BB%B6-%E9%83%A8%E4%BB%B6%E7%AE%80%E7%95%A5/" title="note61.9-Qt控件-部件简略">note61.9-Qt控件-部件简略</a><time datetime="2021-07-26T15:49:33.000Z" title="发表于 2021-07-26 23:49:33">2021-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程"><img src="https://i0.hdslb.com/bfs/archive/14c8a10b8628f9207fd68dd235a0b5004c88ce83.jpg@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note60.6-进程"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/22/note60-6-%E8%BF%9B%E7%A8%8B/" title="note60.6-进程">note60.6-进程</a><time datetime="2021-07-22T07:36:50.000Z" title="发表于 2021-07-22 15:36:50">2021-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button"><img src="https://i0.hdslb.com/bfs/album/15d44993eeeebcc85611d2331c93c2910b0a1ece.png@518w.webp" onerror="this.onerror=null;this.src='/Chenzhan666.github.io/img/404.jpg'" alt="note59.9-Qt控件-Button"/></a><div class="content"><a class="title" href="/Chenzhan666.github.io/2021/07/20/note59-9-Qt%E6%8E%A7%E4%BB%B6-Button/" title="note59.9-Qt控件-Button">note59.9-Qt控件-Button</a><time datetime="2021-07-20T08:55:58.000Z" title="发表于 2021-07-20 16:55:58">2021-07-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Chenzhan666</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Chenzhan666.github.io/js/utils.js"></script><script src="/Chenzhan666.github.io/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/Chenzhan666.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/Chenzhan666.github.io/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":145,"height":315},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"log":false});</script></body></html>
